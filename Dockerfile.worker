@@ -1,0 +1,61 @@
+# ==============================================================================
+# RepoShield AI - Sandboxed Security Scanner & Verification Worker
+# Dedicated container for executing AST, SAST, secret detection, and test jobs
+# ==============================================================================
+
+FROM python:3.11-slim-bookworm
+
+LABEL maintainer="Xerova Digital Solutions <security@xerova.com>"
+LABEL service="reposhield-worker"
+LABEL description="Isolated Sandboxed Worker for Untrusted Repository Security Scans"
+
+WORKDIR /sandbox
+
+# Install essential execution tools and pinned security scanner binaries
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    tini \
+    git \
+    curl \
+    ca-certificates \
+    && rm -rf /var/lib/apt/lists/*
+
+# Install pinned scanner packages
+RUN pip install --no-cache-dir \
+    semgrep==1.65.0 \
+    bandit==1.7.8 \
+    pip-audit==2.7.3 \
+    pytest==8.1.1
+
+# Download and install pinned Gitleaks binary
+ARG GITLEAKS_VERSION=8.18.2
+RUN curl -sSL "https://github.com/gitleaks/gitleaks/releases/download/v${GITLEAKS_VERSION}/gitleaks_${GITLEAKS_VERSION}_linux_x64.tar.gz" -o gitleaks.tar.gz && \
+    tar -xzf gitleaks.tar.gz gitleaks && \
+    mv gitleaks /usr/local/bin/gitleaks && \
+    chmod 755 /usr/local/bin/gitleaks && \
+    rm -f gitleaks.tar.gz
+
+# Create dedicated sandboxed unprivileged user
+RUN groupadd -g 10002 reposhield-sandbox && \
+    useradd -u 10002 -g reposhield-sandbox -s /bin/false -d /sandbox reposhield-sandbox && \
+    mkdir -p /sandbox/workspaces && \
+    chown -R reposhield-sandbox:reposhield-sandbox /sandbox
+
+# Copy backend application codebase for worker processing
+COPY backend/app /sandbox/app
+COPY backend/alembic /sandbox/alembic
+COPY backend/alembic.ini /sandbox/alembic.ini
+
+# Drop privileges to sandbox user
+USER reposhield-sandbox:reposhield-sandbox
+
+# Security isolation environment variables
+ENV PYTHONUNBUFFERED=1 \
+    PYTHONDONTWRITEBYTECODE=1 \
+    PIP_NO_INDEX=1 \
+    NO_PROXY="*" \
+    WORKSPACE_ROOT=/sandbox/workspaces
+
+ENTRYPOINT ["/usr/bin/tini", "--"]
+
+# Worker command: can run as background consumer or on-demand task
+CMD ["python", "-m", "app.scanner.runner"]

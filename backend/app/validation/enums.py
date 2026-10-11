@@ -1,0 +1,32 @@
+"""Validation status and evidence taxonomy enums."""
+from enum import Enum
+
+
+class ValidationStatus(str, Enum):
+    """Assessment states regarding evidentiary support.
+    
+    CRITICAL: These represent assessment states, not absolute proof that
+    a vulnerability is exploitable or harmless.
+    """
+    UNREVIEWED = "UNREVIEWED"
+    SUPPORTED_BY_EVIDENCE = "SUPPORTED_BY_EVIDENCE"
+    POSSIBLE_FALSE_POSITIVE = "POSSIBLE_FALSE_POSITIVE"
+    INSUFFICIENT_EVIDENCE = "INSUFFICIENT_EVIDENCE"
+    HUMAN_REVIEW_REQUIRED = "HUMAN_REVIEW_REQUIRED"
+
+
+class EvidenceType(str, Enum):
+    """Categorization of observed code, AST, or configuration evidence."""
+    SOURCE_TAINT_SINK = "SOURCE_TAINT_SINK"
+    DATA_FLOW_PATH = "DATA_FLOW_PATH"
+    SOURCE_CODE_CONTEXT = "SOURCE_CODE_CONTEXT"
+    CONSTANT_ARGUMENT = "CONSTANT_ARGUMENT"
+    CONSTANT_LITERAL_ARG = "CONSTANT_ARGUMENT"
+    SANITIZATION_ROUTINE = "SANITIZATION_ROUTINE"
+    TEST_OR_MOCK_CONTEXT = "TEST_OR_MOCK_CONTEXT"
+    CONFIG_OR_INFRA = "CONFIG_OR_INFRA"
+    DEPENDENCY_SPECIFICATION = "DEPENDENCY_SPECIFICATION"
+    PROMPT_INJECTION_SIGNAL = "PROMPT_INJECTION_SIGNAL"
+    INCOMPLETE_CONTEXT = "INCOMPLETE_CONTEXT"
+    CONFLICTING_SIGNALS = "CONFLICTING_SIGNALS"
+    DEAD_OR_UNREACHABLE_CODE = "DEAD_OR_UNREACHABLE_CODE"

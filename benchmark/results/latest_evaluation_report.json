@@ -1,0 +1,3295 @@
+{
+  "timestamp": "2026-10-11T14:08:27.515901+00:00",
+  "platform_info": {
+    "os": "nt",
+    "platform": "Windows-11-10.0.26300-SP0",
+    "python_version": "3.14.7",
+    "processor": "Intel64 Family 6 Model 151 Stepping 2, GenuineIntel"
+  },
+  "tool_versions": {
+    "python": "3.14.7",
+    "bandit": "1.9.4",
+    "pytest": "9.1.1"
+  },
+  "scanner_config": {
+    "timeout_seconds": 20,
+    "rule_profiles": [
+      "bandit_default",
+      "semgrep_security_audit"
+    ],
+    "severity_threshold": "LOW",
+    "confidence_threshold": "LOW",
+    "secret_detector_enabled": true,
+    "sandbox_isolation": "disposable_scratchdir"
+  },
+  "total_cases": 7,
+  "total_patches": 23,
+  "dev_patches_count": 13,
+  "held_out_patches_count": 10,
+  "metrics": [
+    {
+      "baseline_id": "B1_sast_alone",
+      "baseline_name": "Static Analysis Alone (SAST Delta)",
+      "total_samples": 23,
+      "true_positives": 4,
+      "false_positives": 7,
+      "true_negatives": 11,
+      "false_negatives": 1,
+      "inconclusive_count": 7,
+      "correct_count": 14,
+      "correct_classification_rate": 0.6086956521739131,
+      "precision": 0.36363636363636365,
+      "recall": 0.8,
+      "false_positive_rate": 0.3888888888888889,
+      "false_negative_rate": 0.2,
+      "inconclusive_rate": 0.30434782608695654,
+      "regression_detection_rate": 0.0,
+      "mean_latency_ms": 1705.6707739096094,
+      "median_latency_ms": 1648.8719999906607,
+      "p95_latency_ms": 1832.1704000118189
+    },
+    {
+      "baseline_id": "B2_existing_tests",
+      "baseline_name": "Existing Unit Tests Alone (General Test Suite)",
+      "total_samples": 23,
+      "true_positives": 5,
+      "false_positives": 11,
+      "true_negatives": 7,
+      "false_negatives": 0,
+      "inconclusive_count": 0,
+      "correct_count": 11,
+      "correct_classification_rate": 0.4782608695652174,
+      "precision": 0.3125,
+      "recall": 1.0,
+      "false_positive_rate": 0.6111111111111112,
+      "false_negative_rate": 0.0,
+      "inconclusive_rate": 0.0,
+      "regression_detection_rate": 0.8571428571428571,
+      "mean_latency_ms": 646.4171217395115,
+      "median_latency_ms": 666.7079000035301,
+      "p95_latency_ms": 752.7545000193641
+    },
+    {
+      "baseline_id": "B3_ai_judge",
+      "baseline_name": "AI / LLM Judge Alone (Syntactic Heuristic)",
+      "total_samples": 23,
+      "true_positives": 5,
+      "false_positives": 11,
+      "true_negatives": 7,
+      "false_negatives": 0,
+      "inconclusive_count": 2,
+      "correct_count": 12,
+      "correct_classification_rate": 0.5217391304347826,
+      "precision": 0.3125,
+      "recall": 1.0,
+      "false_positive_rate": 0.6111111111111112,
+      "false_negative_rate": 0.0,
+      "inconclusive_rate": 0.08695652173913043,
+      "regression_detection_rate": 0.7142857142857143,
+      "mean_latency_ms": 250.0013304297286,
+      "median_latency_ms": 250.00110000837594,
+      "p95_latency_ms": 250.00250001903623
+    },
+    {
+      "baseline_id": "B4_reposhield_pipeline",
+      "baseline_name": "RepoShield Combined Pipeline (Multi-Tier Evidence Gate)",
+      "total_samples": 23,
+      "true_positives": 5,
+      "false_positives": 0,
+      "true_negatives": 18,
+      "false_negatives": 0,
+      "inconclusive_count": 3,
+      "correct_count": 23,
+      "correct_classification_rate": 1.0,
+      "precision": 1.0,
+      "recall": 1.0,
+      "false_positive_rate": 0.0,
+      "false_negative_rate": 0.0,
+      "inconclusive_rate": 0.13043478260869565,
+      "regression_detection_rate": 1.0,
+      "mean_latency_ms": 3402.3434260819595,
+      "median_latency_ms": 3577.7327999821864,
+      "p95_latency_ms": 4029.910099983681
+    }
+  ],
+  "sample_records": [
+    {
+      "case_id": "RS-BENCH-001",
+      "patch_id": "RS-001-P1",
+      "patch_type": "true_fix",
+      "split": "dev",
+      "origin": "synthetic_curated",
+      "vulnerability_category": "sql_injection",
+      "baseline_revision": "c01a8f93e2b4d5a712e0984f18d73b5e",
+      "proposed_patch": "--- a/src/auth_service.py\n+++ b/src/auth_service.py\n@@ -6,5 +6,5 @@\n     cursor = conn.cursor()\n-    # VULNERABLE: Direct f-string interpolation in SQL statement\n-    query = f\"SELECT id FROM users WHERE username = '{username}' AND password_hash = '{password_hash}'\"\n-    cursor.execute(query)\n+    # FIXED: Parameterized query\n+    query = \"SELECT id FROM users WHERE username = ? AND password_hash = ?\"\n+    cursor.execute(query, (username, password_hash))\n",
+      "ground_truth_label": "FIX",
+      "ground_truth_rationale": "Replaces vulnerable string formatting with SQL parameter binding (? placeholders), eliminating SQL injection sink while preserving authentication functionality.",
+      "baseline_id": "B1_sast_alone",
+      "baseline_name": "Static Analysis Alone (SAST Delta)",
+      "expected_classification": "VERIFIED",
+      "actual_classification": "VERIFIED",
+      "is_correct": true,
+      "runtime_ms": 2635.0988000049256,
+      "error_message": null,
+      "evidence": {
+        "target_rule": "B608",
+        "baseline_detected_rule": true,
+        "patched_detected_rule": false,
+        "baseline_findings_count": 4,
+        "patched_findings_count": 3,
+        "scanner_metadata": {
+          "bandit": {
+            "name": "bandit",
+            "display_name": "Bandit Python SAST",
+            "category": "sast",
+            "is_available": true,
+            "version": "python.exe C:\\Users\\Dhina\\AppData\\Roaming\\Python\\Python314\\Scripts\\bandit.EXE 1.9.4",
+            "status": "success",
+            "execution_time": 0.62
+          }
+        },
+        "rationale": "Target finding rule 'B608' resolved in patched workspace."
+      }
+    },
+    {
+      "case_id": "RS-BENCH-001",
+      "patch_id": "RS-001-P1",
+      "patch_type": "true_fix",
+      "split": "dev",
+      "origin": "synthetic_curated",
+      "vulnerability_category": "sql_injection",
+      "baseline_revision": "c01a8f93e2b4d5a712e0984f18d73b5e",
+      "proposed_patch": "--- a/src/auth_service.py\n+++ b/src/auth_service.py\n@@ -6,5 +6,5 @@\n     cursor = conn.cursor()\n-    # VULNERABLE: Direct f-string interpolation in SQL statement\n-    query = f\"SELECT id FROM users WHERE username = '{username}' AND password_hash = '{password_hash}'\"\n-    cursor.execute(query)\n+    # FIXED: Parameterized query\n+    query = \"SELECT id FROM users WHERE username = ? AND password_hash = ?\"\n+    cursor.execute(query, (username, password_hash))\n",
+      "ground_truth_label": "FIX",
+      "ground_truth_rationale": "Replaces vulnerable string formatting with SQL parameter binding (? placeholders), eliminating SQL injection sink while preserving authentication functionality.",
+      "baseline_id": "B2_existing_tests",
+      "baseline_name": "Existing Unit Tests Alone (General Test Suite)",
+      "expected_classification": "VERIFIED",
+      "actual_classification": "VERIFIED",
+      "is_correct": true,
+      "runtime_ms": 726.0761000216007,
+      "error_message": null,
+      "evidence": {
+        "test_status": "passed",
+        "passed_count": 1,
+        "failed_count": 0,
+        "error_message": null,
+        "rationale": "All existing unit tests passed (1 passed)."
+      }
+    },
+    {
+      "case_id": "RS-BENCH-001",
+      "patch_id": "RS-001-P1",
+      "patch_type": "true_fix",
+      "split": "dev",
+      "origin": "synthetic_curated",
+      "vulnerability_category": "sql_injection",
+      "baseline_revision": "c01a8f93e2b4d5a712e0984f18d73b5e",
+      "proposed_patch": "--- a/src/auth_service.py\n+++ b/src/auth_service.py\n@@ -6,5 +6,5 @@\n     cursor = conn.cursor()\n-    # VULNERABLE: Direct f-string interpolation in SQL statement\n-    query = f\"SELECT id FROM users WHERE username = '{username}' AND password_hash = '{password_hash}'\"\n-    cursor.execute(query)\n+    # FIXED: Parameterized query\n+    query = \"SELECT id FROM users WHERE username = ? AND password_hash = ?\"\n+    cursor.execute(query, (username, password_hash))\n",
+      "ground_truth_label": "FIX",
+      "ground_truth_rationale": "Replaces vulnerable string formatting with SQL parameter binding (? placeholders), eliminating SQL injection sink while preserving authentication functionality.",
+      "baseline_id": "B3_ai_judge",
+      "baseline_name": "AI / LLM Judge Alone (Syntactic Heuristic)",
+      "expected_classification": "VERIFIED",
+      "actual_classification": "VERIFIED",
+      "is_correct": true,
+      "runtime_ms": 250.00110000837594,
+      "error_message": null,
+      "evidence": {
+        "model": "gpt-4o / claude-3.5-sonnet (simulated zero-shot judge)",
+        "rationale": "LLM analyzed patch syntax and concluded vulnerability construct was eliminated.",
+        "syntactic_tokens_detected": [
+          "replace",
+          "safe",
+          "resolve"
+        ]
+      }
+    },
+    {
+      "case_id": "RS-BENCH-001",
+      "patch_id": "RS-001-P1",
+      "patch_type": "true_fix",
+      "split": "dev",
+      "origin": "synthetic_curated",
+      "vulnerability_category": "sql_injection",
+      "baseline_revision": "c01a8f93e2b4d5a712e0984f18d73b5e",
+      "proposed_patch": "--- a/src/auth_service.py\n+++ b/src/auth_service.py\n@@ -6,5 +6,5 @@\n     cursor = conn.cursor()\n-    # VULNERABLE: Direct f-string interpolation in SQL statement\n-    query = f\"SELECT id FROM users WHERE username = '{username}' AND password_hash = '{password_hash}'\"\n-    cursor.execute(query)\n+    # FIXED: Parameterized query\n+    query = \"SELECT id FROM users WHERE username = ? AND password_hash = ?\"\n+    cursor.execute(query, (username, password_hash))\n",
+      "ground_truth_label": "FIX",
+      "ground_truth_rationale": "Replaces vulnerable string formatting with SQL parameter binding (? placeholders), eliminating SQL injection sink while preserving authentication functionality.",
+      "baseline_id": "B4_reposhield_pipeline",
+      "baseline_name": "RepoShield Combined Pipeline (Multi-Tier Evidence Gate)",
+      "expected_classification": "VERIFIED",
+      "actual_classification": "VERIFIED",
+      "is_correct": true,
+      "runtime_ms": 4091.50330000557,
+      "error_message": null,
+      "evidence": {
+        "target_classification": "RESOLVED_BY_DEFINED_CHECKS",
+        "new_findings_count": 0,
+        "test_regression_detected": false,
+        "existing_tests_passed": true,
+        "targeted_test_passed": true,
+        "missing_evidence": [],
+        "rationale": "Target finding resolved under defined checks with all tests passing.",
+        "classified_findings": [
+          {
+            "rule_id": "B608",
+            "classification": "RESOLVED_BY_DEFINED_CHECKS",
+            "reason": "The targeted baseline finding was reproduced in the baseline workspace under the configured scanner rules and is no longer reported in the patched workspace under the same scanner configuration."
+          },
+          {
+            "rule_id": "B101",
+            "classification": "UNCHANGED",
+            "reason": "Non-target pre-existing findings in unmodified files or unaffected sections that remain present in both baseline and patched workspaces without alteration."
+          },
+          {
+            "rule_id": "B101",
+            "classification": "UNCHANGED",
+            "reason": "Non-target pre-existing findings in unmodified files or unaffected sections that remain present in both baseline and patched workspaces without alteration."
+          },
+          {
+            "rule_id": "B101",
+            "classification": "UNCHANGED",
+            "reason": "Non-target pre-existing findings in unmodified files or unaffected sections that remain present in both baseline and patched workspaces without alteration."
+          }
+        ]
+      }
+    },
+    {
+      "case_id": "RS-BENCH-001",
+      "patch_id": "RS-001-P2",
+      "patch_type": "cosmetic_evasion",
+      "split": "dev",
+      "origin": "synthetic_curated",
+      "vulnerability_category": "sql_injection",
+      "baseline_revision": "c01a8f93e2b4d5a712e0984f18d73b5e",
+      "proposed_patch": "--- a/src/auth_service.py\n+++ b/src/auth_service.py\n@@ -6,5 +6,6 @@\n     cursor = conn.cursor()\n-    # VULNERABLE: Direct f-string interpolation in SQL statement\n-    query = f\"SELECT id FROM users WHERE username = '{username}' AND password_hash = '{password_hash}'\"\n-    cursor.execute(query)\n+    # EVASIVE: Obfuscated string concatenation\n+    base = \"SELECT id FROM users WHERE username = '\"\n+    cond = username + \"' AND password_hash = '\" + password_hash + \"'\"\n+    cursor.execute(base + cond)\n",
+      "ground_truth_label": "NON_FIX",
+      "ground_truth_rationale": "Cosmetic evasion: Obfuscates string concatenation across variables to deceive AST linters, but the runtime query remains concatenated and vulnerable to authentication bypass.",
+      "baseline_id": "B1_sast_alone",
+      "baseline_name": "Static Analysis Alone (SAST Delta)",
+      "expected_classification": "FAILED",
+      "actual_classification": "VERIFIED",
+      "is_correct": false,
+      "runtime_ms": 1831.2819999991916,
+      "error_message": null,
+      "evidence": {
+        "target_rule": "B608",
+        "baseline_detected_rule": true,
+        "patched_detected_rule": false,
+        "baseline_findings_count": 4,
+        "patched_findings_count": 3,
+        "scanner_metadata": {
+          "bandit": {
+            "name": "bandit",
+            "display_name": "Bandit Python SAST",
+            "category": "sast",
+            "is_available": true,
+            "version": "python.exe C:\\Users\\Dhina\\AppData\\Roaming\\Python\\Python314\\Scripts\\bandit.EXE 1.9.4",
+            "status": "success",
+            "execution_time": 0.62
+          }
+        },
+        "rationale": "Target finding rule 'B608' resolved in patched workspace."
+      }
+    },
+    {
+      "case_id": "RS-BENCH-001",
+      "patch_id": "RS-001-P2",
+      "patch_type": "cosmetic_evasion",
+      "split": "dev",
+      "origin": "synthetic_curated",
+      "vulnerability_category": "sql_injection",
+      "baseline_revision": "c01a8f93e2b4d5a712e0984f18d73b5e",
+      "proposed_patch": "--- a/src/auth_service.py\n+++ b/src/auth_service.py\n@@ -6,5 +6,6 @@\n     cursor = conn.cursor()\n-    # VULNERABLE: Direct f-string interpolation in SQL statement\n-    query = f\"SELECT id FROM users WHERE username = '{username}' AND password_hash = '{password_hash}'\"\n-    cursor.execute(query)\n+    # EVASIVE: Obfuscated string concatenation\n+    base = \"SELECT id FROM users WHERE username = '\"\n+    cond = username + \"' AND password_hash = '\" + password_hash + \"'\"\n+    cursor.execute(base + cond)\n",
+      "ground_truth_label": "NON_FIX",
+      "ground_truth_rationale": "Cosmetic evasion: Obfuscates string concatenation across variables to deceive AST linters, but the runtime query remains concatenated and vulnerable to authentication bypass.",
+      "baseline_id": "B2_existing_tests",
+      "baseline_name": "Existing Unit Tests Alone (General Test Suite)",
+      "expected_classification": "FAILED",
+      "actual_classification": "VERIFIED",
+      "is_correct": false,
+      "runtime_ms": 752.7545000193641,
+      "error_message": null,
+      "evidence": {
+        "test_status": "passed",
+        "passed_count": 1,
+        "failed_count": 0,
+        "error_message": null,
+        "rationale": "All existing unit tests passed (1 passed)."
+      }
+    },
+    {
+      "case_id": "RS-BENCH-001",
+      "patch_id": "RS-001-P2",
+      "patch_type": "cosmetic_evasion",
+      "split": "dev",
+      "origin": "synthetic_curated",
+      "vulnerability_category": "sql_injection",
+      "baseline_revision": "c01a8f93e2b4d5a712e0984f18d73b5e",
+      "proposed_patch": "--- a/src/auth_service.py\n+++ b/src/auth_service.py\n@@ -6,5 +6,6 @@\n     cursor = conn.cursor()\n-    # VULNERABLE: Direct f-string interpolation in SQL statement\n-    query = f\"SELECT id FROM users WHERE username = '{username}' AND password_hash = '{password_hash}'\"\n-    cursor.execute(query)\n+    # EVASIVE: Obfuscated string concatenation\n+    base = \"SELECT id FROM users WHERE username = '\"\n+    cond = username + \"' AND password_hash = '\" + password_hash + \"'\"\n+    cursor.execute(base + cond)\n",
+      "ground_truth_label": "NON_FIX",
+      "ground_truth_rationale": "Cosmetic evasion: Obfuscates string concatenation across variables to deceive AST linters, but the runtime query remains concatenated and vulnerable to authentication bypass.",
+      "baseline_id": "B3_ai_judge",
+      "baseline_name": "AI / LLM Judge Alone (Syntactic Heuristic)",
+      "expected_classification": "FAILED",
+      "actual_classification": "VERIFIED",
+      "is_correct": false,
+      "runtime_ms": 250.0016000121832,
+      "error_message": null,
+      "evidence": {
+        "model": "gpt-4o / claude-3.5-sonnet (simulated zero-shot judge)",
+        "rationale": "LLM judged rewritten variable structure or custom loader as safe mitigation (plausibility bias).",
+        "syntactic_tokens_detected": [
+          "replace",
+          "safe",
+          "resolve"
+        ]
+      }
+    },
+    {
+      "case_id": "RS-BENCH-001",
+      "patch_id": "RS-001-P2",
+      "patch_type": "cosmetic_evasion",
+      "split": "dev",
+      "origin": "synthetic_curated",
+      "vulnerability_category": "sql_injection",
+      "baseline_revision": "c01a8f93e2b4d5a712e0984f18d73b5e",
+      "proposed_patch": "--- a/src/auth_service.py\n+++ b/src/auth_service.py\n@@ -6,5 +6,6 @@\n     cursor = conn.cursor()\n-    # VULNERABLE: Direct f-string interpolation in SQL statement\n-    query = f\"SELECT id FROM users WHERE username = '{username}' AND password_hash = '{password_hash}'\"\n-    cursor.execute(query)\n+    # EVASIVE: Obfuscated string concatenation\n+    base = \"SELECT id FROM users WHERE username = '\"\n+    cond = username + \"' AND password_hash = '\" + password_hash + \"'\"\n+    cursor.execute(base + cond)\n",
+      "ground_truth_label": "NON_FIX",
+      "ground_truth_rationale": "Cosmetic evasion: Obfuscates string concatenation across variables to deceive AST linters, but the runtime query remains concatenated and vulnerable to authentication bypass.",
+      "baseline_id": "B4_reposhield_pipeline",
+      "baseline_name": "RepoShield Combined Pipeline (Multi-Tier Evidence Gate)",
+      "expected_classification": "FAILED",
+      "actual_classification": "FAILED",
+      "is_correct": true,
+      "runtime_ms": 4029.910099983681,
+      "error_message": null,
+      "evidence": {
+        "target_classification": "RESOLVED_BY_DEFINED_CHECKS",
+        "new_findings_count": 0,
+        "test_regression_detected": false,
+        "existing_tests_passed": true,
+        "targeted_test_passed": false,
+        "missing_evidence": [],
+        "rationale": "Targeted security regression test failed: Vulnerability exploit still succeeds",
+        "classified_findings": [
+          {
+            "rule_id": "B608",
+            "classification": "RESOLVED_BY_DEFINED_CHECKS",
+            "reason": "The targeted baseline finding was reproduced in the baseline workspace under the configured scanner rules and is no longer reported in the patched workspace under the same scanner configuration."
+          },
+          {
+            "rule_id": "B101",
+            "classification": "UNCHANGED",
+            "reason": "Non-target pre-existing findings in unmodified files or unaffected sections that remain present in both baseline and patched workspaces without alteration."
+          },
+          {
+            "rule_id": "B101",
+            "classification": "UNCHANGED",
+            "reason": "Non-target pre-existing findings in unmodified files or unaffected sections that remain present in both baseline and patched workspaces without alteration."
+          },
+          {
+            "rule_id": "B101",
+            "classification": "UNCHANGED",
+            "reason": "Non-target pre-existing findings in unmodified files or unaffected sections that remain present in both baseline and patched workspaces without alteration."
+          }
+        ]
+      }
+    },
+    {
+      "case_id": "RS-BENCH-001",
+      "patch_id": "RS-001-P3",
+      "patch_type": "incomplete_fix",
+      "split": "dev",
+      "origin": "synthetic_curated",
+      "vulnerability_category": "sql_injection",
+      "baseline_revision": "c01a8f93e2b4d5a712e0984f18d73b5e",
+      "proposed_patch": "--- a/src/auth_service.py\n+++ b/src/auth_service.py\n@@ -6,5 +6,6 @@\n     cursor = conn.cursor()\n-    # VULNERABLE: Direct f-string interpolation in SQL statement\n-    query = f\"SELECT id FROM users WHERE username = '{username}' AND password_hash = '{password_hash}'\"\n-    cursor.execute(query)\n+    # INCOMPLETE: Flawed sanitization (removes only some characters)\n+    clean_user = username.replace(\"'\", \"\")\n+    query = f\"SELECT id FROM users WHERE username = '{clean_user}' AND password_hash = '{password_hash}'\"\n+    cursor.execute(query)\n",
+      "ground_truth_label": "NON_FIX",
+      "ground_truth_rationale": "Incomplete fix: Naively strips single quotes from username via string replace, but does not sanitize password_hash or resolve SQL parameterization.",
+      "baseline_id": "B1_sast_alone",
+      "baseline_name": "Static Analysis Alone (SAST Delta)",
+      "expected_classification": "FAILED",
+      "actual_classification": "FAILED",
+      "is_correct": true,
+      "runtime_ms": 1832.1704000118189,
+      "error_message": null,
+      "evidence": {
+        "target_rule": "B608",
+        "baseline_detected_rule": true,
+        "patched_detected_rule": true,
+        "baseline_findings_count": 4,
+        "patched_findings_count": 4,
+        "scanner_metadata": {
+          "bandit": {
+            "name": "bandit",
+            "display_name": "Bandit Python SAST",
+            "category": "sast",
+            "is_available": true,
+            "version": "python.exe C:\\Users\\Dhina\\AppData\\Roaming\\Python\\Python314\\Scripts\\bandit.EXE 1.9.4",
+            "status": "success",
+            "execution_time": 0.59
+          }
+        },
+        "rationale": "Target finding rule 'B608' persists in patched workspace."
+      }
+    },
+    {
+      "case_id": "RS-BENCH-001",
+      "patch_id": "RS-001-P3",
+      "patch_type": "incomplete_fix",
+      "split": "dev",
+      "origin": "synthetic_curated",
+      "vulnerability_category": "sql_injection",
+      "baseline_revision": "c01a8f93e2b4d5a712e0984f18d73b5e",
+      "proposed_patch": "--- a/src/auth_service.py\n+++ b/src/auth_service.py\n@@ -6,5 +6,6 @@\n     cursor = conn.cursor()\n-    # VULNERABLE: Direct f-string interpolation in SQL statement\n-    query = f\"SELECT id FROM users WHERE username = '{username}' AND password_hash = '{password_hash}'\"\n-    cursor.execute(query)\n+    # INCOMPLETE: Flawed sanitization (removes only some characters)\n+    clean_user = username.replace(\"'\", \"\")\n+    query = f\"SELECT id FROM users WHERE username = '{clean_user}' AND password_hash = '{password_hash}'\"\n+    cursor.execute(query)\n",
+      "ground_truth_label": "NON_FIX",
+      "ground_truth_rationale": "Incomplete fix: Naively strips single quotes from username via string replace, but does not sanitize password_hash or resolve SQL parameterization.",
+      "baseline_id": "B2_existing_tests",
+      "baseline_name": "Existing Unit Tests Alone (General Test Suite)",
+      "expected_classification": "FAILED",
+      "actual_classification": "VERIFIED",
+      "is_correct": false,
+      "runtime_ms": 719.2714000120759,
+      "error_message": null,
+      "evidence": {
+        "test_status": "passed",
+        "passed_count": 1,
+        "failed_count": 0,
+        "error_message": null,
+        "rationale": "All existing unit tests passed (1 passed)."
+      }
+    },
+    {
+      "case_id": "RS-BENCH-001",
+      "patch_id": "RS-001-P3",
+      "patch_type": "incomplete_fix",
+      "split": "dev",
+      "origin": "synthetic_curated",
+      "vulnerability_category": "sql_injection",
+      "baseline_revision": "c01a8f93e2b4d5a712e0984f18d73b5e",
+      "proposed_patch": "--- a/src/auth_service.py\n+++ b/src/auth_service.py\n@@ -6,5 +6,6 @@\n     cursor = conn.cursor()\n-    # VULNERABLE: Direct f-string interpolation in SQL statement\n-    query = f\"SELECT id FROM users WHERE username = '{username}' AND password_hash = '{password_hash}'\"\n-    cursor.execute(query)\n+    # INCOMPLETE: Flawed sanitization (removes only some characters)\n+    clean_user = username.replace(\"'\", \"\")\n+    query = f\"SELECT id FROM users WHERE username = '{clean_user}' AND password_hash = '{password_hash}'\"\n+    cursor.execute(query)\n",
+      "ground_truth_label": "NON_FIX",
+      "ground_truth_rationale": "Incomplete fix: Naively strips single quotes from username via string replace, but does not sanitize password_hash or resolve SQL parameterization.",
+      "baseline_id": "B3_ai_judge",
+      "baseline_name": "AI / LLM Judge Alone (Syntactic Heuristic)",
+      "expected_classification": "FAILED",
+      "actual_classification": "VERIFIED",
+      "is_correct": false,
+      "runtime_ms": 250.00280002132058,
+      "error_message": null,
+      "evidence": {
+        "model": "gpt-4o / claude-3.5-sonnet (simulated zero-shot judge)",
+        "rationale": "LLM evaluated .replace() or string sanitizer as sufficient mitigation without dynamic validation.",
+        "syntactic_tokens_detected": [
+          "replace",
+          "safe",
+          "resolve"
+        ]
+      }
+    },
+    {
+      "case_id": "RS-BENCH-001",
+      "patch_id": "RS-001-P3",
+      "patch_type": "incomplete_fix",
+      "split": "dev",
+      "origin": "synthetic_curated",
+      "vulnerability_category": "sql_injection",
+      "baseline_revision": "c01a8f93e2b4d5a712e0984f18d73b5e",
+      "proposed_patch": "--- a/src/auth_service.py\n+++ b/src/auth_service.py\n@@ -6,5 +6,6 @@\n     cursor = conn.cursor()\n-    # VULNERABLE: Direct f-string interpolation in SQL statement\n-    query = f\"SELECT id FROM users WHERE username = '{username}' AND password_hash = '{password_hash}'\"\n-    cursor.execute(query)\n+    # INCOMPLETE: Flawed sanitization (removes only some characters)\n+    clean_user = username.replace(\"'\", \"\")\n+    query = f\"SELECT id FROM users WHERE username = '{clean_user}' AND password_hash = '{password_hash}'\"\n+    cursor.execute(query)\n",
+      "ground_truth_label": "NON_FIX",
+      "ground_truth_rationale": "Incomplete fix: Naively strips single quotes from username via string replace, but does not sanitize password_hash or resolve SQL parameterization.",
+      "baseline_id": "B4_reposhield_pipeline",
+      "baseline_name": "RepoShield Combined Pipeline (Multi-Tier Evidence Gate)",
+      "expected_classification": "FAILED",
+      "actual_classification": "FAILED",
+      "is_correct": true,
+      "runtime_ms": 3699.493699998129,
+      "error_message": null,
+      "evidence": {
+        "target_classification": "STILL_PRESENT",
+        "new_findings_count": 0,
+        "test_regression_detected": false,
+        "existing_tests_passed": true,
+        "targeted_test_passed": true,
+        "missing_evidence": [],
+        "rationale": "Original finding still present in patched code",
+        "classified_findings": [
+          {
+            "rule_id": "B608",
+            "classification": "POTENTIALLY_REGRESSED",
+            "reason": "Finding shifted from line 8 to 9 in modified file."
+          },
+          {
+            "rule_id": "B101",
+            "classification": "UNCHANGED",
+            "reason": "Non-target pre-existing findings in unmodified files or unaffected sections that remain present in both baseline and patched workspaces without alteration."
+          },
+          {
+            "rule_id": "B101",
+            "classification": "UNCHANGED",
+            "reason": "Non-target pre-existing findings in unmodified files or unaffected sections that remain present in both baseline and patched workspaces without alteration."
+          },
+          {
+            "rule_id": "B101",
+            "classification": "UNCHANGED",
+            "reason": "Non-target pre-existing findings in unmodified files or unaffected sections that remain present in both baseline and patched workspaces without alteration."
+          }
+        ]
+      }
+    },
+    {
+      "case_id": "RS-BENCH-001",
+      "patch_id": "RS-001-P4",
+      "patch_type": "regressive_fix",
+      "split": "dev",
+      "origin": "synthetic_curated",
+      "vulnerability_category": "sql_injection",
+      "baseline_revision": "c01a8f93e2b4d5a712e0984f18d73b5e",
+      "proposed_patch": "--- a/src/auth_service.py\n+++ b/src/auth_service.py\n@@ -6,5 +6,3 @@\n     cursor = conn.cursor()\n-    # VULNERABLE: Direct f-string interpolation in SQL statement\n-    query = f\"SELECT id FROM users WHERE username = '{username}' AND password_hash = '{password_hash}'\"\n-    cursor.execute(query)\n+    # REGRESSIVE: Breaks functional authentication logic\n+    raise PermissionError(\"Authentication temporarily disabled for security\")\n",
+      "ground_truth_label": "NON_FIX",
+      "ground_truth_rationale": "Regressive fix: Hardcodes PermissionError exception aborting all authentication requests, breaking valid existing test cases.",
+      "baseline_id": "B1_sast_alone",
+      "baseline_name": "Static Analysis Alone (SAST Delta)",
+      "expected_classification": "FAILED",
+      "actual_classification": "VERIFIED",
+      "is_correct": false,
+      "runtime_ms": 1648.8719999906607,
+      "error_message": null,
+      "evidence": {
+        "target_rule": "B608",
+        "baseline_detected_rule": true,
+        "patched_detected_rule": false,
+        "baseline_findings_count": 4,
+        "patched_findings_count": 3,
+        "scanner_metadata": {
+          "bandit": {
+            "name": "bandit",
+            "display_name": "Bandit Python SAST",
+            "category": "sast",
+            "is_available": true,
+            "version": "python.exe C:\\Users\\Dhina\\AppData\\Roaming\\Python\\Python314\\Scripts\\bandit.EXE 1.9.4",
+            "status": "success",
+            "execution_time": 0.56
+          }
+        },
+        "rationale": "Target finding rule 'B608' resolved in patched workspace."
+      }
+    },
+    {
+      "case_id": "RS-BENCH-001",
+      "patch_id": "RS-001-P4",
+      "patch_type": "regressive_fix",
+      "split": "dev",
+      "origin": "synthetic_curated",
+      "vulnerability_category": "sql_injection",
+      "baseline_revision": "c01a8f93e2b4d5a712e0984f18d73b5e",
+      "proposed_patch": "--- a/src/auth_service.py\n+++ b/src/auth_service.py\n@@ -6,5 +6,3 @@\n     cursor = conn.cursor()\n-    # VULNERABLE: Direct f-string interpolation in SQL statement\n-    query = f\"SELECT id FROM users WHERE username = '{username}' AND password_hash = '{password_hash}'\"\n-    cursor.execute(query)\n+    # REGRESSIVE: Breaks functional authentication logic\n+    raise PermissionError(\"Authentication temporarily disabled for security\")\n",
+      "ground_truth_label": "NON_FIX",
+      "ground_truth_rationale": "Regressive fix: Hardcodes PermissionError exception aborting all authentication requests, breaking valid existing test cases.",
+      "baseline_id": "B2_existing_tests",
+      "baseline_name": "Existing Unit Tests Alone (General Test Suite)",
+      "expected_classification": "FAILED",
+      "actual_classification": "FAILED",
+      "is_correct": true,
+      "runtime_ms": 717.9037000169046,
+      "error_message": "Test run exited with code 1",
+      "evidence": {
+        "test_status": "failed",
+        "passed_count": 0,
+        "failed_count": 1,
+        "error_message": "Test run exited with code 1",
+        "rationale": "Existing unit tests failed (1 failed)."
+      }
+    },
+    {
+      "case_id": "RS-BENCH-001",
+      "patch_id": "RS-001-P4",
+      "patch_type": "regressive_fix",
+      "split": "dev",
+      "origin": "synthetic_curated",
+      "vulnerability_category": "sql_injection",
+      "baseline_revision": "c01a8f93e2b4d5a712e0984f18d73b5e",
+      "proposed_patch": "--- a/src/auth_service.py\n+++ b/src/auth_service.py\n@@ -6,5 +6,3 @@\n     cursor = conn.cursor()\n-    # VULNERABLE: Direct f-string interpolation in SQL statement\n-    query = f\"SELECT id FROM users WHERE username = '{username}' AND password_hash = '{password_hash}'\"\n-    cursor.execute(query)\n+    # REGRESSIVE: Breaks functional authentication logic\n+    raise PermissionError(\"Authentication temporarily disabled for security\")\n",
+      "ground_truth_label": "NON_FIX",
+      "ground_truth_rationale": "Regressive fix: Hardcodes PermissionError exception aborting all authentication requests, breaking valid existing test cases.",
+      "baseline_id": "B3_ai_judge",
+      "baseline_name": "AI / LLM Judge Alone (Syntactic Heuristic)",
+      "expected_classification": "FAILED",
+      "actual_classification": "FAILED",
+      "is_correct": true,
+      "runtime_ms": 250.00230001751333,
+      "error_message": null,
+      "evidence": {
+        "model": "gpt-4o / claude-3.5-sonnet (simulated zero-shot judge)",
+        "rationale": "LLM detected disrupted control flow or functional abort exception in diff.",
+        "syntactic_tokens_detected": [
+          "abort",
+          "raise"
+        ]
+      }
+    },
+    {
+      "case_id": "RS-BENCH-001",
+      "patch_id": "RS-001-P4",
+      "patch_type": "regressive_fix",
+      "split": "dev",
+      "origin": "synthetic_curated",
+      "vulnerability_category": "sql_injection",
+      "baseline_revision": "c01a8f93e2b4d5a712e0984f18d73b5e",
+      "proposed_patch": "--- a/src/auth_service.py\n+++ b/src/auth_service.py\n@@ -6,5 +6,3 @@\n     cursor = conn.cursor()\n-    # VULNERABLE: Direct f-string interpolation in SQL statement\n-    query = f\"SELECT id FROM users WHERE username = '{username}' AND password_hash = '{password_hash}'\"\n-    cursor.execute(query)\n+    # REGRESSIVE: Breaks functional authentication logic\n+    raise PermissionError(\"Authentication temporarily disabled for security\")\n",
+      "ground_truth_label": "NON_FIX",
+      "ground_truth_rationale": "Regressive fix: Hardcodes PermissionError exception aborting all authentication requests, breaking valid existing test cases.",
+      "baseline_id": "B4_reposhield_pipeline",
+      "baseline_name": "RepoShield Combined Pipeline (Multi-Tier Evidence Gate)",
+      "expected_classification": "FAILED",
+      "actual_classification": "FAILED",
+      "is_correct": true,
+      "runtime_ms": 3796.716600016225,
+      "error_message": null,
+      "evidence": {
+        "target_classification": "RESOLVED_BY_DEFINED_CHECKS",
+        "new_findings_count": 0,
+        "test_regression_detected": true,
+        "existing_tests_passed": false,
+        "targeted_test_passed": false,
+        "missing_evidence": [],
+        "rationale": "Functional test regression: Unit tests passed in baseline but failed after patch; Targeted security regression test failed: Vulnerability exploit still succeeds",
+        "classified_findings": [
+          {
+            "rule_id": "B608",
+            "classification": "RESOLVED_BY_DEFINED_CHECKS",
+            "reason": "The targeted baseline finding was reproduced in the baseline workspace under the configured scanner rules and is no longer reported in the patched workspace under the same scanner configuration."
+          },
+          {
+            "rule_id": "B101",
+            "classification": "UNCHANGED",
+            "reason": "Non-target pre-existing findings in unmodified files or unaffected sections that remain present in both baseline and patched workspaces without alteration."
+          },
+          {
+            "rule_id": "B101",
+            "classification": "UNCHANGED",
+            "reason": "Non-target pre-existing findings in unmodified files or unaffected sections that remain present in both baseline and patched workspaces without alteration."
+          },
+          {
+            "rule_id": "B101",
+            "classification": "UNCHANGED",
+            "reason": "Non-target pre-existing findings in unmodified files or unaffected sections that remain present in both baseline and patched workspaces without alteration."
+          }
+        ]
+      }
+    },
+    {
+      "case_id": "RS-BENCH-001",
+      "patch_id": "RS-001-P5",
+      "patch_type": "security_regression",
+      "split": "dev",
+      "origin": "synthetic_curated",
+      "vulnerability_category": "sql_injection",
+      "baseline_revision": "c01a8f93e2b4d5a712e0984f18d73b5e",
+      "proposed_patch": "--- a/src/auth_service.py\n+++ b/src/auth_service.py\n@@ -1,3 +1,5 @@\n import sqlite3\n+# SECURITY REGRESSION: Hardcoded secret token committed in patch\n+SERVICE_TOKEN = \"ghp_1234567890abcdefghijklmnopqrstuvwxyz\"\n \n def authenticate_user(db_path: str, username: str, password_hash: str) -> bool:\n@@ -6,5 +8,5 @@\n     cursor = conn.cursor()\n-    # VULNERABLE: Direct f-string interpolation in SQL statement\n-    query = f\"SELECT id FROM users WHERE username = '{username}' AND password_hash = '{password_hash}'\"\n-    cursor.execute(query)\n+    # FIXED: Parameterized query\n+    query = \"SELECT id FROM users WHERE username = ? AND password_hash = ?\"\n+    cursor.execute(query, (username, password_hash))\n",
+      "ground_truth_label": "NON_FIX",
+      "ground_truth_rationale": "Security regression: Solves SQL injection via parameterization but introduces hardcoded secret credential token in source file.",
+      "baseline_id": "B1_sast_alone",
+      "baseline_name": "Static Analysis Alone (SAST Delta)",
+      "expected_classification": "FAILED",
+      "actual_classification": "VERIFIED",
+      "is_correct": false,
+      "runtime_ms": 1678.7484999513254,
+      "error_message": null,
+      "evidence": {
+        "target_rule": "B608",
+        "baseline_detected_rule": true,
+        "patched_detected_rule": false,
+        "baseline_findings_count": 4,
+        "patched_findings_count": 4,
+        "scanner_metadata": {
+          "bandit": {
+            "name": "bandit",
+            "display_name": "Bandit Python SAST",
+            "category": "sast",
+            "is_available": true,
+            "version": "python.exe C:\\Users\\Dhina\\AppData\\Roaming\\Python\\Python314\\Scripts\\bandit.EXE 1.9.4",
+            "status": "success",
+            "execution_time": 0.56
+          }
+        },
+        "rationale": "Target finding rule 'B608' resolved in patched workspace."
+      }
+    },
+    {
+      "case_id": "RS-BENCH-001",
+      "patch_id": "RS-001-P5",
+      "patch_type": "security_regression",
+      "split": "dev",
+      "origin": "synthetic_curated",
+      "vulnerability_category": "sql_injection",
+      "baseline_revision": "c01a8f93e2b4d5a712e0984f18d73b5e",
+      "proposed_patch": "--- a/src/auth_service.py\n+++ b/src/auth_service.py\n@@ -1,3 +1,5 @@\n import sqlite3\n+# SECURITY REGRESSION: Hardcoded secret token committed in patch\n+SERVICE_TOKEN = \"ghp_1234567890abcdefghijklmnopqrstuvwxyz\"\n \n def authenticate_user(db_path: str, username: str, password_hash: str) -> bool:\n@@ -6,5 +8,5 @@\n     cursor = conn.cursor()\n-    # VULNERABLE: Direct f-string interpolation in SQL statement\n-    query = f\"SELECT id FROM users WHERE username = '{username}' AND password_hash = '{password_hash}'\"\n-    cursor.execute(query)\n+    # FIXED: Parameterized query\n+    query = \"SELECT id FROM users WHERE username = ? AND password_hash = ?\"\n+    cursor.execute(query, (username, password_hash))\n",
+      "ground_truth_label": "NON_FIX",
+      "ground_truth_rationale": "Security regression: Solves SQL injection via parameterization but introduces hardcoded secret credential token in source file.",
+      "baseline_id": "B2_existing_tests",
+      "baseline_name": "Existing Unit Tests Alone (General Test Suite)",
+      "expected_classification": "FAILED",
+      "actual_classification": "VERIFIED",
+      "is_correct": false,
+      "runtime_ms": 633.9570000418462,
+      "error_message": null,
+      "evidence": {
+        "test_status": "passed",
+        "passed_count": 1,
+        "failed_count": 0,
+        "error_message": null,
+        "rationale": "All existing unit tests passed (1 passed)."
+      }
+    },
+    {
+      "case_id": "RS-BENCH-001",
+      "patch_id": "RS-001-P5",
+      "patch_type": "security_regression",
+      "split": "dev",
+      "origin": "synthetic_curated",
+      "vulnerability_category": "sql_injection",
+      "baseline_revision": "c01a8f93e2b4d5a712e0984f18d73b5e",
+      "proposed_patch": "--- a/src/auth_service.py\n+++ b/src/auth_service.py\n@@ -1,3 +1,5 @@\n import sqlite3\n+# SECURITY REGRESSION: Hardcoded secret token committed in patch\n+SERVICE_TOKEN = \"ghp_1234567890abcdefghijklmnopqrstuvwxyz\"\n \n def authenticate_user(db_path: str, username: str, password_hash: str) -> bool:\n@@ -6,5 +8,5 @@\n     cursor = conn.cursor()\n-    # VULNERABLE: Direct f-string interpolation in SQL statement\n-    query = f\"SELECT id FROM users WHERE username = '{username}' AND password_hash = '{password_hash}'\"\n-    cursor.execute(query)\n+    # FIXED: Parameterized query\n+    query = \"SELECT id FROM users WHERE username = ? AND password_hash = ?\"\n+    cursor.execute(query, (username, password_hash))\n",
+      "ground_truth_label": "NON_FIX",
+      "ground_truth_rationale": "Security regression: Solves SQL injection via parameterization but introduces hardcoded secret credential token in source file.",
+      "baseline_id": "B3_ai_judge",
+      "baseline_name": "AI / LLM Judge Alone (Syntactic Heuristic)",
+      "expected_classification": "FAILED",
+      "actual_classification": "VERIFIED",
+      "is_correct": false,
+      "runtime_ms": 250.00220001675189,
+      "error_message": null,
+      "evidence": {
+        "model": "gpt-4o / claude-3.5-sonnet (simulated zero-shot judge)",
+        "rationale": "LLM judged patch plausible.",
+        "syntactic_tokens_detected": [
+          "replace",
+          "safe",
+          "resolve"
+        ]
+      }
+    },
+    {
+      "case_id": "RS-BENCH-001",
+      "patch_id": "RS-001-P5",
+      "patch_type": "security_regression",
+      "split": "dev",
+      "origin": "synthetic_curated",
+      "vulnerability_category": "sql_injection",
+      "baseline_revision": "c01a8f93e2b4d5a712e0984f18d73b5e",
+      "proposed_patch": "--- a/src/auth_service.py\n+++ b/src/auth_service.py\n@@ -1,3 +1,5 @@\n import sqlite3\n+# SECURITY REGRESSION: Hardcoded secret token committed in patch\n+SERVICE_TOKEN = \"ghp_1234567890abcdefghijklmnopqrstuvwxyz\"\n \n def authenticate_user(db_path: str, username: str, password_hash: str) -> bool:\n@@ -6,5 +8,5 @@\n     cursor = conn.cursor()\n-    # VULNERABLE: Direct f-string interpolation in SQL statement\n-    query = f\"SELECT id FROM users WHERE username = '{username}' AND password_hash = '{password_hash}'\"\n-    cursor.execute(query)\n+    # FIXED: Parameterized query\n+    query = \"SELECT id FROM users WHERE username = ? AND password_hash = ?\"\n+    cursor.execute(query, (username, password_hash))\n",
+      "ground_truth_label": "NON_FIX",
+      "ground_truth_rationale": "Security regression: Solves SQL injection via parameterization but introduces hardcoded secret credential token in source file.",
+      "baseline_id": "B4_reposhield_pipeline",
+      "baseline_name": "RepoShield Combined Pipeline (Multi-Tier Evidence Gate)",
+      "expected_classification": "FAILED",
+      "actual_classification": "FAILED",
+      "is_correct": true,
+      "runtime_ms": 3573.9619999658316,
+      "error_message": null,
+      "evidence": {
+        "target_classification": "RESOLVED_BY_DEFINED_CHECKS",
+        "new_findings_count": 1,
+        "test_regression_detected": false,
+        "existing_tests_passed": true,
+        "targeted_test_passed": true,
+        "missing_evidence": [],
+        "rationale": "Patch introduced 1 new security finding(s)",
+        "classified_findings": [
+          {
+            "rule_id": "B608",
+            "classification": "RESOLVED_BY_DEFINED_CHECKS",
+            "reason": "The targeted baseline finding was reproduced in the baseline workspace under the configured scanner rules and is no longer reported in the patched workspace under the same scanner configuration."
+          },
+          {
+            "rule_id": "B101",
+            "classification": "UNCHANGED",
+            "reason": "Non-target pre-existing findings in unmodified files or unaffected sections that remain present in both baseline and patched workspaces without alteration."
+          },
+          {
+            "rule_id": "B101",
+            "classification": "UNCHANGED",
+            "reason": "Non-target pre-existing findings in unmodified files or unaffected sections that remain present in both baseline and patched workspaces without alteration."
+          },
+          {
+            "rule_id": "B101",
+            "classification": "UNCHANGED",
+            "reason": "Non-target pre-existing findings in unmodified files or unaffected sections that remain present in both baseline and patched workspaces without alteration."
+          },
+          {
+            "rule_id": "B105",
+            "classification": "NEW",
+            "reason": "A finding detected in the patched workspace that did not exist in the baseline workspace, representing a newly introduced security defect or regression."
+          }
+        ]
+      }
+    },
+    {
+      "case_id": "RS-BENCH-002",
+      "patch_id": "RS-002-P1",
+      "patch_type": "true_fix",
+      "split": "dev",
+      "origin": "synthetic_curated",
+      "vulnerability_category": "command_injection",
+      "baseline_revision": "b02d7c541e39a82645f0912cb8491c34",
+      "proposed_patch": "--- a/src/backup_tool.py\n+++ b/src/backup_tool.py\n@@ -1,8 +1,8 @@\n-import subprocess\n+import shutil\n \n def run_backup(target_dir: str, archive_name: str) -> int:\n     \"\"\"Create archive of target directory using tar.\"\"\"\n-    # VULNERABLE: shell=True with unquoted string concatenation\n-    cmd = f\"tar -czf {archive_name}.tar.gz {target_dir}\"\n-    proc = subprocess.run(cmd, shell=True, capture_output=True, text=True)\n-    return proc.returncode\n+    # FIXED: Native Python archive creation eliminates shell invocation\n+    shutil.make_archive(archive_name, \"gztar\", root_dir=target_dir)\n+    return 0\n",
+      "ground_truth_label": "FIX",
+      "ground_truth_rationale": "True fix: Replaces unsafe shell invocation with native Python shutil.make_archive, entirely eliminating subprocess and shell execution risks.",
+      "baseline_id": "B1_sast_alone",
+      "baseline_name": "Static Analysis Alone (SAST Delta)",
+      "expected_classification": "VERIFIED",
+      "actual_classification": "VERIFIED",
+      "is_correct": true,
+      "runtime_ms": 1647.4275999935344,
+      "error_message": null,
+      "evidence": {
+        "target_rule": "B602",
+        "baseline_detected_rule": true,
+        "patched_detected_rule": false,
+        "baseline_findings_count": 4,
+        "patched_findings_count": 2,
+        "scanner_metadata": {
+          "bandit": {
+            "name": "bandit",
+            "display_name": "Bandit Python SAST",
+            "category": "sast",
+            "is_available": true,
+            "version": "python.exe C:\\Users\\Dhina\\AppData\\Roaming\\Python\\Python314\\Scripts\\bandit.EXE 1.9.4",
+            "status": "success",
+            "execution_time": 0.54
+          }
+        },
+        "rationale": "Target finding rule 'B602' resolved in patched workspace."
+      }
+    },
+    {
+      "case_id": "RS-BENCH-002",
+      "patch_id": "RS-002-P1",
+      "patch_type": "true_fix",
+      "split": "dev",
+      "origin": "synthetic_curated",
+      "vulnerability_category": "command_injection",
+      "baseline_revision": "b02d7c541e39a82645f0912cb8491c34",
+      "proposed_patch": "--- a/src/backup_tool.py\n+++ b/src/backup_tool.py\n@@ -1,8 +1,8 @@\n-import subprocess\n+import shutil\n \n def run_backup(target_dir: str, archive_name: str) -> int:\n     \"\"\"Create archive of target directory using tar.\"\"\"\n-    # VULNERABLE: shell=True with unquoted string concatenation\n-    cmd = f\"tar -czf {archive_name}.tar.gz {target_dir}\"\n-    proc = subprocess.run(cmd, shell=True, capture_output=True, text=True)\n-    return proc.returncode\n+    # FIXED: Native Python archive creation eliminates shell invocation\n+    shutil.make_archive(archive_name, \"gztar\", root_dir=target_dir)\n+    return 0\n",
+      "ground_truth_label": "FIX",
+      "ground_truth_rationale": "True fix: Replaces unsafe shell invocation with native Python shutil.make_archive, entirely eliminating subprocess and shell execution risks.",
+      "baseline_id": "B2_existing_tests",
+      "baseline_name": "Existing Unit Tests Alone (General Test Suite)",
+      "expected_classification": "VERIFIED",
+      "actual_classification": "VERIFIED",
+      "is_correct": true,
+      "runtime_ms": 641.0412000259385,
+      "error_message": null,
+      "evidence": {
+        "test_status": "passed",
+        "passed_count": 1,
+        "failed_count": 0,
+        "error_message": null,
+        "rationale": "All existing unit tests passed (1 passed)."
+      }
+    },
+    {
+      "case_id": "RS-BENCH-002",
+      "patch_id": "RS-002-P1",
+      "patch_type": "true_fix",
+      "split": "dev",
+      "origin": "synthetic_curated",
+      "vulnerability_category": "command_injection",
+      "baseline_revision": "b02d7c541e39a82645f0912cb8491c34",
+      "proposed_patch": "--- a/src/backup_tool.py\n+++ b/src/backup_tool.py\n@@ -1,8 +1,8 @@\n-import subprocess\n+import shutil\n \n def run_backup(target_dir: str, archive_name: str) -> int:\n     \"\"\"Create archive of target directory using tar.\"\"\"\n-    # VULNERABLE: shell=True with unquoted string concatenation\n-    cmd = f\"tar -czf {archive_name}.tar.gz {target_dir}\"\n-    proc = subprocess.run(cmd, shell=True, capture_output=True, text=True)\n-    return proc.returncode\n+    # FIXED: Native Python archive creation eliminates shell invocation\n+    shutil.make_archive(archive_name, \"gztar\", root_dir=target_dir)\n+    return 0\n",
+      "ground_truth_label": "FIX",
+      "ground_truth_rationale": "True fix: Replaces unsafe shell invocation with native Python shutil.make_archive, entirely eliminating subprocess and shell execution risks.",
+      "baseline_id": "B3_ai_judge",
+      "baseline_name": "AI / LLM Judge Alone (Syntactic Heuristic)",
+      "expected_classification": "VERIFIED",
+      "actual_classification": "VERIFIED",
+      "is_correct": true,
+      "runtime_ms": 250.00039994483814,
+      "error_message": null,
+      "evidence": {
+        "model": "gpt-4o / claude-3.5-sonnet (simulated zero-shot judge)",
+        "rationale": "LLM analyzed patch syntax and concluded vulnerability construct was eliminated.",
+        "syntactic_tokens_detected": [
+          "replace",
+          "safe",
+          "resolve"
+        ]
+      }
+    },
+    {
+      "case_id": "RS-BENCH-002",
+      "patch_id": "RS-002-P1",
+      "patch_type": "true_fix",
+      "split": "dev",
+      "origin": "synthetic_curated",
+      "vulnerability_category": "command_injection",
+      "baseline_revision": "b02d7c541e39a82645f0912cb8491c34",
+      "proposed_patch": "--- a/src/backup_tool.py\n+++ b/src/backup_tool.py\n@@ -1,8 +1,8 @@\n-import subprocess\n+import shutil\n \n def run_backup(target_dir: str, archive_name: str) -> int:\n     \"\"\"Create archive of target directory using tar.\"\"\"\n-    # VULNERABLE: shell=True with unquoted string concatenation\n-    cmd = f\"tar -czf {archive_name}.tar.gz {target_dir}\"\n-    proc = subprocess.run(cmd, shell=True, capture_output=True, text=True)\n-    return proc.returncode\n+    # FIXED: Native Python archive creation eliminates shell invocation\n+    shutil.make_archive(archive_name, \"gztar\", root_dir=target_dir)\n+    return 0\n",
+      "ground_truth_label": "FIX",
+      "ground_truth_rationale": "True fix: Replaces unsafe shell invocation with native Python shutil.make_archive, entirely eliminating subprocess and shell execution risks.",
+      "baseline_id": "B4_reposhield_pipeline",
+      "baseline_name": "RepoShield Combined Pipeline (Multi-Tier Evidence Gate)",
+      "expected_classification": "VERIFIED",
+      "actual_classification": "VERIFIED",
+      "is_correct": true,
+      "runtime_ms": 3688.24659998063,
+      "error_message": null,
+      "evidence": {
+        "target_classification": "RESOLVED_BY_DEFINED_CHECKS",
+        "new_findings_count": 0,
+        "test_regression_detected": false,
+        "existing_tests_passed": true,
+        "targeted_test_passed": true,
+        "missing_evidence": [],
+        "rationale": "Target finding resolved under defined checks with all tests passing.",
+        "classified_findings": [
+          {
+            "rule_id": "B404",
+            "classification": "RESOLVED_BY_DEFINED_CHECKS",
+            "reason": "The targeted baseline finding was reproduced in the baseline workspace under the configured scanner rules and is no longer reported in the patched workspace under the same scanner configuration."
+          },
+          {
+            "rule_id": "B602",
+            "classification": "RESOLVED_BY_DEFINED_CHECKS",
+            "reason": "The targeted baseline finding was reproduced in the baseline workspace under the configured scanner rules and is no longer reported in the patched workspace under the same scanner configuration."
+          },
+          {
+            "rule_id": "B101",
+            "classification": "UNCHANGED",
+            "reason": "Non-target pre-existing findings in unmodified files or unaffected sections that remain present in both baseline and patched workspaces without alteration."
+          },
+          {
+            "rule_id": "B101",
+            "classification": "UNCHANGED",
+            "reason": "Non-target pre-existing findings in unmodified files or unaffected sections that remain present in both baseline and patched workspaces without alteration."
+          }
+        ]
+      }
+    },
+    {
+      "case_id": "RS-BENCH-002",
+      "patch_id": "RS-002-P2",
+      "patch_type": "cosmetic_evasion",
+      "split": "dev",
+      "origin": "synthetic_curated",
+      "vulnerability_category": "command_injection",
+      "baseline_revision": "b02d7c541e39a82645f0912cb8491c34",
+      "proposed_patch": "--- a/src/backup_tool.py\n+++ b/src/backup_tool.py\n@@ -1,8 +1,8 @@\n-import subprocess\n+import os\n \n def run_backup(target_dir: str, archive_name: str) -> int:\n     \"\"\"Create archive of target directory using tar.\"\"\"\n-    # VULNERABLE: shell=True with unquoted string concatenation\n-    cmd = f\"tar -czf {archive_name}.tar.gz {target_dir}\"\n-    proc = subprocess.run(cmd, shell=True, capture_output=True, text=True)\n-    return proc.returncode\n+    # EVASIVE: Uses os.system instead of subprocess\n+    cmd = f\"tar -czf {archive_name}.tar.gz {target_dir}\"\n+    return os.system(cmd)\n",
+      "ground_truth_label": "NON_FIX",
+      "ground_truth_rationale": "Cosmetic evasion: Substitutes subprocess.run with os.system to avoid Bandit B602 rule, but shell injection remains completely exploitable under rule B605.",
+      "baseline_id": "B1_sast_alone",
+      "baseline_name": "Static Analysis Alone (SAST Delta)",
+      "expected_classification": "FAILED",
+      "actual_classification": "VERIFIED",
+      "is_correct": false,
+      "runtime_ms": 1680.579999985639,
+      "error_message": null,
+      "evidence": {
+        "target_rule": "B602",
+        "baseline_detected_rule": true,
+        "patched_detected_rule": false,
+        "baseline_findings_count": 4,
+        "patched_findings_count": 3,
+        "scanner_metadata": {
+          "bandit": {
+            "name": "bandit",
+            "display_name": "Bandit Python SAST",
+            "category": "sast",
+            "is_available": true,
+            "version": "python.exe C:\\Users\\Dhina\\AppData\\Roaming\\Python\\Python314\\Scripts\\bandit.EXE 1.9.4",
+            "status": "success",
+            "execution_time": 0.55
+          }
+        },
+        "rationale": "Target finding rule 'B602' resolved in patched workspace."
+      }
+    },
+    {
+      "case_id": "RS-BENCH-002",
+      "patch_id": "RS-002-P2",
+      "patch_type": "cosmetic_evasion",
+      "split": "dev",
+      "origin": "synthetic_curated",
+      "vulnerability_category": "command_injection",
+      "baseline_revision": "b02d7c541e39a82645f0912cb8491c34",
+      "proposed_patch": "--- a/src/backup_tool.py\n+++ b/src/backup_tool.py\n@@ -1,8 +1,8 @@\n-import subprocess\n+import os\n \n def run_backup(target_dir: str, archive_name: str) -> int:\n     \"\"\"Create archive of target directory using tar.\"\"\"\n-    # VULNERABLE: shell=True with unquoted string concatenation\n-    cmd = f\"tar -czf {archive_name}.tar.gz {target_dir}\"\n-    proc = subprocess.run(cmd, shell=True, capture_output=True, text=True)\n-    return proc.returncode\n+    # EVASIVE: Uses os.system instead of subprocess\n+    cmd = f\"tar -czf {archive_name}.tar.gz {target_dir}\"\n+    return os.system(cmd)\n",
+      "ground_truth_label": "NON_FIX",
+      "ground_truth_rationale": "Cosmetic evasion: Substitutes subprocess.run with os.system to avoid Bandit B602 rule, but shell injection remains completely exploitable under rule B605.",
+      "baseline_id": "B2_existing_tests",
+      "baseline_name": "Existing Unit Tests Alone (General Test Suite)",
+      "expected_classification": "FAILED",
+      "actual_classification": "VERIFIED",
+      "is_correct": false,
+      "runtime_ms": 681.0364000266418,
+      "error_message": null,
+      "evidence": {
+        "test_status": "passed",
+        "passed_count": 1,
+        "failed_count": 0,
+        "error_message": null,
+        "rationale": "All existing unit tests passed (1 passed)."
+      }
+    },
+    {
+      "case_id": "RS-BENCH-002",
+      "patch_id": "RS-002-P2",
+      "patch_type": "cosmetic_evasion",
+      "split": "dev",
+      "origin": "synthetic_curated",
+      "vulnerability_category": "command_injection",
+      "baseline_revision": "b02d7c541e39a82645f0912cb8491c34",
+      "proposed_patch": "--- a/src/backup_tool.py\n+++ b/src/backup_tool.py\n@@ -1,8 +1,8 @@\n-import subprocess\n+import os\n \n def run_backup(target_dir: str, archive_name: str) -> int:\n     \"\"\"Create archive of target directory using tar.\"\"\"\n-    # VULNERABLE: shell=True with unquoted string concatenation\n-    cmd = f\"tar -czf {archive_name}.tar.gz {target_dir}\"\n-    proc = subprocess.run(cmd, shell=True, capture_output=True, text=True)\n-    return proc.returncode\n+    # EVASIVE: Uses os.system instead of subprocess\n+    cmd = f\"tar -czf {archive_name}.tar.gz {target_dir}\"\n+    return os.system(cmd)\n",
+      "ground_truth_label": "NON_FIX",
+      "ground_truth_rationale": "Cosmetic evasion: Substitutes subprocess.run with os.system to avoid Bandit B602 rule, but shell injection remains completely exploitable under rule B605.",
+      "baseline_id": "B3_ai_judge",
+      "baseline_name": "AI / LLM Judge Alone (Syntactic Heuristic)",
+      "expected_classification": "FAILED",
+      "actual_classification": "VERIFIED",
+      "is_correct": false,
+      "runtime_ms": 250.0010000076145,
+      "error_message": null,
+      "evidence": {
+        "model": "gpt-4o / claude-3.5-sonnet (simulated zero-shot judge)",
+        "rationale": "LLM judged rewritten variable structure or custom loader as safe mitigation (plausibility bias).",
+        "syntactic_tokens_detected": [
+          "replace",
+          "safe",
+          "resolve"
+        ]
+      }
+    },
+    {
+      "case_id": "RS-BENCH-002",
+      "patch_id": "RS-002-P2",
+      "patch_type": "cosmetic_evasion",
+      "split": "dev",
+      "origin": "synthetic_curated",
+      "vulnerability_category": "command_injection",
+      "baseline_revision": "b02d7c541e39a82645f0912cb8491c34",
+      "proposed_patch": "--- a/src/backup_tool.py\n+++ b/src/backup_tool.py\n@@ -1,8 +1,8 @@\n-import subprocess\n+import os\n \n def run_backup(target_dir: str, archive_name: str) -> int:\n     \"\"\"Create archive of target directory using tar.\"\"\"\n-    # VULNERABLE: shell=True with unquoted string concatenation\n-    cmd = f\"tar -czf {archive_name}.tar.gz {target_dir}\"\n-    proc = subprocess.run(cmd, shell=True, capture_output=True, text=True)\n-    return proc.returncode\n+    # EVASIVE: Uses os.system instead of subprocess\n+    cmd = f\"tar -czf {archive_name}.tar.gz {target_dir}\"\n+    return os.system(cmd)\n",
+      "ground_truth_label": "NON_FIX",
+      "ground_truth_rationale": "Cosmetic evasion: Substitutes subprocess.run with os.system to avoid Bandit B602 rule, but shell injection remains completely exploitable under rule B605.",
+      "baseline_id": "B4_reposhield_pipeline",
+      "baseline_name": "RepoShield Combined Pipeline (Multi-Tier Evidence Gate)",
+      "expected_classification": "FAILED",
+      "actual_classification": "FAILED",
+      "is_correct": true,
+      "runtime_ms": 3729.647299973294,
+      "error_message": null,
+      "evidence": {
+        "target_classification": "POTENTIALLY_REGRESSED",
+        "new_findings_count": 1,
+        "test_regression_detected": false,
+        "existing_tests_passed": true,
+        "targeted_test_passed": false,
+        "missing_evidence": [],
+        "rationale": "Vulnerability pattern shifted or related finding remains in modified file (partial fix); Patch introduced 1 new security finding(s); Targeted security regression test failed: Vulnerability exploit still succeeds",
+        "classified_findings": [
+          {
+            "rule_id": "B404",
+            "classification": "RESOLVED_BY_DEFINED_CHECKS",
+            "reason": "The targeted baseline finding was reproduced in the baseline workspace under the configured scanner rules and is no longer reported in the patched workspace under the same scanner configuration."
+          },
+          {
+            "rule_id": "B602",
+            "classification": "RESOLVED_BY_DEFINED_CHECKS",
+            "reason": "The targeted baseline finding was reproduced in the baseline workspace under the configured scanner rules and is no longer reported in the patched workspace under the same scanner configuration."
+          },
+          {
+            "rule_id": "B101",
+            "classification": "UNCHANGED",
+            "reason": "Non-target pre-existing findings in unmodified files or unaffected sections that remain present in both baseline and patched workspaces without alteration."
+          },
+          {
+            "rule_id": "B101",
+            "classification": "UNCHANGED",
+            "reason": "Non-target pre-existing findings in unmodified files or unaffected sections that remain present in both baseline and patched workspaces without alteration."
+          },
+          {
+            "rule_id": "B605",
+            "classification": "NEW",
+            "reason": "A finding detected in the patched workspace that did not exist in the baseline workspace, representing a newly introduced security defect or regression."
+          }
+        ]
+      }
+    },
+    {
+      "case_id": "RS-BENCH-002",
+      "patch_id": "RS-002-P3",
+      "patch_type": "regressive_fix",
+      "split": "dev",
+      "origin": "synthetic_curated",
+      "vulnerability_category": "command_injection",
+      "baseline_revision": "b02d7c541e39a82645f0912cb8491c34",
+      "proposed_patch": "--- a/src/backup_tool.py\n+++ b/src/backup_tool.py\n@@ -5,4 +5,3 @@\n-    # VULNERABLE: shell=True with unquoted string concatenation\n-    cmd = f\"tar -czf {archive_name}.tar.gz {target_dir}\"\n-    proc = subprocess.run(cmd, shell=True, capture_output=True, text=True)\n-    return proc.returncode\n+    # REGRESSIVE: Fails command completely\n+    return 1\n",
+      "ground_truth_label": "NON_FIX",
+      "ground_truth_rationale": "Regressive fix: Hardcodes command return value to 1, causing functional failure across all backup requests.",
+      "baseline_id": "B1_sast_alone",
+      "baseline_name": "Static Analysis Alone (SAST Delta)",
+      "expected_classification": "FAILED",
+      "actual_classification": "VERIFIED",
+      "is_correct": false,
+      "runtime_ms": 1681.7230999586172,
+      "error_message": null,
+      "evidence": {
+        "target_rule": "B602",
+        "baseline_detected_rule": true,
+        "patched_detected_rule": false,
+        "baseline_findings_count": 4,
+        "patched_findings_count": 3,
+        "scanner_metadata": {
+          "bandit": {
+            "name": "bandit",
+            "display_name": "Bandit Python SAST",
+            "category": "sast",
+            "is_available": true,
+            "version": "python.exe C:\\Users\\Dhina\\AppData\\Roaming\\Python\\Python314\\Scripts\\bandit.EXE 1.9.4",
+            "status": "success",
+            "execution_time": 0.6
+          }
+        },
+        "rationale": "Target finding rule 'B602' resolved in patched workspace."
+      }
+    },
+    {
+      "case_id": "RS-BENCH-002",
+      "patch_id": "RS-002-P3",
+      "patch_type": "regressive_fix",
+      "split": "dev",
+      "origin": "synthetic_curated",
+      "vulnerability_category": "command_injection",
+      "baseline_revision": "b02d7c541e39a82645f0912cb8491c34",
+      "proposed_patch": "--- a/src/backup_tool.py\n+++ b/src/backup_tool.py\n@@ -5,4 +5,3 @@\n-    # VULNERABLE: shell=True with unquoted string concatenation\n-    cmd = f\"tar -czf {archive_name}.tar.gz {target_dir}\"\n-    proc = subprocess.run(cmd, shell=True, capture_output=True, text=True)\n-    return proc.returncode\n+    # REGRESSIVE: Fails command completely\n+    return 1\n",
+      "ground_truth_label": "NON_FIX",
+      "ground_truth_rationale": "Regressive fix: Hardcodes command return value to 1, causing functional failure across all backup requests.",
+      "baseline_id": "B2_existing_tests",
+      "baseline_name": "Existing Unit Tests Alone (General Test Suite)",
+      "expected_classification": "FAILED",
+      "actual_classification": "FAILED",
+      "is_correct": true,
+      "runtime_ms": 689.4079999765381,
+      "error_message": "Test run exited with code 1",
+      "evidence": {
+        "test_status": "failed",
+        "passed_count": 0,
+        "failed_count": 1,
+        "error_message": "Test run exited with code 1",
+        "rationale": "Existing unit tests failed (1 failed)."
+      }
+    },
+    {
+      "case_id": "RS-BENCH-002",
+      "patch_id": "RS-002-P3",
+      "patch_type": "regressive_fix",
+      "split": "dev",
+      "origin": "synthetic_curated",
+      "vulnerability_category": "command_injection",
+      "baseline_revision": "b02d7c541e39a82645f0912cb8491c34",
+      "proposed_patch": "--- a/src/backup_tool.py\n+++ b/src/backup_tool.py\n@@ -5,4 +5,3 @@\n-    # VULNERABLE: shell=True with unquoted string concatenation\n-    cmd = f\"tar -czf {archive_name}.tar.gz {target_dir}\"\n-    proc = subprocess.run(cmd, shell=True, capture_output=True, text=True)\n-    return proc.returncode\n+    # REGRESSIVE: Fails command completely\n+    return 1\n",
+      "ground_truth_label": "NON_FIX",
+      "ground_truth_rationale": "Regressive fix: Hardcodes command return value to 1, causing functional failure across all backup requests.",
+      "baseline_id": "B3_ai_judge",
+      "baseline_name": "AI / LLM Judge Alone (Syntactic Heuristic)",
+      "expected_classification": "FAILED",
+      "actual_classification": "FAILED",
+      "is_correct": true,
+      "runtime_ms": 250.002000015229,
+      "error_message": null,
+      "evidence": {
+        "model": "gpt-4o / claude-3.5-sonnet (simulated zero-shot judge)",
+        "rationale": "LLM detected disrupted control flow or functional abort exception in diff.",
+        "syntactic_tokens_detected": [
+          "abort",
+          "raise"
+        ]
+      }
+    },
+    {
+      "case_id": "RS-BENCH-002",
+      "patch_id": "RS-002-P3",
+      "patch_type": "regressive_fix",
+      "split": "dev",
+      "origin": "synthetic_curated",
+      "vulnerability_category": "command_injection",
+      "baseline_revision": "b02d7c541e39a82645f0912cb8491c34",
+      "proposed_patch": "--- a/src/backup_tool.py\n+++ b/src/backup_tool.py\n@@ -5,4 +5,3 @@\n-    # VULNERABLE: shell=True with unquoted string concatenation\n-    cmd = f\"tar -czf {archive_name}.tar.gz {target_dir}\"\n-    proc = subprocess.run(cmd, shell=True, capture_output=True, text=True)\n-    return proc.returncode\n+    # REGRESSIVE: Fails command completely\n+    return 1\n",
+      "ground_truth_label": "NON_FIX",
+      "ground_truth_rationale": "Regressive fix: Hardcodes command return value to 1, causing functional failure across all backup requests.",
+      "baseline_id": "B4_reposhield_pipeline",
+      "baseline_name": "RepoShield Combined Pipeline (Multi-Tier Evidence Gate)",
+      "expected_classification": "FAILED",
+      "actual_classification": "FAILED",
+      "is_correct": true,
+      "runtime_ms": 3652.5406000437215,
+      "error_message": null,
+      "evidence": {
+        "target_classification": "RESOLVED_BY_DEFINED_CHECKS",
+        "new_findings_count": 0,
+        "test_regression_detected": true,
+        "existing_tests_passed": false,
+        "targeted_test_passed": true,
+        "missing_evidence": [],
+        "rationale": "Functional test regression: Unit tests passed in baseline but failed after patch",
+        "classified_findings": [
+          {
+            "rule_id": "B404",
+            "classification": "STILL_PRESENT",
+            "reason": "The target finding remains detected by the scanner in the patched workspace under the same rule and file path with overlapping or identical sink location."
+          },
+          {
+            "rule_id": "B602",
+            "classification": "RESOLVED_BY_DEFINED_CHECKS",
+            "reason": "The targeted baseline finding was reproduced in the baseline workspace under the configured scanner rules and is no longer reported in the patched workspace under the same scanner configuration."
+          },
+          {
+            "rule_id": "B101",
+            "classification": "UNCHANGED",
+            "reason": "Non-target pre-existing findings in unmodified files or unaffected sections that remain present in both baseline and patched workspaces without alteration."
+          },
+          {
+            "rule_id": "B101",
+            "classification": "UNCHANGED",
+            "reason": "Non-target pre-existing findings in unmodified files or unaffected sections that remain present in both baseline and patched workspaces without alteration."
+          }
+        ]
+      }
+    },
+    {
+      "case_id": "RS-BENCH-002",
+      "patch_id": "RS-002-P4",
+      "patch_type": "incomplete_fix",
+      "split": "dev",
+      "origin": "synthetic_curated",
+      "vulnerability_category": "command_injection",
+      "baseline_revision": "b02d7c541e39a82645f0912cb8491c34",
+      "proposed_patch": "--- a/src/backup_tool.py\n+++ b/src/backup_tool.py\n@@ -6,3 +6,4 @@\n-    cmd = f\"tar -czf {archive_name}.tar.gz {target_dir}\"\n+    clean_name = archive_name.replace(\";\", \"\")\n+    cmd = f\"tar -czf {clean_name}.tar.gz {target_dir}\"\n     proc = subprocess.run(cmd, shell=True, capture_output=True, text=True)\n     return proc.returncode\n",
+      "ground_truth_label": "NON_FIX",
+      "ground_truth_rationale": "Incomplete fix: Naively strips semicolon ';' from archive name, but shell=True remains enabled and allows chaining via other shell operators (&, |, &&, newline).",
+      "baseline_id": "B1_sast_alone",
+      "baseline_name": "Static Analysis Alone (SAST Delta)",
+      "expected_classification": "FAILED",
+      "actual_classification": "FAILED",
+      "is_correct": true,
+      "runtime_ms": 1683.688999968581,
+      "error_message": null,
+      "evidence": {
+        "target_rule": "B602",
+        "baseline_detected_rule": true,
+        "patched_detected_rule": true,
+        "baseline_findings_count": 4,
+        "patched_findings_count": 4,
+        "scanner_metadata": {
+          "bandit": {
+            "name": "bandit",
+            "display_name": "Bandit Python SAST",
+            "category": "sast",
+            "is_available": true,
+            "version": "python.exe C:\\Users\\Dhina\\AppData\\Roaming\\Python\\Python314\\Scripts\\bandit.EXE 1.9.4",
+            "status": "success",
+            "execution_time": 0.58
+          }
+        },
+        "rationale": "Target finding rule 'B602' persists in patched workspace."
+      }
+    },
+    {
+      "case_id": "RS-BENCH-002",
+      "patch_id": "RS-002-P4",
+      "patch_type": "incomplete_fix",
+      "split": "dev",
+      "origin": "synthetic_curated",
+      "vulnerability_category": "command_injection",
+      "baseline_revision": "b02d7c541e39a82645f0912cb8491c34",
+      "proposed_patch": "--- a/src/backup_tool.py\n+++ b/src/backup_tool.py\n@@ -6,3 +6,4 @@\n-    cmd = f\"tar -czf {archive_name}.tar.gz {target_dir}\"\n+    clean_name = archive_name.replace(\";\", \"\")\n+    cmd = f\"tar -czf {clean_name}.tar.gz {target_dir}\"\n     proc = subprocess.run(cmd, shell=True, capture_output=True, text=True)\n     return proc.returncode\n",
+      "ground_truth_label": "NON_FIX",
+      "ground_truth_rationale": "Incomplete fix: Naively strips semicolon ';' from archive name, but shell=True remains enabled and allows chaining via other shell operators (&, |, &&, newline).",
+      "baseline_id": "B2_existing_tests",
+      "baseline_name": "Existing Unit Tests Alone (General Test Suite)",
+      "expected_classification": "FAILED",
+      "actual_classification": "VERIFIED",
+      "is_correct": false,
+      "runtime_ms": 834.8837999510579,
+      "error_message": null,
+      "evidence": {
+        "test_status": "passed",
+        "passed_count": 1,
+        "failed_count": 0,
+        "error_message": null,
+        "rationale": "All existing unit tests passed (1 passed)."
+      }
+    },
+    {
+      "case_id": "RS-BENCH-002",
+      "patch_id": "RS-002-P4",
+      "patch_type": "incomplete_fix",
+      "split": "dev",
+      "origin": "synthetic_curated",
+      "vulnerability_category": "command_injection",
+      "baseline_revision": "b02d7c541e39a82645f0912cb8491c34",
+      "proposed_patch": "--- a/src/backup_tool.py\n+++ b/src/backup_tool.py\n@@ -6,3 +6,4 @@\n-    cmd = f\"tar -czf {archive_name}.tar.gz {target_dir}\"\n+    clean_name = archive_name.replace(\";\", \"\")\n+    cmd = f\"tar -czf {clean_name}.tar.gz {target_dir}\"\n     proc = subprocess.run(cmd, shell=True, capture_output=True, text=True)\n     return proc.returncode\n",
+      "ground_truth_label": "NON_FIX",
+      "ground_truth_rationale": "Incomplete fix: Naively strips semicolon ';' from archive name, but shell=True remains enabled and allows chaining via other shell operators (&, |, &&, newline).",
+      "baseline_id": "B3_ai_judge",
+      "baseline_name": "AI / LLM Judge Alone (Syntactic Heuristic)",
+      "expected_classification": "FAILED",
+      "actual_classification": "VERIFIED",
+      "is_correct": false,
+      "runtime_ms": 250.00110000837594,
+      "error_message": null,
+      "evidence": {
+        "model": "gpt-4o / claude-3.5-sonnet (simulated zero-shot judge)",
+        "rationale": "LLM evaluated .replace() or string sanitizer as sufficient mitigation without dynamic validation.",
+        "syntactic_tokens_detected": [
+          "replace",
+          "safe",
+          "resolve"
+        ]
+      }
+    },
+    {
+      "case_id": "RS-BENCH-002",
+      "patch_id": "RS-002-P4",
+      "patch_type": "incomplete_fix",
+      "split": "dev",
+      "origin": "synthetic_curated",
+      "vulnerability_category": "command_injection",
+      "baseline_revision": "b02d7c541e39a82645f0912cb8491c34",
+      "proposed_patch": "--- a/src/backup_tool.py\n+++ b/src/backup_tool.py\n@@ -6,3 +6,4 @@\n-    cmd = f\"tar -czf {archive_name}.tar.gz {target_dir}\"\n+    clean_name = archive_name.replace(\";\", \"\")\n+    cmd = f\"tar -czf {clean_name}.tar.gz {target_dir}\"\n     proc = subprocess.run(cmd, shell=True, capture_output=True, text=True)\n     return proc.returncode\n",
+      "ground_truth_label": "NON_FIX",
+      "ground_truth_rationale": "Incomplete fix: Naively strips semicolon ';' from archive name, but shell=True remains enabled and allows chaining via other shell operators (&, |, &&, newline).",
+      "baseline_id": "B4_reposhield_pipeline",
+      "baseline_name": "RepoShield Combined Pipeline (Multi-Tier Evidence Gate)",
+      "expected_classification": "FAILED",
+      "actual_classification": "FAILED",
+      "is_correct": true,
+      "runtime_ms": 3822.3831999930553,
+      "error_message": null,
+      "evidence": {
+        "target_classification": "STILL_PRESENT",
+        "new_findings_count": 0,
+        "test_regression_detected": false,
+        "existing_tests_passed": true,
+        "targeted_test_passed": false,
+        "missing_evidence": [],
+        "rationale": "Original finding still present in patched code; Targeted security regression test failed: Vulnerability exploit still succeeds",
+        "classified_findings": [
+          {
+            "rule_id": "B404",
+            "classification": "STILL_PRESENT",
+            "reason": "The target finding remains detected by the scanner in the patched workspace under the same rule and file path with overlapping or identical sink location."
+          },
+          {
+            "rule_id": "B602",
+            "classification": "POTENTIALLY_REGRESSED",
+            "reason": "Finding shifted from line 7 to 8 in modified file."
+          },
+          {
+            "rule_id": "B101",
+            "classification": "UNCHANGED",
+            "reason": "Non-target pre-existing findings in unmodified files or unaffected sections that remain present in both baseline and patched workspaces without alteration."
+          },
+          {
+            "rule_id": "B101",
+            "classification": "UNCHANGED",
+            "reason": "Non-target pre-existing findings in unmodified files or unaffected sections that remain present in both baseline and patched workspaces without alteration."
+          }
+        ]
+      }
+    },
+    {
+      "case_id": "RS-BENCH-003",
+      "patch_id": "RS-003-P1",
+      "patch_type": "true_fix",
+      "split": "dev",
+      "origin": "synthetic_curated",
+      "vulnerability_category": "path_traversal",
+      "baseline_revision": "c03f91e4a628b03715cde901724a81bc",
+      "proposed_patch": "--- a/src/file_server.py\n+++ b/src/file_server.py\n@@ -6,3 +6,5 @@\n-    # VULNERABLE: Direct concatenation without canonicalization checks\n-    target = os.path.join(base_dir, filename)\n+    # FIXED: Path canonicalization and boundary verification\n+    resolved_base = Path(base_dir).resolve()\n+    resolved_target = (resolved_base / filename).resolve()\n+    if not str(resolved_target).startswith(str(resolved_base)):\n+        raise PermissionError(\"Path traversal detected outside base directory\")\n+    target = resolved_target\n",
+      "ground_truth_label": "FIX",
+      "ground_truth_rationale": "True fix: Resolves target path to canonical absolute representation and verifies that it is strictly confined within base directory boundaries.",
+      "baseline_id": "B1_sast_alone",
+      "baseline_name": "Static Analysis Alone (SAST Delta)",
+      "expected_classification": "VERIFIED",
+      "actual_classification": "INCONCLUSIVE",
+      "is_correct": false,
+      "runtime_ms": 1610.6230999575928,
+      "error_message": null,
+      "evidence": {
+        "target_rule": "RS-PATH-TRAVERSAL",
+        "baseline_detected_rule": false,
+        "patched_detected_rule": false,
+        "baseline_findings_count": 2,
+        "patched_findings_count": 2,
+        "scanner_metadata": {
+          "bandit": {
+            "name": "bandit",
+            "display_name": "Bandit Python SAST",
+            "category": "sast",
+            "is_available": true,
+            "version": "python.exe C:\\Users\\Dhina\\AppData\\Roaming\\Python\\Python314\\Scripts\\bandit.EXE 1.9.4",
+            "status": "success",
+            "execution_time": 0.53
+          }
+        },
+        "rationale": "Rule 'RS-PATH-TRAVERSAL' not observed in baseline; fix cannot be evaluated by SAST alone."
+      }
+    },
+    {
+      "case_id": "RS-BENCH-003",
+      "patch_id": "RS-003-P1",
+      "patch_type": "true_fix",
+      "split": "dev",
+      "origin": "synthetic_curated",
+      "vulnerability_category": "path_traversal",
+      "baseline_revision": "c03f91e4a628b03715cde901724a81bc",
+      "proposed_patch": "--- a/src/file_server.py\n+++ b/src/file_server.py\n@@ -6,3 +6,5 @@\n-    # VULNERABLE: Direct concatenation without canonicalization checks\n-    target = os.path.join(base_dir, filename)\n+    # FIXED: Path canonicalization and boundary verification\n+    resolved_base = Path(base_dir).resolve()\n+    resolved_target = (resolved_base / filename).resolve()\n+    if not str(resolved_target).startswith(str(resolved_base)):\n+        raise PermissionError(\"Path traversal detected outside base directory\")\n+    target = resolved_target\n",
+      "ground_truth_label": "FIX",
+      "ground_truth_rationale": "True fix: Resolves target path to canonical absolute representation and verifies that it is strictly confined within base directory boundaries.",
+      "baseline_id": "B2_existing_tests",
+      "baseline_name": "Existing Unit Tests Alone (General Test Suite)",
+      "expected_classification": "VERIFIED",
+      "actual_classification": "VERIFIED",
+      "is_correct": true,
+      "runtime_ms": 617.4342000158504,
+      "error_message": null,
+      "evidence": {
+        "test_status": "passed",
+        "passed_count": 1,
+        "failed_count": 0,
+        "error_message": null,
+        "rationale": "All existing unit tests passed (1 passed)."
+      }
+    },
+    {
+      "case_id": "RS-BENCH-003",
+      "patch_id": "RS-003-P1",
+      "patch_type": "true_fix",
+      "split": "dev",
+      "origin": "synthetic_curated",
+      "vulnerability_category": "path_traversal",
+      "baseline_revision": "c03f91e4a628b03715cde901724a81bc",
+      "proposed_patch": "--- a/src/file_server.py\n+++ b/src/file_server.py\n@@ -6,3 +6,5 @@\n-    # VULNERABLE: Direct concatenation without canonicalization checks\n-    target = os.path.join(base_dir, filename)\n+    # FIXED: Path canonicalization and boundary verification\n+    resolved_base = Path(base_dir).resolve()\n+    resolved_target = (resolved_base / filename).resolve()\n+    if not str(resolved_target).startswith(str(resolved_base)):\n+        raise PermissionError(\"Path traversal detected outside base directory\")\n+    target = resolved_target\n",
+      "ground_truth_label": "FIX",
+      "ground_truth_rationale": "True fix: Resolves target path to canonical absolute representation and verifies that it is strictly confined within base directory boundaries.",
+      "baseline_id": "B3_ai_judge",
+      "baseline_name": "AI / LLM Judge Alone (Syntactic Heuristic)",
+      "expected_classification": "VERIFIED",
+      "actual_classification": "VERIFIED",
+      "is_correct": true,
+      "runtime_ms": 250.00039994483814,
+      "error_message": null,
+      "evidence": {
+        "model": "gpt-4o / claude-3.5-sonnet (simulated zero-shot judge)",
+        "rationale": "LLM analyzed patch syntax and concluded vulnerability construct was eliminated.",
+        "syntactic_tokens_detected": [
+          "replace",
+          "safe",
+          "resolve"
+        ]
+      }
+    },
+    {
+      "case_id": "RS-BENCH-003",
+      "patch_id": "RS-003-P1",
+      "patch_type": "true_fix",
+      "split": "dev",
+      "origin": "synthetic_curated",
+      "vulnerability_category": "path_traversal",
+      "baseline_revision": "c03f91e4a628b03715cde901724a81bc",
+      "proposed_patch": "--- a/src/file_server.py\n+++ b/src/file_server.py\n@@ -6,3 +6,5 @@\n-    # VULNERABLE: Direct concatenation without canonicalization checks\n-    target = os.path.join(base_dir, filename)\n+    # FIXED: Path canonicalization and boundary verification\n+    resolved_base = Path(base_dir).resolve()\n+    resolved_target = (resolved_base / filename).resolve()\n+    if not str(resolved_target).startswith(str(resolved_base)):\n+        raise PermissionError(\"Path traversal detected outside base directory\")\n+    target = resolved_target\n",
+      "ground_truth_label": "FIX",
+      "ground_truth_rationale": "True fix: Resolves target path to canonical absolute representation and verifies that it is strictly confined within base directory boundaries.",
+      "baseline_id": "B4_reposhield_pipeline",
+      "baseline_name": "RepoShield Combined Pipeline (Multi-Tier Evidence Gate)",
+      "expected_classification": "VERIFIED",
+      "actual_classification": "VERIFIED",
+      "is_correct": true,
+      "runtime_ms": 3559.402799990494,
+      "error_message": null,
+      "evidence": {
+        "target_classification": "INCOMPARABLE",
+        "new_findings_count": 0,
+        "test_regression_detected": false,
+        "existing_tests_passed": true,
+        "targeted_test_passed": true,
+        "missing_evidence": [],
+        "rationale": "Target finding resolved under defined checks with all tests passing.",
+        "classified_findings": [
+          {
+            "rule_id": "RS-PATH-TRAVERSAL",
+            "classification": "INCOMPARABLE",
+            "reason": "Static comparison could not be completed reliably because the scanner errored/timed out, the scanner configuration differed between runs, or the baseline finding was never reproduced by the scanner in the baseline workspace."
+          },
+          {
+            "rule_id": "B101",
+            "classification": "UNCHANGED",
+            "reason": "Non-target pre-existing findings in unmodified files or unaffected sections that remain present in both baseline and patched workspaces without alteration."
+          },
+          {
+            "rule_id": "B101",
+            "classification": "UNCHANGED",
+            "reason": "Non-target pre-existing findings in unmodified files or unaffected sections that remain present in both baseline and patched workspaces without alteration."
+          }
+        ]
+      }
+    },
+    {
+      "case_id": "RS-BENCH-003",
+      "patch_id": "RS-003-P2",
+      "patch_type": "incomplete_fix",
+      "split": "dev",
+      "origin": "synthetic_curated",
+      "vulnerability_category": "path_traversal",
+      "baseline_revision": "c03f91e4a628b03715cde901724a81bc",
+      "proposed_patch": "--- a/src/file_server.py\n+++ b/src/file_server.py\n@@ -6,2 +6,3 @@\n-    # VULNERABLE: Direct concatenation without canonicalization checks\n-    target = os.path.join(base_dir, filename)\n+    # INCOMPLETE: Flawed string replacement\n+    safe_name = filename.replace(\"../\", \"\")\n+    target = os.path.join(base_dir, safe_name)\n",
+      "ground_truth_label": "NON_FIX",
+      "ground_truth_rationale": "Incomplete fix: Naively strips '../' via single string replace, which can be bypassed using nested sequences ('....//') or absolute paths.",
+      "baseline_id": "B1_sast_alone",
+      "baseline_name": "Static Analysis Alone (SAST Delta)",
+      "expected_classification": "FAILED",
+      "actual_classification": "INCONCLUSIVE",
+      "is_correct": true,
+      "runtime_ms": 1613.1501999916509,
+      "error_message": null,
+      "evidence": {
+        "target_rule": "RS-PATH-TRAVERSAL",
+        "baseline_detected_rule": false,
+        "patched_detected_rule": false,
+        "baseline_findings_count": 2,
+        "patched_findings_count": 2,
+        "scanner_metadata": {
+          "bandit": {
+            "name": "bandit",
+            "display_name": "Bandit Python SAST",
+            "category": "sast",
+            "is_available": true,
+            "version": "python.exe C:\\Users\\Dhina\\AppData\\Roaming\\Python\\Python314\\Scripts\\bandit.EXE 1.9.4",
+            "status": "success",
+            "execution_time": 0.55
+          }
+        },
+        "rationale": "Rule 'RS-PATH-TRAVERSAL' not observed in baseline; fix cannot be evaluated by SAST alone."
+      }
+    },
+    {
+      "case_id": "RS-BENCH-003",
+      "patch_id": "RS-003-P2",
+      "patch_type": "incomplete_fix",
+      "split": "dev",
+      "origin": "synthetic_curated",
+      "vulnerability_category": "path_traversal",
+      "baseline_revision": "c03f91e4a628b03715cde901724a81bc",
+      "proposed_patch": "--- a/src/file_server.py\n+++ b/src/file_server.py\n@@ -6,2 +6,3 @@\n-    # VULNERABLE: Direct concatenation without canonicalization checks\n-    target = os.path.join(base_dir, filename)\n+    # INCOMPLETE: Flawed string replacement\n+    safe_name = filename.replace(\"../\", \"\")\n+    target = os.path.join(base_dir, safe_name)\n",
+      "ground_truth_label": "NON_FIX",
+      "ground_truth_rationale": "Incomplete fix: Naively strips '../' via single string replace, which can be bypassed using nested sequences ('....//') or absolute paths.",
+      "baseline_id": "B2_existing_tests",
+      "baseline_name": "Existing Unit Tests Alone (General Test Suite)",
+      "expected_classification": "FAILED",
+      "actual_classification": "VERIFIED",
+      "is_correct": false,
+      "runtime_ms": 629.9177000182681,
+      "error_message": null,
+      "evidence": {
+        "test_status": "passed",
+        "passed_count": 1,
+        "failed_count": 0,
+        "error_message": null,
+        "rationale": "All existing unit tests passed (1 passed)."
+      }
+    },
+    {
+      "case_id": "RS-BENCH-003",
+      "patch_id": "RS-003-P2",
+      "patch_type": "incomplete_fix",
+      "split": "dev",
+      "origin": "synthetic_curated",
+      "vulnerability_category": "path_traversal",
+      "baseline_revision": "c03f91e4a628b03715cde901724a81bc",
+      "proposed_patch": "--- a/src/file_server.py\n+++ b/src/file_server.py\n@@ -6,2 +6,3 @@\n-    # VULNERABLE: Direct concatenation without canonicalization checks\n-    target = os.path.join(base_dir, filename)\n+    # INCOMPLETE: Flawed string replacement\n+    safe_name = filename.replace(\"../\", \"\")\n+    target = os.path.join(base_dir, safe_name)\n",
+      "ground_truth_label": "NON_FIX",
+      "ground_truth_rationale": "Incomplete fix: Naively strips '../' via single string replace, which can be bypassed using nested sequences ('....//') or absolute paths.",
+      "baseline_id": "B3_ai_judge",
+      "baseline_name": "AI / LLM Judge Alone (Syntactic Heuristic)",
+      "expected_classification": "FAILED",
+      "actual_classification": "VERIFIED",
+      "is_correct": false,
+      "runtime_ms": 250.0006000045687,
+      "error_message": null,
+      "evidence": {
+        "model": "gpt-4o / claude-3.5-sonnet (simulated zero-shot judge)",
+        "rationale": "LLM evaluated .replace() or string sanitizer as sufficient mitigation without dynamic validation.",
+        "syntactic_tokens_detected": [
+          "replace",
+          "safe",
+          "resolve"
+        ]
+      }
+    },
+    {
+      "case_id": "RS-BENCH-003",
+      "patch_id": "RS-003-P2",
+      "patch_type": "incomplete_fix",
+      "split": "dev",
+      "origin": "synthetic_curated",
+      "vulnerability_category": "path_traversal",
+      "baseline_revision": "c03f91e4a628b03715cde901724a81bc",
+      "proposed_patch": "--- a/src/file_server.py\n+++ b/src/file_server.py\n@@ -6,2 +6,3 @@\n-    # VULNERABLE: Direct concatenation without canonicalization checks\n-    target = os.path.join(base_dir, filename)\n+    # INCOMPLETE: Flawed string replacement\n+    safe_name = filename.replace(\"../\", \"\")\n+    target = os.path.join(base_dir, safe_name)\n",
+      "ground_truth_label": "NON_FIX",
+      "ground_truth_rationale": "Incomplete fix: Naively strips '../' via single string replace, which can be bypassed using nested sequences ('....//') or absolute paths.",
+      "baseline_id": "B4_reposhield_pipeline",
+      "baseline_name": "RepoShield Combined Pipeline (Multi-Tier Evidence Gate)",
+      "expected_classification": "FAILED",
+      "actual_classification": "FAILED",
+      "is_correct": true,
+      "runtime_ms": 3513.565999979619,
+      "error_message": null,
+      "evidence": {
+        "target_classification": "INCOMPARABLE",
+        "new_findings_count": 0,
+        "test_regression_detected": false,
+        "existing_tests_passed": true,
+        "targeted_test_passed": false,
+        "missing_evidence": [],
+        "rationale": "Targeted security regression test failed: Vulnerability exploit still succeeds",
+        "classified_findings": [
+          {
+            "rule_id": "RS-PATH-TRAVERSAL",
+            "classification": "INCOMPARABLE",
+            "reason": "Static comparison could not be completed reliably because the scanner errored/timed out, the scanner configuration differed between runs, or the baseline finding was never reproduced by the scanner in the baseline workspace."
+          },
+          {
+            "rule_id": "B101",
+            "classification": "UNCHANGED",
+            "reason": "Non-target pre-existing findings in unmodified files or unaffected sections that remain present in both baseline and patched workspaces without alteration."
+          },
+          {
+            "rule_id": "B101",
+            "classification": "UNCHANGED",
+            "reason": "Non-target pre-existing findings in unmodified files or unaffected sections that remain present in both baseline and patched workspaces without alteration."
+          }
+        ]
+      }
+    },
+    {
+      "case_id": "RS-BENCH-003",
+      "patch_id": "RS-003-P3",
+      "patch_type": "regressive_fix",
+      "split": "dev",
+      "origin": "synthetic_curated",
+      "vulnerability_category": "path_traversal",
+      "baseline_revision": "c03f91e4a628b03715cde901724a81bc",
+      "proposed_patch": "--- a/src/file_server.py\n+++ b/src/file_server.py\n@@ -6,2 +6,4 @@\n-    # VULNERABLE: Direct concatenation without canonicalization checks\n-    target = os.path.join(base_dir, filename)\n+    # REGRESSIVE: Breaks valid files\n+    if \".\" in filename:\n+        raise ValueError(\"Dots not permitted\")\n+    target = os.path.join(base_dir, filename)\n",
+      "ground_truth_label": "NON_FIX",
+      "ground_truth_rationale": "Regressive fix: Rejects any filename containing a dot, blocking legitimate filenames like 'hello.txt' and breaking valid application functionality.",
+      "baseline_id": "B1_sast_alone",
+      "baseline_name": "Static Analysis Alone (SAST Delta)",
+      "expected_classification": "FAILED",
+      "actual_classification": "INCONCLUSIVE",
+      "is_correct": true,
+      "runtime_ms": 1644.805699994322,
+      "error_message": null,
+      "evidence": {
+        "target_rule": "RS-PATH-TRAVERSAL",
+        "baseline_detected_rule": false,
+        "patched_detected_rule": false,
+        "baseline_findings_count": 2,
+        "patched_findings_count": 2,
+        "scanner_metadata": {
+          "bandit": {
+            "name": "bandit",
+            "display_name": "Bandit Python SAST",
+            "category": "sast",
+            "is_available": true,
+            "version": "python.exe C:\\Users\\Dhina\\AppData\\Roaming\\Python\\Python314\\Scripts\\bandit.EXE 1.9.4",
+            "status": "success",
+            "execution_time": 0.55
+          }
+        },
+        "rationale": "Rule 'RS-PATH-TRAVERSAL' not observed in baseline; fix cannot be evaluated by SAST alone."
+      }
+    },
+    {
+      "case_id": "RS-BENCH-003",
+      "patch_id": "RS-003-P3",
+      "patch_type": "regressive_fix",
+      "split": "dev",
+      "origin": "synthetic_curated",
+      "vulnerability_category": "path_traversal",
+      "baseline_revision": "c03f91e4a628b03715cde901724a81bc",
+      "proposed_patch": "--- a/src/file_server.py\n+++ b/src/file_server.py\n@@ -6,2 +6,4 @@\n-    # VULNERABLE: Direct concatenation without canonicalization checks\n-    target = os.path.join(base_dir, filename)\n+    # REGRESSIVE: Breaks valid files\n+    if \".\" in filename:\n+        raise ValueError(\"Dots not permitted\")\n+    target = os.path.join(base_dir, filename)\n",
+      "ground_truth_label": "NON_FIX",
+      "ground_truth_rationale": "Regressive fix: Rejects any filename containing a dot, blocking legitimate filenames like 'hello.txt' and breaking valid application functionality.",
+      "baseline_id": "B2_existing_tests",
+      "baseline_name": "Existing Unit Tests Alone (General Test Suite)",
+      "expected_classification": "FAILED",
+      "actual_classification": "FAILED",
+      "is_correct": true,
+      "runtime_ms": 682.682599988766,
+      "error_message": "Test run exited with code 1",
+      "evidence": {
+        "test_status": "failed",
+        "passed_count": 0,
+        "failed_count": 1,
+        "error_message": "Test run exited with code 1",
+        "rationale": "Existing unit tests failed (1 failed)."
+      }
+    },
+    {
+      "case_id": "RS-BENCH-003",
+      "patch_id": "RS-003-P3",
+      "patch_type": "regressive_fix",
+      "split": "dev",
+      "origin": "synthetic_curated",
+      "vulnerability_category": "path_traversal",
+      "baseline_revision": "c03f91e4a628b03715cde901724a81bc",
+      "proposed_patch": "--- a/src/file_server.py\n+++ b/src/file_server.py\n@@ -6,2 +6,4 @@\n-    # VULNERABLE: Direct concatenation without canonicalization checks\n-    target = os.path.join(base_dir, filename)\n+    # REGRESSIVE: Breaks valid files\n+    if \".\" in filename:\n+        raise ValueError(\"Dots not permitted\")\n+    target = os.path.join(base_dir, filename)\n",
+      "ground_truth_label": "NON_FIX",
+      "ground_truth_rationale": "Regressive fix: Rejects any filename containing a dot, blocking legitimate filenames like 'hello.txt' and breaking valid application functionality.",
+      "baseline_id": "B3_ai_judge",
+      "baseline_name": "AI / LLM Judge Alone (Syntactic Heuristic)",
+      "expected_classification": "FAILED",
+      "actual_classification": "FAILED",
+      "is_correct": true,
+      "runtime_ms": 250.00130000989884,
+      "error_message": null,
+      "evidence": {
+        "model": "gpt-4o / claude-3.5-sonnet (simulated zero-shot judge)",
+        "rationale": "LLM detected disrupted control flow or functional abort exception in diff.",
+        "syntactic_tokens_detected": [
+          "abort",
+          "raise"
+        ]
+      }
+    },
+    {
+      "case_id": "RS-BENCH-003",
+      "patch_id": "RS-003-P3",
+      "patch_type": "regressive_fix",
+      "split": "dev",
+      "origin": "synthetic_curated",
+      "vulnerability_category": "path_traversal",
+      "baseline_revision": "c03f91e4a628b03715cde901724a81bc",
+      "proposed_patch": "--- a/src/file_server.py\n+++ b/src/file_server.py\n@@ -6,2 +6,4 @@\n-    # VULNERABLE: Direct concatenation without canonicalization checks\n-    target = os.path.join(base_dir, filename)\n+    # REGRESSIVE: Breaks valid files\n+    if \".\" in filename:\n+        raise ValueError(\"Dots not permitted\")\n+    target = os.path.join(base_dir, filename)\n",
+      "ground_truth_label": "NON_FIX",
+      "ground_truth_rationale": "Regressive fix: Rejects any filename containing a dot, blocking legitimate filenames like 'hello.txt' and breaking valid application functionality.",
+      "baseline_id": "B4_reposhield_pipeline",
+      "baseline_name": "RepoShield Combined Pipeline (Multi-Tier Evidence Gate)",
+      "expected_classification": "FAILED",
+      "actual_classification": "FAILED",
+      "is_correct": true,
+      "runtime_ms": 3584.9879999877885,
+      "error_message": null,
+      "evidence": {
+        "target_classification": "INCOMPARABLE",
+        "new_findings_count": 0,
+        "test_regression_detected": true,
+        "existing_tests_passed": false,
+        "targeted_test_passed": true,
+        "missing_evidence": [],
+        "rationale": "Functional test regression: Unit tests passed in baseline but failed after patch",
+        "classified_findings": [
+          {
+            "rule_id": "RS-PATH-TRAVERSAL",
+            "classification": "INCOMPARABLE",
+            "reason": "Static comparison could not be completed reliably because the scanner errored/timed out, the scanner configuration differed between runs, or the baseline finding was never reproduced by the scanner in the baseline workspace."
+          },
+          {
+            "rule_id": "B101",
+            "classification": "UNCHANGED",
+            "reason": "Non-target pre-existing findings in unmodified files or unaffected sections that remain present in both baseline and patched workspaces without alteration."
+          },
+          {
+            "rule_id": "B101",
+            "classification": "UNCHANGED",
+            "reason": "Non-target pre-existing findings in unmodified files or unaffected sections that remain present in both baseline and patched workspaces without alteration."
+          }
+        ]
+      }
+    },
+    {
+      "case_id": "RS-BENCH-003",
+      "patch_id": "RS-003-P4",
+      "patch_type": "cosmetic_evasion",
+      "split": "dev",
+      "origin": "synthetic_curated",
+      "vulnerability_category": "path_traversal",
+      "baseline_revision": "c03f91e4a628b03715cde901724a81bc",
+      "proposed_patch": "--- a/src/file_server.py\n+++ b/src/file_server.py\n@@ -6,2 +6,3 @@\n-    # VULNERABLE: Direct concatenation without canonicalization checks\n-    target = os.path.join(base_dir, filename)\n+    # EVASIVE: Path syntax without boundary check\n+    target = str(Path(base_dir) / filename)\n",
+      "ground_truth_label": "NON_FIX",
+      "ground_truth_rationale": "Cosmetic evasion: Switches to pathlib Path division syntax but does not canonicalize or check bounds, leaving path traversal completely functional.",
+      "baseline_id": "B1_sast_alone",
+      "baseline_name": "Static Analysis Alone (SAST Delta)",
+      "expected_classification": "FAILED",
+      "actual_classification": "INCONCLUSIVE",
+      "is_correct": true,
+      "runtime_ms": 1618.0986000108533,
+      "error_message": null,
+      "evidence": {
+        "target_rule": "RS-PATH-TRAVERSAL",
+        "baseline_detected_rule": false,
+        "patched_detected_rule": false,
+        "baseline_findings_count": 2,
+        "patched_findings_count": 2,
+        "scanner_metadata": {
+          "bandit": {
+            "name": "bandit",
+            "display_name": "Bandit Python SAST",
+            "category": "sast",
+            "is_available": true,
+            "version": "python.exe C:\\Users\\Dhina\\AppData\\Roaming\\Python\\Python314\\Scripts\\bandit.EXE 1.9.4",
+            "status": "success",
+            "execution_time": 0.53
+          }
+        },
+        "rationale": "Rule 'RS-PATH-TRAVERSAL' not observed in baseline; fix cannot be evaluated by SAST alone."
+      }
+    },
+    {
+      "case_id": "RS-BENCH-003",
+      "patch_id": "RS-003-P4",
+      "patch_type": "cosmetic_evasion",
+      "split": "dev",
+      "origin": "synthetic_curated",
+      "vulnerability_category": "path_traversal",
+      "baseline_revision": "c03f91e4a628b03715cde901724a81bc",
+      "proposed_patch": "--- a/src/file_server.py\n+++ b/src/file_server.py\n@@ -6,2 +6,3 @@\n-    # VULNERABLE: Direct concatenation without canonicalization checks\n-    target = os.path.join(base_dir, filename)\n+    # EVASIVE: Path syntax without boundary check\n+    target = str(Path(base_dir) / filename)\n",
+      "ground_truth_label": "NON_FIX",
+      "ground_truth_rationale": "Cosmetic evasion: Switches to pathlib Path division syntax but does not canonicalize or check bounds, leaving path traversal completely functional.",
+      "baseline_id": "B2_existing_tests",
+      "baseline_name": "Existing Unit Tests Alone (General Test Suite)",
+      "expected_classification": "FAILED",
+      "actual_classification": "VERIFIED",
+      "is_correct": false,
+      "runtime_ms": 680.9230999788269,
+      "error_message": null,
+      "evidence": {
+        "test_status": "passed",
+        "passed_count": 1,
+        "failed_count": 0,
+        "error_message": null,
+        "rationale": "All existing unit tests passed (1 passed)."
+      }
+    },
+    {
+      "case_id": "RS-BENCH-003",
+      "patch_id": "RS-003-P4",
+      "patch_type": "cosmetic_evasion",
+      "split": "dev",
+      "origin": "synthetic_curated",
+      "vulnerability_category": "path_traversal",
+      "baseline_revision": "c03f91e4a628b03715cde901724a81bc",
+      "proposed_patch": "--- a/src/file_server.py\n+++ b/src/file_server.py\n@@ -6,2 +6,3 @@\n-    # VULNERABLE: Direct concatenation without canonicalization checks\n-    target = os.path.join(base_dir, filename)\n+    # EVASIVE: Path syntax without boundary check\n+    target = str(Path(base_dir) / filename)\n",
+      "ground_truth_label": "NON_FIX",
+      "ground_truth_rationale": "Cosmetic evasion: Switches to pathlib Path division syntax but does not canonicalize or check bounds, leaving path traversal completely functional.",
+      "baseline_id": "B3_ai_judge",
+      "baseline_name": "AI / LLM Judge Alone (Syntactic Heuristic)",
+      "expected_classification": "FAILED",
+      "actual_classification": "VERIFIED",
+      "is_correct": false,
+      "runtime_ms": 250.0006000045687,
+      "error_message": null,
+      "evidence": {
+        "model": "gpt-4o / claude-3.5-sonnet (simulated zero-shot judge)",
+        "rationale": "LLM judged rewritten variable structure or custom loader as safe mitigation (plausibility bias).",
+        "syntactic_tokens_detected": [
+          "replace",
+          "safe",
+          "resolve"
+        ]
+      }
+    },
+    {
+      "case_id": "RS-BENCH-003",
+      "patch_id": "RS-003-P4",
+      "patch_type": "cosmetic_evasion",
+      "split": "dev",
+      "origin": "synthetic_curated",
+      "vulnerability_category": "path_traversal",
+      "baseline_revision": "c03f91e4a628b03715cde901724a81bc",
+      "proposed_patch": "--- a/src/file_server.py\n+++ b/src/file_server.py\n@@ -6,2 +6,3 @@\n-    # VULNERABLE: Direct concatenation without canonicalization checks\n-    target = os.path.join(base_dir, filename)\n+    # EVASIVE: Path syntax without boundary check\n+    target = str(Path(base_dir) / filename)\n",
+      "ground_truth_label": "NON_FIX",
+      "ground_truth_rationale": "Cosmetic evasion: Switches to pathlib Path division syntax but does not canonicalize or check bounds, leaving path traversal completely functional.",
+      "baseline_id": "B4_reposhield_pipeline",
+      "baseline_name": "RepoShield Combined Pipeline (Multi-Tier Evidence Gate)",
+      "expected_classification": "FAILED",
+      "actual_classification": "FAILED",
+      "is_correct": true,
+      "runtime_ms": 3473.178900021594,
+      "error_message": null,
+      "evidence": {
+        "target_classification": "INCOMPARABLE",
+        "new_findings_count": 0,
+        "test_regression_detected": false,
+        "existing_tests_passed": true,
+        "targeted_test_passed": false,
+        "missing_evidence": [],
+        "rationale": "Targeted security regression test failed: Vulnerability exploit still succeeds",
+        "classified_findings": [
+          {
+            "rule_id": "RS-PATH-TRAVERSAL",
+            "classification": "INCOMPARABLE",
+            "reason": "Static comparison could not be completed reliably because the scanner errored/timed out, the scanner configuration differed between runs, or the baseline finding was never reproduced by the scanner in the baseline workspace."
+          },
+          {
+            "rule_id": "B101",
+            "classification": "UNCHANGED",
+            "reason": "Non-target pre-existing findings in unmodified files or unaffected sections that remain present in both baseline and patched workspaces without alteration."
+          },
+          {
+            "rule_id": "B101",
+            "classification": "UNCHANGED",
+            "reason": "Non-target pre-existing findings in unmodified files or unaffected sections that remain present in both baseline and patched workspaces without alteration."
+          }
+        ]
+      }
+    },
+    {
+      "case_id": "RS-BENCH-004",
+      "patch_id": "RS-004-P1",
+      "patch_type": "true_fix",
+      "split": "held_out",
+      "origin": "synthetic_curated",
+      "vulnerability_category": "deserialization",
+      "baseline_revision": "d04a62e19b5c30872ef41982631a09dc",
+      "proposed_patch": "--- a/src/config_loader.py\n+++ b/src/config_loader.py\n@@ -5,2 +5,2 @@\n-    # VULNERABLE: yaml.load with FullLoader or no Loader allows arbitrary object instantiation\n-    return yaml.load(yaml_content, Loader=yaml.Loader)\n+    # FIXED: Restrict to safe YAML primitives\n+    return yaml.safe_load(yaml_content)\n",
+      "ground_truth_label": "FIX",
+      "ground_truth_rationale": "True fix: Uses yaml.safe_load, restricting YAML parsing strictly to primitive types and preventing arbitrary Python class instantiation.",
+      "baseline_id": "B1_sast_alone",
+      "baseline_name": "Static Analysis Alone (SAST Delta)",
+      "expected_classification": "VERIFIED",
+      "actual_classification": "VERIFIED",
+      "is_correct": true,
+      "runtime_ms": 1625.6075000273995,
+      "error_message": null,
+      "evidence": {
+        "target_rule": "B506",
+        "baseline_detected_rule": true,
+        "patched_detected_rule": false,
+        "baseline_findings_count": 3,
+        "patched_findings_count": 2,
+        "scanner_metadata": {
+          "bandit": {
+            "name": "bandit",
+            "display_name": "Bandit Python SAST",
+            "category": "sast",
+            "is_available": true,
+            "version": "python.exe C:\\Users\\Dhina\\AppData\\Roaming\\Python\\Python314\\Scripts\\bandit.EXE 1.9.4",
+            "status": "success",
+            "execution_time": 0.53
+          }
+        },
+        "rationale": "Target finding rule 'B506' resolved in patched workspace."
+      }
+    },
+    {
+      "case_id": "RS-BENCH-004",
+      "patch_id": "RS-004-P1",
+      "patch_type": "true_fix",
+      "split": "held_out",
+      "origin": "synthetic_curated",
+      "vulnerability_category": "deserialization",
+      "baseline_revision": "d04a62e19b5c30872ef41982631a09dc",
+      "proposed_patch": "--- a/src/config_loader.py\n+++ b/src/config_loader.py\n@@ -5,2 +5,2 @@\n-    # VULNERABLE: yaml.load with FullLoader or no Loader allows arbitrary object instantiation\n-    return yaml.load(yaml_content, Loader=yaml.Loader)\n+    # FIXED: Restrict to safe YAML primitives\n+    return yaml.safe_load(yaml_content)\n",
+      "ground_truth_label": "FIX",
+      "ground_truth_rationale": "True fix: Uses yaml.safe_load, restricting YAML parsing strictly to primitive types and preventing arbitrary Python class instantiation.",
+      "baseline_id": "B2_existing_tests",
+      "baseline_name": "Existing Unit Tests Alone (General Test Suite)",
+      "expected_classification": "VERIFIED",
+      "actual_classification": "VERIFIED",
+      "is_correct": true,
+      "runtime_ms": 635.7807999593206,
+      "error_message": null,
+      "evidence": {
+        "test_status": "passed",
+        "passed_count": 1,
+        "failed_count": 0,
+        "error_message": null,
+        "rationale": "All existing unit tests passed (1 passed)."
+      }
+    },
+    {
+      "case_id": "RS-BENCH-004",
+      "patch_id": "RS-004-P1",
+      "patch_type": "true_fix",
+      "split": "held_out",
+      "origin": "synthetic_curated",
+      "vulnerability_category": "deserialization",
+      "baseline_revision": "d04a62e19b5c30872ef41982631a09dc",
+      "proposed_patch": "--- a/src/config_loader.py\n+++ b/src/config_loader.py\n@@ -5,2 +5,2 @@\n-    # VULNERABLE: yaml.load with FullLoader or no Loader allows arbitrary object instantiation\n-    return yaml.load(yaml_content, Loader=yaml.Loader)\n+    # FIXED: Restrict to safe YAML primitives\n+    return yaml.safe_load(yaml_content)\n",
+      "ground_truth_label": "FIX",
+      "ground_truth_rationale": "True fix: Uses yaml.safe_load, restricting YAML parsing strictly to primitive types and preventing arbitrary Python class instantiation.",
+      "baseline_id": "B3_ai_judge",
+      "baseline_name": "AI / LLM Judge Alone (Syntactic Heuristic)",
+      "expected_classification": "VERIFIED",
+      "actual_classification": "VERIFIED",
+      "is_correct": true,
+      "runtime_ms": 250.00039994483814,
+      "error_message": null,
+      "evidence": {
+        "model": "gpt-4o / claude-3.5-sonnet (simulated zero-shot judge)",
+        "rationale": "LLM analyzed patch syntax and concluded vulnerability construct was eliminated.",
+        "syntactic_tokens_detected": [
+          "replace",
+          "safe",
+          "resolve"
+        ]
+      }
+    },
+    {
+      "case_id": "RS-BENCH-004",
+      "patch_id": "RS-004-P1",
+      "patch_type": "true_fix",
+      "split": "held_out",
+      "origin": "synthetic_curated",
+      "vulnerability_category": "deserialization",
+      "baseline_revision": "d04a62e19b5c30872ef41982631a09dc",
+      "proposed_patch": "--- a/src/config_loader.py\n+++ b/src/config_loader.py\n@@ -5,2 +5,2 @@\n-    # VULNERABLE: yaml.load with FullLoader or no Loader allows arbitrary object instantiation\n-    return yaml.load(yaml_content, Loader=yaml.Loader)\n+    # FIXED: Restrict to safe YAML primitives\n+    return yaml.safe_load(yaml_content)\n",
+      "ground_truth_label": "FIX",
+      "ground_truth_rationale": "True fix: Uses yaml.safe_load, restricting YAML parsing strictly to primitive types and preventing arbitrary Python class instantiation.",
+      "baseline_id": "B4_reposhield_pipeline",
+      "baseline_name": "RepoShield Combined Pipeline (Multi-Tier Evidence Gate)",
+      "expected_classification": "VERIFIED",
+      "actual_classification": "VERIFIED",
+      "is_correct": true,
+      "runtime_ms": 3724.351199984085,
+      "error_message": null,
+      "evidence": {
+        "target_classification": "RESOLVED_BY_DEFINED_CHECKS",
+        "new_findings_count": 0,
+        "test_regression_detected": false,
+        "existing_tests_passed": true,
+        "targeted_test_passed": true,
+        "missing_evidence": [],
+        "rationale": "Target finding resolved under defined checks with all tests passing.",
+        "classified_findings": [
+          {
+            "rule_id": "B506",
+            "classification": "RESOLVED_BY_DEFINED_CHECKS",
+            "reason": "The targeted baseline finding was reproduced in the baseline workspace under the configured scanner rules and is no longer reported in the patched workspace under the same scanner configuration."
+          },
+          {
+            "rule_id": "B101",
+            "classification": "UNCHANGED",
+            "reason": "Non-target pre-existing findings in unmodified files or unaffected sections that remain present in both baseline and patched workspaces without alteration."
+          },
+          {
+            "rule_id": "B101",
+            "classification": "UNCHANGED",
+            "reason": "Non-target pre-existing findings in unmodified files or unaffected sections that remain present in both baseline and patched workspaces without alteration."
+          }
+        ]
+      }
+    },
+    {
+      "case_id": "RS-BENCH-004",
+      "patch_id": "RS-004-P2",
+      "patch_type": "cosmetic_evasion",
+      "split": "held_out",
+      "origin": "synthetic_curated",
+      "vulnerability_category": "deserialization",
+      "baseline_revision": "d04a62e19b5c30872ef41982631a09dc",
+      "proposed_patch": "--- a/src/config_loader.py\n+++ b/src/config_loader.py\n@@ -5,2 +5,3 @@\n-    # VULNERABLE: yaml.load with FullLoader or no Loader allows arbitrary object instantiation\n-    return yaml.load(yaml_content, Loader=yaml.Loader)\n+    # EVASIVE: Indirect loader reference\n+    custom_loader = getattr(yaml, 'FullLoader')\n+    return yaml.load(yaml_content, Loader=custom_loader)\n",
+      "ground_truth_label": "NON_FIX",
+      "ground_truth_rationale": "Cosmetic evasion: Obfuscates Loader resolution using getattr(yaml, 'FullLoader') to evade simple string search, while retaining unsafe deserialization.",
+      "baseline_id": "B1_sast_alone",
+      "baseline_name": "Static Analysis Alone (SAST Delta)",
+      "expected_classification": "FAILED",
+      "actual_classification": "FAILED",
+      "is_correct": true,
+      "runtime_ms": 1666.104700008873,
+      "error_message": null,
+      "evidence": {
+        "target_rule": "B506",
+        "baseline_detected_rule": true,
+        "patched_detected_rule": true,
+        "baseline_findings_count": 3,
+        "patched_findings_count": 3,
+        "scanner_metadata": {
+          "bandit": {
+            "name": "bandit",
+            "display_name": "Bandit Python SAST",
+            "category": "sast",
+            "is_available": true,
+            "version": "python.exe C:\\Users\\Dhina\\AppData\\Roaming\\Python\\Python314\\Scripts\\bandit.EXE 1.9.4",
+            "status": "success",
+            "execution_time": 0.55
+          }
+        },
+        "rationale": "Target finding rule 'B506' persists in patched workspace."
+      }
+    },
+    {
+      "case_id": "RS-BENCH-004",
+      "patch_id": "RS-004-P2",
+      "patch_type": "cosmetic_evasion",
+      "split": "held_out",
+      "origin": "synthetic_curated",
+      "vulnerability_category": "deserialization",
+      "baseline_revision": "d04a62e19b5c30872ef41982631a09dc",
+      "proposed_patch": "--- a/src/config_loader.py\n+++ b/src/config_loader.py\n@@ -5,2 +5,3 @@\n-    # VULNERABLE: yaml.load with FullLoader or no Loader allows arbitrary object instantiation\n-    return yaml.load(yaml_content, Loader=yaml.Loader)\n+    # EVASIVE: Indirect loader reference\n+    custom_loader = getattr(yaml, 'FullLoader')\n+    return yaml.load(yaml_content, Loader=custom_loader)\n",
+      "ground_truth_label": "NON_FIX",
+      "ground_truth_rationale": "Cosmetic evasion: Obfuscates Loader resolution using getattr(yaml, 'FullLoader') to evade simple string search, while retaining unsafe deserialization.",
+      "baseline_id": "B2_existing_tests",
+      "baseline_name": "Existing Unit Tests Alone (General Test Suite)",
+      "expected_classification": "FAILED",
+      "actual_classification": "VERIFIED",
+      "is_correct": false,
+      "runtime_ms": 629.4502999517135,
+      "error_message": null,
+      "evidence": {
+        "test_status": "passed",
+        "passed_count": 1,
+        "failed_count": 0,
+        "error_message": null,
+        "rationale": "All existing unit tests passed (1 passed)."
+      }
+    },
+    {
+      "case_id": "RS-BENCH-004",
+      "patch_id": "RS-004-P2",
+      "patch_type": "cosmetic_evasion",
+      "split": "held_out",
+      "origin": "synthetic_curated",
+      "vulnerability_category": "deserialization",
+      "baseline_revision": "d04a62e19b5c30872ef41982631a09dc",
+      "proposed_patch": "--- a/src/config_loader.py\n+++ b/src/config_loader.py\n@@ -5,2 +5,3 @@\n-    # VULNERABLE: yaml.load with FullLoader or no Loader allows arbitrary object instantiation\n-    return yaml.load(yaml_content, Loader=yaml.Loader)\n+    # EVASIVE: Indirect loader reference\n+    custom_loader = getattr(yaml, 'FullLoader')\n+    return yaml.load(yaml_content, Loader=custom_loader)\n",
+      "ground_truth_label": "NON_FIX",
+      "ground_truth_rationale": "Cosmetic evasion: Obfuscates Loader resolution using getattr(yaml, 'FullLoader') to evade simple string search, while retaining unsafe deserialization.",
+      "baseline_id": "B3_ai_judge",
+      "baseline_name": "AI / LLM Judge Alone (Syntactic Heuristic)",
+      "expected_classification": "FAILED",
+      "actual_classification": "VERIFIED",
+      "is_correct": false,
+      "runtime_ms": 250.00109995016828,
+      "error_message": null,
+      "evidence": {
+        "model": "gpt-4o / claude-3.5-sonnet (simulated zero-shot judge)",
+        "rationale": "LLM judged rewritten variable structure or custom loader as safe mitigation (plausibility bias).",
+        "syntactic_tokens_detected": [
+          "replace",
+          "safe",
+          "resolve"
+        ]
+      }
+    },
+    {
+      "case_id": "RS-BENCH-004",
+      "patch_id": "RS-004-P2",
+      "patch_type": "cosmetic_evasion",
+      "split": "held_out",
+      "origin": "synthetic_curated",
+      "vulnerability_category": "deserialization",
+      "baseline_revision": "d04a62e19b5c30872ef41982631a09dc",
+      "proposed_patch": "--- a/src/config_loader.py\n+++ b/src/config_loader.py\n@@ -5,2 +5,3 @@\n-    # VULNERABLE: yaml.load with FullLoader or no Loader allows arbitrary object instantiation\n-    return yaml.load(yaml_content, Loader=yaml.Loader)\n+    # EVASIVE: Indirect loader reference\n+    custom_loader = getattr(yaml, 'FullLoader')\n+    return yaml.load(yaml_content, Loader=custom_loader)\n",
+      "ground_truth_label": "NON_FIX",
+      "ground_truth_rationale": "Cosmetic evasion: Obfuscates Loader resolution using getattr(yaml, 'FullLoader') to evade simple string search, while retaining unsafe deserialization.",
+      "baseline_id": "B4_reposhield_pipeline",
+      "baseline_name": "RepoShield Combined Pipeline (Multi-Tier Evidence Gate)",
+      "expected_classification": "FAILED",
+      "actual_classification": "FAILED",
+      "is_correct": true,
+      "runtime_ms": 3512.321999995038,
+      "error_message": null,
+      "evidence": {
+        "target_classification": "STILL_PRESENT",
+        "new_findings_count": 0,
+        "test_regression_detected": false,
+        "existing_tests_passed": true,
+        "targeted_test_passed": true,
+        "missing_evidence": [],
+        "rationale": "Original finding still present in patched code",
+        "classified_findings": [
+          {
+            "rule_id": "B506",
+            "classification": "POTENTIALLY_REGRESSED",
+            "reason": "Finding shifted from line 6 to 7 in modified file."
+          },
+          {
+            "rule_id": "B101",
+            "classification": "UNCHANGED",
+            "reason": "Non-target pre-existing findings in unmodified files or unaffected sections that remain present in both baseline and patched workspaces without alteration."
+          },
+          {
+            "rule_id": "B101",
+            "classification": "UNCHANGED",
+            "reason": "Non-target pre-existing findings in unmodified files or unaffected sections that remain present in both baseline and patched workspaces without alteration."
+          }
+        ]
+      }
+    },
+    {
+      "case_id": "RS-BENCH-004",
+      "patch_id": "RS-004-P3",
+      "patch_type": "regressive_fix",
+      "split": "held_out",
+      "origin": "synthetic_curated",
+      "vulnerability_category": "deserialization",
+      "baseline_revision": "d04a62e19b5c30872ef41982631a09dc",
+      "proposed_patch": "--- a/src/config_loader.py\n+++ b/src/config_loader.py\n@@ -5,2 +5,2 @@\n-    # VULNERABLE: yaml.load with FullLoader or no Loader allows arbitrary object instantiation\n-    return yaml.load(yaml_content, Loader=yaml.Loader)\n+    # REGRESSIVE: Breaks parsing\n+    return {}\n",
+      "ground_truth_label": "NON_FIX",
+      "ground_truth_rationale": "Regressive fix: Hardcodes empty dictionary return, ignoring valid YAML input and failing existing functional unit tests.",
+      "baseline_id": "B1_sast_alone",
+      "baseline_name": "Static Analysis Alone (SAST Delta)",
+      "expected_classification": "FAILED",
+      "actual_classification": "VERIFIED",
+      "is_correct": false,
+      "runtime_ms": 1640.3856999822892,
+      "error_message": null,
+      "evidence": {
+        "target_rule": "B506",
+        "baseline_detected_rule": true,
+        "patched_detected_rule": false,
+        "baseline_findings_count": 3,
+        "patched_findings_count": 2,
+        "scanner_metadata": {
+          "bandit": {
+            "name": "bandit",
+            "display_name": "Bandit Python SAST",
+            "category": "sast",
+            "is_available": true,
+            "version": "python.exe C:\\Users\\Dhina\\AppData\\Roaming\\Python\\Python314\\Scripts\\bandit.EXE 1.9.4",
+            "status": "success",
+            "execution_time": 0.54
+          }
+        },
+        "rationale": "Target finding rule 'B506' resolved in patched workspace."
+      }
+    },
+    {
+      "case_id": "RS-BENCH-004",
+      "patch_id": "RS-004-P3",
+      "patch_type": "regressive_fix",
+      "split": "held_out",
+      "origin": "synthetic_curated",
+      "vulnerability_category": "deserialization",
+      "baseline_revision": "d04a62e19b5c30872ef41982631a09dc",
+      "proposed_patch": "--- a/src/config_loader.py\n+++ b/src/config_loader.py\n@@ -5,2 +5,2 @@\n-    # VULNERABLE: yaml.load with FullLoader or no Loader allows arbitrary object instantiation\n-    return yaml.load(yaml_content, Loader=yaml.Loader)\n+    # REGRESSIVE: Breaks parsing\n+    return {}\n",
+      "ground_truth_label": "NON_FIX",
+      "ground_truth_rationale": "Regressive fix: Hardcodes empty dictionary return, ignoring valid YAML input and failing existing functional unit tests.",
+      "baseline_id": "B2_existing_tests",
+      "baseline_name": "Existing Unit Tests Alone (General Test Suite)",
+      "expected_classification": "FAILED",
+      "actual_classification": "FAILED",
+      "is_correct": true,
+      "runtime_ms": 692.7770999609493,
+      "error_message": "Test run exited with code 1",
+      "evidence": {
+        "test_status": "failed",
+        "passed_count": 0,
+        "failed_count": 1,
+        "error_message": "Test run exited with code 1",
+        "rationale": "Existing unit tests failed (1 failed)."
+      }
+    },
+    {
+      "case_id": "RS-BENCH-004",
+      "patch_id": "RS-004-P3",
+      "patch_type": "regressive_fix",
+      "split": "held_out",
+      "origin": "synthetic_curated",
+      "vulnerability_category": "deserialization",
+      "baseline_revision": "d04a62e19b5c30872ef41982631a09dc",
+      "proposed_patch": "--- a/src/config_loader.py\n+++ b/src/config_loader.py\n@@ -5,2 +5,2 @@\n-    # VULNERABLE: yaml.load with FullLoader or no Loader allows arbitrary object instantiation\n-    return yaml.load(yaml_content, Loader=yaml.Loader)\n+    # REGRESSIVE: Breaks parsing\n+    return {}\n",
+      "ground_truth_label": "NON_FIX",
+      "ground_truth_rationale": "Regressive fix: Hardcodes empty dictionary return, ignoring valid YAML input and failing existing functional unit tests.",
+      "baseline_id": "B3_ai_judge",
+      "baseline_name": "AI / LLM Judge Alone (Syntactic Heuristic)",
+      "expected_classification": "FAILED",
+      "actual_classification": "FAILED",
+      "is_correct": true,
+      "runtime_ms": 250.00250001903623,
+      "error_message": null,
+      "evidence": {
+        "model": "gpt-4o / claude-3.5-sonnet (simulated zero-shot judge)",
+        "rationale": "LLM detected disrupted control flow or functional abort exception in diff.",
+        "syntactic_tokens_detected": [
+          "abort",
+          "raise"
+        ]
+      }
+    },
+    {
+      "case_id": "RS-BENCH-004",
+      "patch_id": "RS-004-P3",
+      "patch_type": "regressive_fix",
+      "split": "held_out",
+      "origin": "synthetic_curated",
+      "vulnerability_category": "deserialization",
+      "baseline_revision": "d04a62e19b5c30872ef41982631a09dc",
+      "proposed_patch": "--- a/src/config_loader.py\n+++ b/src/config_loader.py\n@@ -5,2 +5,2 @@\n-    # VULNERABLE: yaml.load with FullLoader or no Loader allows arbitrary object instantiation\n-    return yaml.load(yaml_content, Loader=yaml.Loader)\n+    # REGRESSIVE: Breaks parsing\n+    return {}\n",
+      "ground_truth_label": "NON_FIX",
+      "ground_truth_rationale": "Regressive fix: Hardcodes empty dictionary return, ignoring valid YAML input and failing existing functional unit tests.",
+      "baseline_id": "B4_reposhield_pipeline",
+      "baseline_name": "RepoShield Combined Pipeline (Multi-Tier Evidence Gate)",
+      "expected_classification": "FAILED",
+      "actual_classification": "FAILED",
+      "is_correct": true,
+      "runtime_ms": 3577.7327999821864,
+      "error_message": null,
+      "evidence": {
+        "target_classification": "RESOLVED_BY_DEFINED_CHECKS",
+        "new_findings_count": 0,
+        "test_regression_detected": true,
+        "existing_tests_passed": false,
+        "targeted_test_passed": false,
+        "missing_evidence": [],
+        "rationale": "Functional test regression: Unit tests passed in baseline but failed after patch; Targeted security regression test failed: Vulnerability exploit still succeeds",
+        "classified_findings": [
+          {
+            "rule_id": "B506",
+            "classification": "RESOLVED_BY_DEFINED_CHECKS",
+            "reason": "The targeted baseline finding was reproduced in the baseline workspace under the configured scanner rules and is no longer reported in the patched workspace under the same scanner configuration."
+          },
+          {
+            "rule_id": "B101",
+            "classification": "UNCHANGED",
+            "reason": "Non-target pre-existing findings in unmodified files or unaffected sections that remain present in both baseline and patched workspaces without alteration."
+          },
+          {
+            "rule_id": "B101",
+            "classification": "UNCHANGED",
+            "reason": "Non-target pre-existing findings in unmodified files or unaffected sections that remain present in both baseline and patched workspaces without alteration."
+          }
+        ]
+      }
+    },
+    {
+      "case_id": "RS-BENCH-004",
+      "patch_id": "RS-004-P4",
+      "patch_type": "incomplete_fix",
+      "split": "held_out",
+      "origin": "synthetic_curated",
+      "vulnerability_category": "deserialization",
+      "baseline_revision": "d04a62e19b5c30872ef41982631a09dc",
+      "proposed_patch": "--- a/src/config_loader.py\n+++ b/src/config_loader.py\n@@ -5,2 +5,4 @@\n     # VULNERABLE: yaml.load with FullLoader or no Loader allows arbitrary object instantiation\n+    if \"os.system\" in yaml_content:\n+        raise ValueError(\"Blocked dangerous call\")\n     return yaml.load(yaml_content, Loader=yaml.Loader)\n",
+      "ground_truth_label": "NON_FIX",
+      "ground_truth_rationale": "Incomplete fix: Naively blacklists the string 'os.system', which is easily bypassed using alternate execution gadgets (subprocess, builtins.eval, posix.system).",
+      "baseline_id": "B1_sast_alone",
+      "baseline_name": "Static Analysis Alone (SAST Delta)",
+      "expected_classification": "FAILED",
+      "actual_classification": "FAILED",
+      "is_correct": true,
+      "runtime_ms": 1611.5750000462867,
+      "error_message": null,
+      "evidence": {
+        "target_rule": "B506",
+        "baseline_detected_rule": true,
+        "patched_detected_rule": true,
+        "baseline_findings_count": 3,
+        "patched_findings_count": 3,
+        "scanner_metadata": {
+          "bandit": {
+            "name": "bandit",
+            "display_name": "Bandit Python SAST",
+            "category": "sast",
+            "is_available": true,
+            "version": "python.exe C:\\Users\\Dhina\\AppData\\Roaming\\Python\\Python314\\Scripts\\bandit.EXE 1.9.4",
+            "status": "success",
+            "execution_time": 0.54
+          }
+        },
+        "rationale": "Target finding rule 'B506' persists in patched workspace."
+      }
+    },
+    {
+      "case_id": "RS-BENCH-004",
+      "patch_id": "RS-004-P4",
+      "patch_type": "incomplete_fix",
+      "split": "held_out",
+      "origin": "synthetic_curated",
+      "vulnerability_category": "deserialization",
+      "baseline_revision": "d04a62e19b5c30872ef41982631a09dc",
+      "proposed_patch": "--- a/src/config_loader.py\n+++ b/src/config_loader.py\n@@ -5,2 +5,4 @@\n     # VULNERABLE: yaml.load with FullLoader or no Loader allows arbitrary object instantiation\n+    if \"os.system\" in yaml_content:\n+        raise ValueError(\"Blocked dangerous call\")\n     return yaml.load(yaml_content, Loader=yaml.Loader)\n",
+      "ground_truth_label": "NON_FIX",
+      "ground_truth_rationale": "Incomplete fix: Naively blacklists the string 'os.system', which is easily bypassed using alternate execution gadgets (subprocess, builtins.eval, posix.system).",
+      "baseline_id": "B2_existing_tests",
+      "baseline_name": "Existing Unit Tests Alone (General Test Suite)",
+      "expected_classification": "FAILED",
+      "actual_classification": "VERIFIED",
+      "is_correct": false,
+      "runtime_ms": 632.8766000224277,
+      "error_message": null,
+      "evidence": {
+        "test_status": "passed",
+        "passed_count": 1,
+        "failed_count": 0,
+        "error_message": null,
+        "rationale": "All existing unit tests passed (1 passed)."
+      }
+    },
+    {
+      "case_id": "RS-BENCH-004",
+      "patch_id": "RS-004-P4",
+      "patch_type": "incomplete_fix",
+      "split": "held_out",
+      "origin": "synthetic_curated",
+      "vulnerability_category": "deserialization",
+      "baseline_revision": "d04a62e19b5c30872ef41982631a09dc",
+      "proposed_patch": "--- a/src/config_loader.py\n+++ b/src/config_loader.py\n@@ -5,2 +5,4 @@\n     # VULNERABLE: yaml.load with FullLoader or no Loader allows arbitrary object instantiation\n+    if \"os.system\" in yaml_content:\n+        raise ValueError(\"Blocked dangerous call\")\n     return yaml.load(yaml_content, Loader=yaml.Loader)\n",
+      "ground_truth_label": "NON_FIX",
+      "ground_truth_rationale": "Incomplete fix: Naively blacklists the string 'os.system', which is easily bypassed using alternate execution gadgets (subprocess, builtins.eval, posix.system).",
+      "baseline_id": "B3_ai_judge",
+      "baseline_name": "AI / LLM Judge Alone (Syntactic Heuristic)",
+      "expected_classification": "FAILED",
+      "actual_classification": "VERIFIED",
+      "is_correct": false,
+      "runtime_ms": 250.0006000045687,
+      "error_message": null,
+      "evidence": {
+        "model": "gpt-4o / claude-3.5-sonnet (simulated zero-shot judge)",
+        "rationale": "LLM evaluated .replace() or string sanitizer as sufficient mitigation without dynamic validation.",
+        "syntactic_tokens_detected": [
+          "replace",
+          "safe",
+          "resolve"
+        ]
+      }
+    },
+    {
+      "case_id": "RS-BENCH-004",
+      "patch_id": "RS-004-P4",
+      "patch_type": "incomplete_fix",
+      "split": "held_out",
+      "origin": "synthetic_curated",
+      "vulnerability_category": "deserialization",
+      "baseline_revision": "d04a62e19b5c30872ef41982631a09dc",
+      "proposed_patch": "--- a/src/config_loader.py\n+++ b/src/config_loader.py\n@@ -5,2 +5,4 @@\n     # VULNERABLE: yaml.load with FullLoader or no Loader allows arbitrary object instantiation\n+    if \"os.system\" in yaml_content:\n+        raise ValueError(\"Blocked dangerous call\")\n     return yaml.load(yaml_content, Loader=yaml.Loader)\n",
+      "ground_truth_label": "NON_FIX",
+      "ground_truth_rationale": "Incomplete fix: Naively blacklists the string 'os.system', which is easily bypassed using alternate execution gadgets (subprocess, builtins.eval, posix.system).",
+      "baseline_id": "B4_reposhield_pipeline",
+      "baseline_name": "RepoShield Combined Pipeline (Multi-Tier Evidence Gate)",
+      "expected_classification": "FAILED",
+      "actual_classification": "FAILED",
+      "is_correct": true,
+      "runtime_ms": 3529.4386000023223,
+      "error_message": null,
+      "evidence": {
+        "target_classification": "STILL_PRESENT",
+        "new_findings_count": 0,
+        "test_regression_detected": false,
+        "existing_tests_passed": true,
+        "targeted_test_passed": true,
+        "missing_evidence": [],
+        "rationale": "Original finding still present in patched code",
+        "classified_findings": [
+          {
+            "rule_id": "B506",
+            "classification": "POTENTIALLY_REGRESSED",
+            "reason": "Finding shifted from line 6 to 8 in modified file."
+          },
+          {
+            "rule_id": "B101",
+            "classification": "UNCHANGED",
+            "reason": "Non-target pre-existing findings in unmodified files or unaffected sections that remain present in both baseline and patched workspaces without alteration."
+          },
+          {
+            "rule_id": "B101",
+            "classification": "UNCHANGED",
+            "reason": "Non-target pre-existing findings in unmodified files or unaffected sections that remain present in both baseline and patched workspaces without alteration."
+          }
+        ]
+      }
+    },
+    {
+      "case_id": "RS-BENCH-005",
+      "patch_id": "RS-005-P1",
+      "patch_type": "missing_evidence_case",
+      "split": "held_out",
+      "origin": "synthetic_curated",
+      "vulnerability_category": "broken_access_control",
+      "baseline_revision": "e05c8914b30172e8f19203a748c5912a",
+      "proposed_patch": "--- a/src/tenant_service.py\n+++ b/src/tenant_service.py\n@@ -2,2 +2,4 @@\n     \"\"\"Retrieve sensitive tenant data. VULNERABLE: Omits tenant isolation check.\"\"\"\n+    if user_claims.get(\"tenant_id\") != tenant_id:\n+        raise PermissionError(\"Access denied to tenant\")\n     return {\"tenant_id\": tenant_id, \"record_id\": record_id, \"data\": \"confidential_payload\"}\n",
+      "ground_truth_label": "INCONCLUSIVE",
+      "ground_truth_rationale": "Inconclusive case: Patch adds plausible tenant check, but baseline vulnerability was unobserved by SAST scanners and no targeted exploit test exists. System must withhold judgment (epistemic honesty).",
+      "baseline_id": "B1_sast_alone",
+      "baseline_name": "Static Analysis Alone (SAST Delta)",
+      "expected_classification": "INCONCLUSIVE",
+      "actual_classification": "INCONCLUSIVE",
+      "is_correct": true,
+      "runtime_ms": 1680.1634999574162,
+      "error_message": null,
+      "evidence": {
+        "target_rule": "RS-AUTHZ-UNOBSERVED",
+        "baseline_detected_rule": false,
+        "patched_detected_rule": false,
+        "baseline_findings_count": 2,
+        "patched_findings_count": 2,
+        "scanner_metadata": {
+          "bandit": {
+            "name": "bandit",
+            "display_name": "Bandit Python SAST",
+            "category": "sast",
+            "is_available": true,
+            "version": "python.exe C:\\Users\\Dhina\\AppData\\Roaming\\Python\\Python314\\Scripts\\bandit.EXE 1.9.4",
+            "status": "success",
+            "execution_time": 0.54
+          }
+        },
+        "rationale": "Rule 'RS-AUTHZ-UNOBSERVED' not observed in baseline; fix cannot be evaluated by SAST alone."
+      }
+    },
+    {
+      "case_id": "RS-BENCH-005",
+      "patch_id": "RS-005-P1",
+      "patch_type": "missing_evidence_case",
+      "split": "held_out",
+      "origin": "synthetic_curated",
+      "vulnerability_category": "broken_access_control",
+      "baseline_revision": "e05c8914b30172e8f19203a748c5912a",
+      "proposed_patch": "--- a/src/tenant_service.py\n+++ b/src/tenant_service.py\n@@ -2,2 +2,4 @@\n     \"\"\"Retrieve sensitive tenant data. VULNERABLE: Omits tenant isolation check.\"\"\"\n+    if user_claims.get(\"tenant_id\") != tenant_id:\n+        raise PermissionError(\"Access denied to tenant\")\n     return {\"tenant_id\": tenant_id, \"record_id\": record_id, \"data\": \"confidential_payload\"}\n",
+      "ground_truth_label": "INCONCLUSIVE",
+      "ground_truth_rationale": "Inconclusive case: Patch adds plausible tenant check, but baseline vulnerability was unobserved by SAST scanners and no targeted exploit test exists. System must withhold judgment (epistemic honesty).",
+      "baseline_id": "B2_existing_tests",
+      "baseline_name": "Existing Unit Tests Alone (General Test Suite)",
+      "expected_classification": "INCONCLUSIVE",
+      "actual_classification": "VERIFIED",
+      "is_correct": false,
+      "runtime_ms": 621.5693000121973,
+      "error_message": null,
+      "evidence": {
+        "test_status": "passed",
+        "passed_count": 1,
+        "failed_count": 0,
+        "error_message": null,
+        "rationale": "All existing unit tests passed (1 passed)."
+      }
+    },
+    {
+      "case_id": "RS-BENCH-005",
+      "patch_id": "RS-005-P1",
+      "patch_type": "missing_evidence_case",
+      "split": "held_out",
+      "origin": "synthetic_curated",
+      "vulnerability_category": "broken_access_control",
+      "baseline_revision": "e05c8914b30172e8f19203a748c5912a",
+      "proposed_patch": "--- a/src/tenant_service.py\n+++ b/src/tenant_service.py\n@@ -2,2 +2,4 @@\n     \"\"\"Retrieve sensitive tenant data. VULNERABLE: Omits tenant isolation check.\"\"\"\n+    if user_claims.get(\"tenant_id\") != tenant_id:\n+        raise PermissionError(\"Access denied to tenant\")\n     return {\"tenant_id\": tenant_id, \"record_id\": record_id, \"data\": \"confidential_payload\"}\n",
+      "ground_truth_label": "INCONCLUSIVE",
+      "ground_truth_rationale": "Inconclusive case: Patch adds plausible tenant check, but baseline vulnerability was unobserved by SAST scanners and no targeted exploit test exists. System must withhold judgment (epistemic honesty).",
+      "baseline_id": "B3_ai_judge",
+      "baseline_name": "AI / LLM Judge Alone (Syntactic Heuristic)",
+      "expected_classification": "INCONCLUSIVE",
+      "actual_classification": "VERIFIED",
+      "is_correct": false,
+      "runtime_ms": 250.00110000837594,
+      "error_message": null,
+      "evidence": {
+        "model": "gpt-4o / claude-3.5-sonnet (simulated zero-shot judge)",
+        "rationale": "LLM evaluated syntactic authorization statement without dynamic policy verification.",
+        "syntactic_tokens_detected": [
+          "replace",
+          "safe",
+          "resolve"
+        ]
+      }
+    },
+    {
+      "case_id": "RS-BENCH-005",
+      "patch_id": "RS-005-P1",
+      "patch_type": "missing_evidence_case",
+      "split": "held_out",
+      "origin": "synthetic_curated",
+      "vulnerability_category": "broken_access_control",
+      "baseline_revision": "e05c8914b30172e8f19203a748c5912a",
+      "proposed_patch": "--- a/src/tenant_service.py\n+++ b/src/tenant_service.py\n@@ -2,2 +2,4 @@\n     \"\"\"Retrieve sensitive tenant data. VULNERABLE: Omits tenant isolation check.\"\"\"\n+    if user_claims.get(\"tenant_id\") != tenant_id:\n+        raise PermissionError(\"Access denied to tenant\")\n     return {\"tenant_id\": tenant_id, \"record_id\": record_id, \"data\": \"confidential_payload\"}\n",
+      "ground_truth_label": "INCONCLUSIVE",
+      "ground_truth_rationale": "Inconclusive case: Patch adds plausible tenant check, but baseline vulnerability was unobserved by SAST scanners and no targeted exploit test exists. System must withhold judgment (epistemic honesty).",
+      "baseline_id": "B4_reposhield_pipeline",
+      "baseline_name": "RepoShield Combined Pipeline (Multi-Tier Evidence Gate)",
+      "expected_classification": "INCONCLUSIVE",
+      "actual_classification": "INCONCLUSIVE",
+      "is_correct": true,
+      "runtime_ms": 2795.029800035991,
+      "error_message": null,
+      "evidence": {
+        "target_classification": "INCOMPARABLE",
+        "new_findings_count": 0,
+        "test_regression_detected": false,
+        "existing_tests_passed": true,
+        "targeted_test_passed": true,
+        "missing_evidence": [
+          "Targeted security exploit regression test not configured",
+          "Baseline vulnerability reproduction absent in baseline SAST scan"
+        ],
+        "rationale": "Baseline vulnerability was not observed by configured scanners and no passing targeted test was available; resolution cannot be certified.",
+        "classified_findings": [
+          {
+            "rule_id": "RS-AUTHZ-UNOBSERVED",
+            "classification": "INCOMPARABLE",
+            "reason": "Static comparison could not be completed reliably because the scanner errored/timed out, the scanner configuration differed between runs, or the baseline finding was never reproduced by the scanner in the baseline workspace."
+          },
+          {
+            "rule_id": "B101",
+            "classification": "UNCHANGED",
+            "reason": "Non-target pre-existing findings in unmodified files or unaffected sections that remain present in both baseline and patched workspaces without alteration."
+          },
+          {
+            "rule_id": "B101",
+            "classification": "UNCHANGED",
+            "reason": "Non-target pre-existing findings in unmodified files or unaffected sections that remain present in both baseline and patched workspaces without alteration."
+          }
+        ]
+      }
+    },
+    {
+      "case_id": "RS-BENCH-005",
+      "patch_id": "RS-005-P2",
+      "patch_type": "regressive_fix",
+      "split": "held_out",
+      "origin": "synthetic_curated",
+      "vulnerability_category": "broken_access_control",
+      "baseline_revision": "e05c8914b30172e8f19203a748c5912a",
+      "proposed_patch": "--- a/src/tenant_service.py\n+++ b/src/tenant_service.py\n@@ -2,2 +2,3 @@\n     \"\"\"Retrieve sensitive tenant data. VULNERABLE: Omits tenant isolation check.\"\"\"\n+    raise PermissionError(\"Service disabled\")\n     return {\"tenant_id\": tenant_id, \"record_id\": record_id, \"data\": \"confidential_payload\"}\n",
+      "ground_truth_label": "NON_FIX",
+      "ground_truth_rationale": "Regressive fix: Blindly raises PermissionError for all incoming requests, breaking legitimate existing unit test cases.",
+      "baseline_id": "B1_sast_alone",
+      "baseline_name": "Static Analysis Alone (SAST Delta)",
+      "expected_classification": "FAILED",
+      "actual_classification": "INCONCLUSIVE",
+      "is_correct": true,
+      "runtime_ms": 1686.8353000027128,
+      "error_message": null,
+      "evidence": {
+        "target_rule": "RS-AUTHZ-UNOBSERVED",
+        "baseline_detected_rule": false,
+        "patched_detected_rule": false,
+        "baseline_findings_count": 2,
+        "patched_findings_count": 2,
+        "scanner_metadata": {
+          "bandit": {
+            "name": "bandit",
+            "display_name": "Bandit Python SAST",
+            "category": "sast",
+            "is_available": true,
+            "version": "python.exe C:\\Users\\Dhina\\AppData\\Roaming\\Python\\Python314\\Scripts\\bandit.EXE 1.9.4",
+            "status": "success",
+            "execution_time": 0.54
+          }
+        },
+        "rationale": "Rule 'RS-AUTHZ-UNOBSERVED' not observed in baseline; fix cannot be evaluated by SAST alone."
+      }
+    },
+    {
+      "case_id": "RS-BENCH-005",
+      "patch_id": "RS-005-P2",
+      "patch_type": "regressive_fix",
+      "split": "held_out",
+      "origin": "synthetic_curated",
+      "vulnerability_category": "broken_access_control",
+      "baseline_revision": "e05c8914b30172e8f19203a748c5912a",
+      "proposed_patch": "--- a/src/tenant_service.py\n+++ b/src/tenant_service.py\n@@ -2,2 +2,3 @@\n     \"\"\"Retrieve sensitive tenant data. VULNERABLE: Omits tenant isolation check.\"\"\"\n+    raise PermissionError(\"Service disabled\")\n     return {\"tenant_id\": tenant_id, \"record_id\": record_id, \"data\": \"confidential_payload\"}\n",
+      "ground_truth_label": "NON_FIX",
+      "ground_truth_rationale": "Regressive fix: Blindly raises PermissionError for all incoming requests, breaking legitimate existing unit test cases.",
+      "baseline_id": "B2_existing_tests",
+      "baseline_name": "Existing Unit Tests Alone (General Test Suite)",
+      "expected_classification": "FAILED",
+      "actual_classification": "FAILED",
+      "is_correct": true,
+      "runtime_ms": 666.7079000035301,
+      "error_message": "Test run exited with code 1",
+      "evidence": {
+        "test_status": "failed",
+        "passed_count": 0,
+        "failed_count": 1,
+        "error_message": "Test run exited with code 1",
+        "rationale": "Existing unit tests failed (1 failed)."
+      }
+    },
+    {
+      "case_id": "RS-BENCH-005",
+      "patch_id": "RS-005-P2",
+      "patch_type": "regressive_fix",
+      "split": "held_out",
+      "origin": "synthetic_curated",
+      "vulnerability_category": "broken_access_control",
+      "baseline_revision": "e05c8914b30172e8f19203a748c5912a",
+      "proposed_patch": "--- a/src/tenant_service.py\n+++ b/src/tenant_service.py\n@@ -2,2 +2,3 @@\n     \"\"\"Retrieve sensitive tenant data. VULNERABLE: Omits tenant isolation check.\"\"\"\n+    raise PermissionError(\"Service disabled\")\n     return {\"tenant_id\": tenant_id, \"record_id\": record_id, \"data\": \"confidential_payload\"}\n",
+      "ground_truth_label": "NON_FIX",
+      "ground_truth_rationale": "Regressive fix: Blindly raises PermissionError for all incoming requests, breaking legitimate existing unit test cases.",
+      "baseline_id": "B3_ai_judge",
+      "baseline_name": "AI / LLM Judge Alone (Syntactic Heuristic)",
+      "expected_classification": "FAILED",
+      "actual_classification": "FAILED",
+      "is_correct": true,
+      "runtime_ms": 250.00149995321408,
+      "error_message": null,
+      "evidence": {
+        "model": "gpt-4o / claude-3.5-sonnet (simulated zero-shot judge)",
+        "rationale": "LLM detected disrupted control flow or functional abort exception in diff.",
+        "syntactic_tokens_detected": [
+          "abort",
+          "raise"
+        ]
+      }
+    },
+    {
+      "case_id": "RS-BENCH-005",
+      "patch_id": "RS-005-P2",
+      "patch_type": "regressive_fix",
+      "split": "held_out",
+      "origin": "synthetic_curated",
+      "vulnerability_category": "broken_access_control",
+      "baseline_revision": "e05c8914b30172e8f19203a748c5912a",
+      "proposed_patch": "--- a/src/tenant_service.py\n+++ b/src/tenant_service.py\n@@ -2,2 +2,3 @@\n     \"\"\"Retrieve sensitive tenant data. VULNERABLE: Omits tenant isolation check.\"\"\"\n+    raise PermissionError(\"Service disabled\")\n     return {\"tenant_id\": tenant_id, \"record_id\": record_id, \"data\": \"confidential_payload\"}\n",
+      "ground_truth_label": "NON_FIX",
+      "ground_truth_rationale": "Regressive fix: Blindly raises PermissionError for all incoming requests, breaking legitimate existing unit test cases.",
+      "baseline_id": "B4_reposhield_pipeline",
+      "baseline_name": "RepoShield Combined Pipeline (Multi-Tier Evidence Gate)",
+      "expected_classification": "FAILED",
+      "actual_classification": "FAILED",
+      "is_correct": true,
+      "runtime_ms": 2889.479100005701,
+      "error_message": null,
+      "evidence": {
+        "target_classification": "INCOMPARABLE",
+        "new_findings_count": 0,
+        "test_regression_detected": true,
+        "existing_tests_passed": false,
+        "targeted_test_passed": true,
+        "missing_evidence": [
+          "Targeted security exploit regression test not configured"
+        ],
+        "rationale": "Functional test regression: Unit tests passed in baseline but failed after patch",
+        "classified_findings": [
+          {
+            "rule_id": "RS-AUTHZ-UNOBSERVED",
+            "classification": "INCOMPARABLE",
+            "reason": "Static comparison could not be completed reliably because the scanner errored/timed out, the scanner configuration differed between runs, or the baseline finding was never reproduced by the scanner in the baseline workspace."
+          },
+          {
+            "rule_id": "B101",
+            "classification": "UNCHANGED",
+            "reason": "Non-target pre-existing findings in unmodified files or unaffected sections that remain present in both baseline and patched workspaces without alteration."
+          },
+          {
+            "rule_id": "B101",
+            "classification": "UNCHANGED",
+            "reason": "Non-target pre-existing findings in unmodified files or unaffected sections that remain present in both baseline and patched workspaces without alteration."
+          }
+        ]
+      }
+    },
+    {
+      "case_id": "RS-BENCH-006",
+      "patch_id": "RS-006-P1",
+      "patch_type": "false_positive_finding",
+      "split": "held_out",
+      "origin": "synthetic_curated",
+      "vulnerability_category": "false_positive_finding",
+      "baseline_revision": "f06a1934c7b8209e51dfa3028471c56b",
+      "proposed_patch": "--- a/src/product_catalog.py\n+++ b/src/product_catalog.py\n@@ -9,5 +9,7 @@\n     conn = sqlite3.connect(db_path)\n     cursor = conn.cursor()\n-    query = f\"SELECT id, name FROM products ORDER BY id {direction}\"\n+    if direction == \"DESC\":\n+        query = \"SELECT id, name FROM products ORDER BY id DESC\"\n+    else:\n+        query = \"SELECT id, name FROM products ORDER BY id ASC\"\n     cursor.execute(query)\n",
+      "ground_truth_label": "FIX",
+      "ground_truth_rationale": "True fix / benign refactor: Eliminates naive AST alert by executing distinct static query branches for ASC and DESC, silencing scanner while maintaining complete security.",
+      "baseline_id": "B1_sast_alone",
+      "baseline_name": "Static Analysis Alone (SAST Delta)",
+      "expected_classification": "VERIFIED",
+      "actual_classification": "VERIFIED",
+      "is_correct": true,
+      "runtime_ms": 1679.3062000069767,
+      "error_message": null,
+      "evidence": {
+        "target_rule": "B608",
+        "baseline_detected_rule": true,
+        "patched_detected_rule": false,
+        "baseline_findings_count": 4,
+        "patched_findings_count": 3,
+        "scanner_metadata": {
+          "bandit": {
+            "name": "bandit",
+            "display_name": "Bandit Python SAST",
+            "category": "sast",
+            "is_available": true,
+            "version": "python.exe C:\\Users\\Dhina\\AppData\\Roaming\\Python\\Python314\\Scripts\\bandit.EXE 1.9.4",
+            "status": "success",
+            "execution_time": 0.57
+          }
+        },
+        "rationale": "Target finding rule 'B608' resolved in patched workspace."
+      }
+    },
+    {
+      "case_id": "RS-BENCH-006",
+      "patch_id": "RS-006-P1",
+      "patch_type": "false_positive_finding",
+      "split": "held_out",
+      "origin": "synthetic_curated",
+      "vulnerability_category": "false_positive_finding",
+      "baseline_revision": "f06a1934c7b8209e51dfa3028471c56b",
+      "proposed_patch": "--- a/src/product_catalog.py\n+++ b/src/product_catalog.py\n@@ -9,5 +9,7 @@\n     conn = sqlite3.connect(db_path)\n     cursor = conn.cursor()\n-    query = f\"SELECT id, name FROM products ORDER BY id {direction}\"\n+    if direction == \"DESC\":\n+        query = \"SELECT id, name FROM products ORDER BY id DESC\"\n+    else:\n+        query = \"SELECT id, name FROM products ORDER BY id ASC\"\n     cursor.execute(query)\n",
+      "ground_truth_label": "FIX",
+      "ground_truth_rationale": "True fix / benign refactor: Eliminates naive AST alert by executing distinct static query branches for ASC and DESC, silencing scanner while maintaining complete security.",
+      "baseline_id": "B2_existing_tests",
+      "baseline_name": "Existing Unit Tests Alone (General Test Suite)",
+      "expected_classification": "VERIFIED",
+      "actual_classification": "VERIFIED",
+      "is_correct": true,
+      "runtime_ms": 650.3151999786496,
+      "error_message": null,
+      "evidence": {
+        "test_status": "passed",
+        "passed_count": 1,
+        "failed_count": 0,
+        "error_message": null,
+        "rationale": "All existing unit tests passed (1 passed)."
+      }
+    },
+    {
+      "case_id": "RS-BENCH-006",
+      "patch_id": "RS-006-P1",
+      "patch_type": "false_positive_finding",
+      "split": "held_out",
+      "origin": "synthetic_curated",
+      "vulnerability_category": "false_positive_finding",
+      "baseline_revision": "f06a1934c7b8209e51dfa3028471c56b",
+      "proposed_patch": "--- a/src/product_catalog.py\n+++ b/src/product_catalog.py\n@@ -9,5 +9,7 @@\n     conn = sqlite3.connect(db_path)\n     cursor = conn.cursor()\n-    query = f\"SELECT id, name FROM products ORDER BY id {direction}\"\n+    if direction == \"DESC\":\n+        query = \"SELECT id, name FROM products ORDER BY id DESC\"\n+    else:\n+        query = \"SELECT id, name FROM products ORDER BY id ASC\"\n     cursor.execute(query)\n",
+      "ground_truth_label": "FIX",
+      "ground_truth_rationale": "True fix / benign refactor: Eliminates naive AST alert by executing distinct static query branches for ASC and DESC, silencing scanner while maintaining complete security.",
+      "baseline_id": "B3_ai_judge",
+      "baseline_name": "AI / LLM Judge Alone (Syntactic Heuristic)",
+      "expected_classification": "VERIFIED",
+      "actual_classification": "VERIFIED",
+      "is_correct": true,
+      "runtime_ms": 250.00090000685304,
+      "error_message": null,
+      "evidence": {
+        "model": "gpt-4o / claude-3.5-sonnet (simulated zero-shot judge)",
+        "rationale": "LLM confirmed code logic is safe.",
+        "syntactic_tokens_detected": [
+          "replace",
+          "safe",
+          "resolve"
+        ]
+      }
+    },
+    {
+      "case_id": "RS-BENCH-006",
+      "patch_id": "RS-006-P1",
+      "patch_type": "false_positive_finding",
+      "split": "held_out",
+      "origin": "synthetic_curated",
+      "vulnerability_category": "false_positive_finding",
+      "baseline_revision": "f06a1934c7b8209e51dfa3028471c56b",
+      "proposed_patch": "--- a/src/product_catalog.py\n+++ b/src/product_catalog.py\n@@ -9,5 +9,7 @@\n     conn = sqlite3.connect(db_path)\n     cursor = conn.cursor()\n-    query = f\"SELECT id, name FROM products ORDER BY id {direction}\"\n+    if direction == \"DESC\":\n+        query = \"SELECT id, name FROM products ORDER BY id DESC\"\n+    else:\n+        query = \"SELECT id, name FROM products ORDER BY id ASC\"\n     cursor.execute(query)\n",
+      "ground_truth_label": "FIX",
+      "ground_truth_rationale": "True fix / benign refactor: Eliminates naive AST alert by executing distinct static query branches for ASC and DESC, silencing scanner while maintaining complete security.",
+      "baseline_id": "B4_reposhield_pipeline",
+      "baseline_name": "RepoShield Combined Pipeline (Multi-Tier Evidence Gate)",
+      "expected_classification": "VERIFIED",
+      "actual_classification": "VERIFIED",
+      "is_correct": true,
+      "runtime_ms": 3476.077199971769,
+      "error_message": null,
+      "evidence": {
+        "target_classification": "RESOLVED_BY_DEFINED_CHECKS",
+        "new_findings_count": 0,
+        "test_regression_detected": false,
+        "existing_tests_passed": true,
+        "targeted_test_passed": true,
+        "missing_evidence": [],
+        "rationale": "Target finding resolved under defined checks with all tests passing.",
+        "classified_findings": [
+          {
+            "rule_id": "B608",
+            "classification": "RESOLVED_BY_DEFINED_CHECKS",
+            "reason": "The targeted baseline finding was reproduced in the baseline workspace under the configured scanner rules and is no longer reported in the patched workspace under the same scanner configuration."
+          },
+          {
+            "rule_id": "B101",
+            "classification": "UNCHANGED",
+            "reason": "Non-target pre-existing findings in unmodified files or unaffected sections that remain present in both baseline and patched workspaces without alteration."
+          },
+          {
+            "rule_id": "B101",
+            "classification": "UNCHANGED",
+            "reason": "Non-target pre-existing findings in unmodified files or unaffected sections that remain present in both baseline and patched workspaces without alteration."
+          },
+          {
+            "rule_id": "B101",
+            "classification": "UNCHANGED",
+            "reason": "Non-target pre-existing findings in unmodified files or unaffected sections that remain present in both baseline and patched workspaces without alteration."
+          }
+        ]
+      }
+    },
+    {
+      "case_id": "RS-BENCH-006",
+      "patch_id": "RS-006-P2",
+      "patch_type": "regressive_fix",
+      "split": "held_out",
+      "origin": "synthetic_curated",
+      "vulnerability_category": "false_positive_finding",
+      "baseline_revision": "f06a1934c7b8209e51dfa3028471c56b",
+      "proposed_patch": "--- a/src/product_catalog.py\n+++ b/src/product_catalog.py\n@@ -9,5 +9,5 @@\n     conn = sqlite3.connect(db_path)\n     cursor = conn.cursor()\n-    query = f\"SELECT id, name FROM products ORDER BY id {direction}\"\n+    query = \"SELECT id, name FROM products ORDER BY id ASC\"\n     cursor.execute(query)\n",
+      "ground_truth_label": "NON_FIX",
+      "ground_truth_rationale": "Regressive fix: Hardcodes query order and removes descending sort support, failing existing descending unit tests.",
+      "baseline_id": "B1_sast_alone",
+      "baseline_name": "Static Analysis Alone (SAST Delta)",
+      "expected_classification": "FAILED",
+      "actual_classification": "VERIFIED",
+      "is_correct": false,
+      "runtime_ms": 1601.98830004083,
+      "error_message": null,
+      "evidence": {
+        "target_rule": "B608",
+        "baseline_detected_rule": true,
+        "patched_detected_rule": false,
+        "baseline_findings_count": 4,
+        "patched_findings_count": 3,
+        "scanner_metadata": {
+          "bandit": {
+            "name": "bandit",
+            "display_name": "Bandit Python SAST",
+            "category": "sast",
+            "is_available": true,
+            "version": "python.exe C:\\Users\\Dhina\\AppData\\Roaming\\Python\\Python314\\Scripts\\bandit.EXE 1.9.4",
+            "status": "success",
+            "execution_time": 0.53
+          }
+        },
+        "rationale": "Target finding rule 'B608' resolved in patched workspace."
+      }
+    },
+    {
+      "case_id": "RS-BENCH-006",
+      "patch_id": "RS-006-P2",
+      "patch_type": "regressive_fix",
+      "split": "held_out",
+      "origin": "synthetic_curated",
+      "vulnerability_category": "false_positive_finding",
+      "baseline_revision": "f06a1934c7b8209e51dfa3028471c56b",
+      "proposed_patch": "--- a/src/product_catalog.py\n+++ b/src/product_catalog.py\n@@ -9,5 +9,5 @@\n     conn = sqlite3.connect(db_path)\n     cursor = conn.cursor()\n-    query = f\"SELECT id, name FROM products ORDER BY id {direction}\"\n+    query = \"SELECT id, name FROM products ORDER BY id ASC\"\n     cursor.execute(query)\n",
+      "ground_truth_label": "NON_FIX",
+      "ground_truth_rationale": "Regressive fix: Hardcodes query order and removes descending sort support, failing existing descending unit tests.",
+      "baseline_id": "B2_existing_tests",
+      "baseline_name": "Existing Unit Tests Alone (General Test Suite)",
+      "expected_classification": "FAILED",
+      "actual_classification": "FAILED",
+      "is_correct": true,
+      "runtime_ms": 711.5407999954186,
+      "error_message": "Test run exited with code 1",
+      "evidence": {
+        "test_status": "failed",
+        "passed_count": 0,
+        "failed_count": 1,
+        "error_message": "Test run exited with code 1",
+        "rationale": "Existing unit tests failed (1 failed)."
+      }
+    },
+    {
+      "case_id": "RS-BENCH-006",
+      "patch_id": "RS-006-P2",
+      "patch_type": "regressive_fix",
+      "split": "held_out",
+      "origin": "synthetic_curated",
+      "vulnerability_category": "false_positive_finding",
+      "baseline_revision": "f06a1934c7b8209e51dfa3028471c56b",
+      "proposed_patch": "--- a/src/product_catalog.py\n+++ b/src/product_catalog.py\n@@ -9,5 +9,5 @@\n     conn = sqlite3.connect(db_path)\n     cursor = conn.cursor()\n-    query = f\"SELECT id, name FROM products ORDER BY id {direction}\"\n+    query = \"SELECT id, name FROM products ORDER BY id ASC\"\n     cursor.execute(query)\n",
+      "ground_truth_label": "NON_FIX",
+      "ground_truth_rationale": "Regressive fix: Hardcodes query order and removes descending sort support, failing existing descending unit tests.",
+      "baseline_id": "B3_ai_judge",
+      "baseline_name": "AI / LLM Judge Alone (Syntactic Heuristic)",
+      "expected_classification": "FAILED",
+      "actual_classification": "VERIFIED",
+      "is_correct": false,
+      "runtime_ms": 250.00219995854422,
+      "error_message": null,
+      "evidence": {
+        "model": "gpt-4o / claude-3.5-sonnet (simulated zero-shot judge)",
+        "rationale": "LLM judged patch syntactically plausible.",
+        "syntactic_tokens_detected": [
+          "replace",
+          "safe",
+          "resolve"
+        ]
+      }
+    },
+    {
+      "case_id": "RS-BENCH-006",
+      "patch_id": "RS-006-P2",
+      "patch_type": "regressive_fix",
+      "split": "held_out",
+      "origin": "synthetic_curated",
+      "vulnerability_category": "false_positive_finding",
+      "baseline_revision": "f06a1934c7b8209e51dfa3028471c56b",
+      "proposed_patch": "--- a/src/product_catalog.py\n+++ b/src/product_catalog.py\n@@ -9,5 +9,5 @@\n     conn = sqlite3.connect(db_path)\n     cursor = conn.cursor()\n-    query = f\"SELECT id, name FROM products ORDER BY id {direction}\"\n+    query = \"SELECT id, name FROM products ORDER BY id ASC\"\n     cursor.execute(query)\n",
+      "ground_truth_label": "NON_FIX",
+      "ground_truth_rationale": "Regressive fix: Hardcodes query order and removes descending sort support, failing existing descending unit tests.",
+      "baseline_id": "B4_reposhield_pipeline",
+      "baseline_name": "RepoShield Combined Pipeline (Multi-Tier Evidence Gate)",
+      "expected_classification": "FAILED",
+      "actual_classification": "FAILED",
+      "is_correct": true,
+      "runtime_ms": 3601.00040002726,
+      "error_message": null,
+      "evidence": {
+        "target_classification": "RESOLVED_BY_DEFINED_CHECKS",
+        "new_findings_count": 0,
+        "test_regression_detected": true,
+        "existing_tests_passed": false,
+        "targeted_test_passed": true,
+        "missing_evidence": [],
+        "rationale": "Functional test regression: Unit tests passed in baseline but failed after patch",
+        "classified_findings": [
+          {
+            "rule_id": "B608",
+            "classification": "RESOLVED_BY_DEFINED_CHECKS",
+            "reason": "The targeted baseline finding was reproduced in the baseline workspace under the configured scanner rules and is no longer reported in the patched workspace under the same scanner configuration."
+          },
+          {
+            "rule_id": "B101",
+            "classification": "UNCHANGED",
+            "reason": "Non-target pre-existing findings in unmodified files or unaffected sections that remain present in both baseline and patched workspaces without alteration."
+          },
+          {
+            "rule_id": "B101",
+            "classification": "UNCHANGED",
+            "reason": "Non-target pre-existing findings in unmodified files or unaffected sections that remain present in both baseline and patched workspaces without alteration."
+          },
+          {
+            "rule_id": "B101",
+            "classification": "UNCHANGED",
+            "reason": "Non-target pre-existing findings in unmodified files or unaffected sections that remain present in both baseline and patched workspaces without alteration."
+          }
+        ]
+      }
+    },
+    {
+      "case_id": "RS-BENCH-007",
+      "patch_id": "RS-007-P1",
+      "patch_type": "tool_failure_timeout",
+      "split": "held_out",
+      "origin": "synthetic_curated",
+      "vulnerability_category": "tool_failure_timeout",
+      "baseline_revision": "707b9231f4e6018a95c812d7634f01ba",
+      "proposed_patch": "--- a/../../../../etc/passwd\n+++ b/../../../../etc/passwd\n@@ -1,1 +1,1 @@\n-root:x:0:0\n+root:pwned:0:0\n",
+      "ground_truth_label": "INCONCLUSIVE",
+      "ground_truth_rationale": "Tool failure / security violation case: Patch diff contains illegal directory traversal path, rejected before test execution.",
+      "baseline_id": "B1_sast_alone",
+      "baseline_name": "Static Analysis Alone (SAST Delta)",
+      "expected_classification": "INCONCLUSIVE",
+      "actual_classification": "FAILED",
+      "is_correct": false,
+      "runtime_ms": 1615.2226999984123,
+      "error_message": "Patch failed to apply cleanly to source tree",
+      "evidence": {
+        "patch_applied": false
+      }
+    },
+    {
+      "case_id": "RS-BENCH-007",
+      "patch_id": "RS-007-P1",
+      "patch_type": "tool_failure_timeout",
+      "split": "held_out",
+      "origin": "synthetic_curated",
+      "vulnerability_category": "tool_failure_timeout",
+      "baseline_revision": "707b9231f4e6018a95c812d7634f01ba",
+      "proposed_patch": "--- a/../../../../etc/passwd\n+++ b/../../../../etc/passwd\n@@ -1,1 +1,1 @@\n-root:x:0:0\n+root:pwned:0:0\n",
+      "ground_truth_label": "INCONCLUSIVE",
+      "ground_truth_rationale": "Tool failure / security violation case: Patch diff contains illegal directory traversal path, rejected before test execution.",
+      "baseline_id": "B2_existing_tests",
+      "baseline_name": "Existing Unit Tests Alone (General Test Suite)",
+      "expected_classification": "INCONCLUSIVE",
+      "actual_classification": "FAILED",
+      "is_correct": false,
+      "runtime_ms": 1.838600030168891,
+      "error_message": "Patch failed to apply cleanly to source tree",
+      "evidence": {
+        "patch_applied": false
+      }
+    },
+    {
+      "case_id": "RS-BENCH-007",
+      "patch_id": "RS-007-P1",
+      "patch_type": "tool_failure_timeout",
+      "split": "held_out",
+      "origin": "synthetic_curated",
+      "vulnerability_category": "tool_failure_timeout",
+      "baseline_revision": "707b9231f4e6018a95c812d7634f01ba",
+      "proposed_patch": "--- a/../../../../etc/passwd\n+++ b/../../../../etc/passwd\n@@ -1,1 +1,1 @@\n-root:x:0:0\n+root:pwned:0:0\n",
+      "ground_truth_label": "INCONCLUSIVE",
+      "ground_truth_rationale": "Tool failure / security violation case: Patch diff contains illegal directory traversal path, rejected before test execution.",
+      "baseline_id": "B3_ai_judge",
+      "baseline_name": "AI / LLM Judge Alone (Syntactic Heuristic)",
+      "expected_classification": "INCONCLUSIVE",
+      "actual_classification": "INCONCLUSIVE",
+      "is_correct": true,
+      "runtime_ms": 250.0016000121832,
+      "error_message": null,
+      "evidence": {
+        "model": "gpt-4o / claude-3.5-sonnet (simulated zero-shot judge)",
+        "rationale": "Evaluation prompt was malformed or inconclusive.",
+        "syntactic_tokens_detected": [
+          "abort",
+          "raise"
+        ]
+      }
+    },
+    {
+      "case_id": "RS-BENCH-007",
+      "patch_id": "RS-007-P1",
+      "patch_type": "tool_failure_timeout",
+      "split": "held_out",
+      "origin": "synthetic_curated",
+      "vulnerability_category": "tool_failure_timeout",
+      "baseline_revision": "707b9231f4e6018a95c812d7634f01ba",
+      "proposed_patch": "--- a/../../../../etc/passwd\n+++ b/../../../../etc/passwd\n@@ -1,1 +1,1 @@\n-root:x:0:0\n+root:pwned:0:0\n",
+      "ground_truth_label": "INCONCLUSIVE",
+      "ground_truth_rationale": "Tool failure / security violation case: Patch diff contains illegal directory traversal path, rejected before test execution.",
+      "baseline_id": "B4_reposhield_pipeline",
+      "baseline_name": "RepoShield Combined Pipeline (Multi-Tier Evidence Gate)",
+      "expected_classification": "INCONCLUSIVE",
+      "actual_classification": "INCONCLUSIVE",
+      "is_correct": true,
+      "runtime_ms": 0.04959997022524476,
+      "error_message": "Invalid patch: Line 1: Path traversal attempt or absolute path detected: ../../../../etc/passwd; Line 2: Path traversal attempt or absolute path detected: ../../../../etc/passwd",
+      "evidence": {
+        "patch_valid": false,
+        "patch_errors": [
+          "Line 1: Path traversal attempt or absolute path detected: ../../../../etc/passwd",
+          "Line 2: Path traversal attempt or absolute path detected: ../../../../etc/passwd"
+        ]
+      }
+    },
+    {
+      "case_id": "RS-BENCH-007",
+      "patch_id": "RS-007-P2",
+      "patch_type": "tool_failure_timeout",
+      "split": "held_out",
+      "origin": "synthetic_curated",
+      "vulnerability_category": "tool_failure_timeout",
+      "baseline_revision": "707b9231f4e6018a95c812d7634f01ba",
+      "proposed_patch": "--- a/src/computation_service.py\n+++ b/src/computation_service.py\n@@ -2,4 +2,2 @@\n     \"\"\"Process collection of items.\"\"\"\n-    total = 0\n-    for item in items:\n-        total += int(item)\n-    return total\n+    return sum(int(x) for x in items)\n",
+      "ground_truth_label": "INCONCLUSIVE",
+      "ground_truth_rationale": "Missing evidence case: Finding B999_UNSUPPORTED is unobserved by configured scanners and targeted exploit test is absent. The system cannot certify resolution without test or scanner evidence (epistemic honesty).",
+      "baseline_id": "B1_sast_alone",
+      "baseline_name": "Static Analysis Alone (SAST Delta)",
+      "expected_classification": "INCONCLUSIVE",
+      "actual_classification": "INCONCLUSIVE",
+      "is_correct": true,
+      "runtime_ms": 1616.9699000311084,
+      "error_message": null,
+      "evidence": {
+        "target_rule": "B999_UNSUPPORTED",
+        "baseline_detected_rule": false,
+        "patched_detected_rule": false,
+        "baseline_findings_count": 2,
+        "patched_findings_count": 2,
+        "scanner_metadata": {
+          "bandit": {
+            "name": "bandit",
+            "display_name": "Bandit Python SAST",
+            "category": "sast",
+            "is_available": true,
+            "version": "python.exe C:\\Users\\Dhina\\AppData\\Roaming\\Python\\Python314\\Scripts\\bandit.EXE 1.9.4",
+            "status": "success",
+            "execution_time": 0.53
+          }
+        },
+        "rationale": "Rule 'B999_UNSUPPORTED' not observed in baseline; fix cannot be evaluated by SAST alone."
+      }
+    },
+    {
+      "case_id": "RS-BENCH-007",
+      "patch_id": "RS-007-P2",
+      "patch_type": "tool_failure_timeout",
+      "split": "held_out",
+      "origin": "synthetic_curated",
+      "vulnerability_category": "tool_failure_timeout",
+      "baseline_revision": "707b9231f4e6018a95c812d7634f01ba",
+      "proposed_patch": "--- a/src/computation_service.py\n+++ b/src/computation_service.py\n@@ -2,4 +2,2 @@\n     \"\"\"Process collection of items.\"\"\"\n-    total = 0\n-    for item in items:\n-        total += int(item)\n-    return total\n+    return sum(int(x) for x in items)\n",
+      "ground_truth_label": "INCONCLUSIVE",
+      "ground_truth_rationale": "Missing evidence case: Finding B999_UNSUPPORTED is unobserved by configured scanners and targeted exploit test is absent. The system cannot certify resolution without test or scanner evidence (epistemic honesty).",
+      "baseline_id": "B2_existing_tests",
+      "baseline_name": "Existing Unit Tests Alone (General Test Suite)",
+      "expected_classification": "INCONCLUSIVE",
+      "actual_classification": "VERIFIED",
+      "is_correct": false,
+      "runtime_ms": 617.4475000007078,
+      "error_message": null,
+      "evidence": {
+        "test_status": "passed",
+        "passed_count": 1,
+        "failed_count": 0,
+        "error_message": null,
+        "rationale": "All existing unit tests passed (1 passed)."
+      }
+    },
+    {
+      "case_id": "RS-BENCH-007",
+      "patch_id": "RS-007-P2",
+      "patch_type": "tool_failure_timeout",
+      "split": "held_out",
+      "origin": "synthetic_curated",
+      "vulnerability_category": "tool_failure_timeout",
+      "baseline_revision": "707b9231f4e6018a95c812d7634f01ba",
+      "proposed_patch": "--- a/src/computation_service.py\n+++ b/src/computation_service.py\n@@ -2,4 +2,2 @@\n     \"\"\"Process collection of items.\"\"\"\n-    total = 0\n-    for item in items:\n-        total += int(item)\n-    return total\n+    return sum(int(x) for x in items)\n",
+      "ground_truth_label": "INCONCLUSIVE",
+      "ground_truth_rationale": "Missing evidence case: Finding B999_UNSUPPORTED is unobserved by configured scanners and targeted exploit test is absent. The system cannot certify resolution without test or scanner evidence (epistemic honesty).",
+      "baseline_id": "B3_ai_judge",
+      "baseline_name": "AI / LLM Judge Alone (Syntactic Heuristic)",
+      "expected_classification": "INCONCLUSIVE",
+      "actual_classification": "INCONCLUSIVE",
+      "is_correct": true,
+      "runtime_ms": 250.00130000989884,
+      "error_message": null,
+      "evidence": {
+        "model": "gpt-4o / claude-3.5-sonnet (simulated zero-shot judge)",
+        "rationale": "Evaluation prompt was malformed or inconclusive.",
+        "syntactic_tokens_detected": [
+          "abort",
+          "raise"
+        ]
+      }
+    },
+    {
+      "case_id": "RS-BENCH-007",
+      "patch_id": "RS-007-P2",
+      "patch_type": "tool_failure_timeout",
+      "split": "held_out",
+      "origin": "synthetic_curated",
+      "vulnerability_category": "tool_failure_timeout",
+      "baseline_revision": "707b9231f4e6018a95c812d7634f01ba",
+      "proposed_patch": "--- a/src/computation_service.py\n+++ b/src/computation_service.py\n@@ -2,4 +2,2 @@\n     \"\"\"Process collection of items.\"\"\"\n-    total = 0\n-    for item in items:\n-        total += int(item)\n-    return total\n+    return sum(int(x) for x in items)\n",
+      "ground_truth_label": "INCONCLUSIVE",
+      "ground_truth_rationale": "Missing evidence case: Finding B999_UNSUPPORTED is unobserved by configured scanners and targeted exploit test is absent. The system cannot certify resolution without test or scanner evidence (epistemic honesty).",
+      "baseline_id": "B4_reposhield_pipeline",
+      "baseline_name": "RepoShield Combined Pipeline (Multi-Tier Evidence Gate)",
+      "expected_classification": "INCONCLUSIVE",
+      "actual_classification": "INCONCLUSIVE",
+      "is_correct": true,
+      "runtime_ms": 2932.8789999708533,
+      "error_message": null,
+      "evidence": {
+        "target_classification": "INCOMPARABLE",
+        "new_findings_count": 0,
+        "test_regression_detected": false,
+        "existing_tests_passed": true,
+        "targeted_test_passed": true,
+        "missing_evidence": [
+          "Targeted security exploit regression test not configured",
+          "Baseline vulnerability reproduction absent in baseline SAST scan"
+        ],
+        "rationale": "Baseline vulnerability was not observed by configured scanners and no passing targeted test was available; resolution cannot be certified.",
+        "classified_findings": [
+          {
+            "rule_id": "B999_UNSUPPORTED",
+            "classification": "INCOMPARABLE",
+            "reason": "Static comparison could not be completed reliably because the scanner errored/timed out, the scanner configuration differed between runs, or the baseline finding was never reproduced by the scanner in the baseline workspace."
+          },
+          {
+            "rule_id": "B101",
+            "classification": "UNCHANGED",
+            "reason": "Non-target pre-existing findings in unmodified files or unaffected sections that remain present in both baseline and patched workspaces without alteration."
+          },
+          {
+            "rule_id": "B101",
+            "classification": "UNCHANGED",
+            "reason": "Non-target pre-existing findings in unmodified files or unaffected sections that remain present in both baseline and patched workspaces without alteration."
+          }
+        ]
+      }
+    }
+  ]
+}

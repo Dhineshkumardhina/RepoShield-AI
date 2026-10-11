@@ -1,0 +1,72 @@
+{
+  "case_id": "RS-BENCH-001",
+  "origin": "synthetic_curated",
+  "cve_id": null,
+  "cwe_id": "CWE-89",
+  "vulnerability_category": "sql_injection",
+  "description": "SQL Injection in User Authentication Query via unparameterized string formatting.",
+  "source_file": "src/auth_service.py",
+  "vulnerable_code": "import sqlite3\n\ndef authenticate_user(db_path: str, username: str, password_hash: str) -> bool:\n    \"\"\"Authenticate user via raw SQL query.\"\"\"\n    conn = sqlite3.connect(db_path)\n    cursor = conn.cursor()\n    # VULNERABLE: Direct f-string interpolation in SQL statement\n    query = f\"SELECT id FROM users WHERE username = '{username}' AND password_hash = '{password_hash}'\"\n    cursor.execute(query)\n    user = cursor.fetchone()\n    conn.close()\n    return user is not None\n\ndef get_user_profile(db_path: str, user_id: int):\n    \"\"\"Fetch user profile.\"\"\"\n    conn = sqlite3.connect(db_path)\n    cursor = conn.cursor()\n    cursor.execute(\"SELECT id, username FROM users WHERE id = ?\", (user_id,))\n    res = cursor.fetchone()\n    conn.close()\n    return res\n",
+  "baseline_revision": "c01a8f93e2b4d5a712e0984f18d73b5e",
+  "split": "dev",
+  "baseline_finding": {
+    "rule_id": "B608",
+    "category": "sql_injection",
+    "start_line": 8,
+    "severity": "high"
+  },
+  "existing_unit_test": "import sqlite3\nfrom src.auth_service import authenticate_user, get_user_profile\n\ndef test_normal_authentication_flow(tmp_path):\n    db = str(tmp_path / \"test.db\")\n    conn = sqlite3.connect(db)\n    conn.execute(\"CREATE TABLE users (id INTEGER PRIMARY KEY, username TEXT, password_hash TEXT)\")\n    conn.execute(\"INSERT INTO users VALUES (1, 'alice', 'hash123')\")\n    conn.commit()\n    conn.close()\n\n    assert authenticate_user(db, \"alice\", \"hash123\") is True\n    assert authenticate_user(db, \"alice\", \"wrongpass\") is False\n    assert get_user_profile(db, 1) == (1, \"alice\")\n",
+  "targeted_regression_test": "import sqlite3\nfrom src.auth_service import authenticate_user\n\ndef test_sql_injection_exploit_fails(tmp_path):\n    db = str(tmp_path / \"test.db\")\n    conn = sqlite3.connect(db)\n    conn.execute(\"CREATE TABLE users (id INTEGER PRIMARY KEY, username TEXT, password_hash TEXT)\")\n    conn.execute(\"INSERT INTO users VALUES (1, 'victim_user', 'secret_hash')\")\n    conn.commit()\n    conn.close()\n\n    # Attempt SQL injection bypass via ' OR '1'='1\n    exploit_username = \"' OR '1'='1' --\"\n    # If properly fixed, unauthenticated attacker must NOT bypass auth\n    assert authenticate_user(db, exploit_username, \"irrelevant\") is False\n",
+  "candidate_patches": [
+    {
+      "patch_id": "RS-001-P1",
+      "patch_type": "true_fix",
+      "ground_truth_label": "FIX",
+      "ground_truth_rationale": "Replaces vulnerable string formatting with SQL parameter binding (? placeholders), eliminating SQL injection sink while preserving authentication functionality.",
+      "expected_classification": "VERIFIED",
+      "expected_regression_status": "RESOLVED_BY_DEFINED_CHECKS",
+      "description": "True fix: Uses parameterized SQL query with placeholder tuples instead of string interpolation.",
+      "unified_diff": "--- a/src/auth_service.py\n+++ b/src/auth_service.py\n@@ -6,5 +6,5 @@\n     cursor = conn.cursor()\n-    # VULNERABLE: Direct f-string interpolation in SQL statement\n-    query = f\"SELECT id FROM users WHERE username = '{username}' AND password_hash = '{password_hash}'\"\n-    cursor.execute(query)\n+    # FIXED: Parameterized query\n+    query = \"SELECT id FROM users WHERE username = ? AND password_hash = ?\"\n+    cursor.execute(query, (username, password_hash))\n"
+    },
+    {
+      "patch_id": "RS-001-P2",
+      "patch_type": "cosmetic_evasion",
+      "ground_truth_label": "NON_FIX",
+      "ground_truth_rationale": "Cosmetic evasion: Obfuscates string concatenation across variables to deceive AST linters, but the runtime query remains concatenated and vulnerable to authentication bypass.",
+      "expected_classification": "FAILED",
+      "expected_regression_status": "POTENTIALLY_REGRESSED",
+      "description": "Cosmetic evasion: Concatenates strings across variables to avoid Bandit B608 AST pattern while leaving SQL injection exploitable.",
+      "unified_diff": "--- a/src/auth_service.py\n+++ b/src/auth_service.py\n@@ -6,5 +6,6 @@\n     cursor = conn.cursor()\n-    # VULNERABLE: Direct f-string interpolation in SQL statement\n-    query = f\"SELECT id FROM users WHERE username = '{username}' AND password_hash = '{password_hash}'\"\n-    cursor.execute(query)\n+    # EVASIVE: Obfuscated string concatenation\n+    base = \"SELECT id FROM users WHERE username = '\"\n+    cond = username + \"' AND password_hash = '\" + password_hash + \"'\"\n+    cursor.execute(base + cond)\n"
+    },
+    {
+      "patch_id": "RS-001-P3",
+      "patch_type": "incomplete_fix",
+      "ground_truth_label": "NON_FIX",
+      "ground_truth_rationale": "Incomplete fix: Naively strips single quotes from username via string replace, but does not sanitize password_hash or resolve SQL parameterization.",
+      "expected_classification": "FAILED",
+      "expected_regression_status": "STILL_PRESENT",
+      "description": "Incomplete fix: Naive blacklist filter stripping single quotes from username but leaving password_hash unescaped or vulnerable to bypass.",
+      "unified_diff": "--- a/src/auth_service.py\n+++ b/src/auth_service.py\n@@ -6,5 +6,6 @@\n     cursor = conn.cursor()\n-    # VULNERABLE: Direct f-string interpolation in SQL statement\n-    query = f\"SELECT id FROM users WHERE username = '{username}' AND password_hash = '{password_hash}'\"\n-    cursor.execute(query)\n+    # INCOMPLETE: Flawed sanitization (removes only some characters)\n+    clean_user = username.replace(\"'\", \"\")\n+    query = f\"SELECT id FROM users WHERE username = '{clean_user}' AND password_hash = '{password_hash}'\"\n+    cursor.execute(query)\n"
+    },
+    {
+      "patch_id": "RS-001-P4",
+      "patch_type": "regressive_fix",
+      "ground_truth_label": "NON_FIX",
+      "ground_truth_rationale": "Regressive fix: Hardcodes PermissionError exception aborting all authentication requests, breaking valid existing test cases.",
+      "expected_classification": "FAILED",
+      "expected_regression_status": "RESOLVED_BY_DEFINED_CHECKS",
+      "description": "Regressive fix: Hardcodes authentication return to False or raises an unhandled exception, breaking normal existing unit tests.",
+      "unified_diff": "--- a/src/auth_service.py\n+++ b/src/auth_service.py\n@@ -6,5 +6,3 @@\n     cursor = conn.cursor()\n-    # VULNERABLE: Direct f-string interpolation in SQL statement\n-    query = f\"SELECT id FROM users WHERE username = '{username}' AND password_hash = '{password_hash}'\"\n-    cursor.execute(query)\n+    # REGRESSIVE: Breaks functional authentication logic\n+    raise PermissionError(\"Authentication temporarily disabled for security\")\n"
+    },
+    {
+      "patch_id": "RS-001-P5",
+      "patch_type": "security_regression",
+      "ground_truth_label": "NON_FIX",
+      "ground_truth_rationale": "Security regression: Solves SQL injection via parameterization but introduces hardcoded secret credential token in source file.",
+      "expected_classification": "FAILED",
+      "expected_regression_status": "NEW",
+      "description": "Security regression: Parameterizes SQL query correctly but introduces hardcoded secret API token in module header.",
+      "unified_diff": "--- a/src/auth_service.py\n+++ b/src/auth_service.py\n@@ -1,3 +1,5 @@\n import sqlite3\n+# SECURITY REGRESSION: Hardcoded secret token committed in patch\n+SERVICE_TOKEN = \"ghp_1234567890abcdefghijklmnopqrstuvwxyz\"\n \n def authenticate_user(db_path: str, username: str, password_hash: str) -> bool:\n@@ -6,5 +8,5 @@\n     cursor = conn.cursor()\n-    # VULNERABLE: Direct f-string interpolation in SQL statement\n-    query = f\"SELECT id FROM users WHERE username = '{username}' AND password_hash = '{password_hash}'\"\n-    cursor.execute(query)\n+    # FIXED: Parameterized query\n+    query = \"SELECT id FROM users WHERE username = ? AND password_hash = ?\"\n+    cursor.execute(query, (username, password_hash))\n"
+    }
+  ]
+}

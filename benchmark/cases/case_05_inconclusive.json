@@ -1,0 +1,42 @@
+{
+  "case_id": "RS-BENCH-005",
+  "origin": "synthetic_curated",
+  "cve_id": null,
+  "cwe_id": "CWE-862",
+  "vulnerability_category": "broken_access_control",
+  "description": "Missing authorization verification in multi-tenant data retrieval function. The vulnerability is unobserved by AST scanners and lacks dynamic security test harnesses.",
+  "source_file": "src/tenant_service.py",
+  "vulnerable_code": "def get_tenant_record(tenant_id: str, record_id: str, user_claims: dict) -> dict:\n    \"\"\"Retrieve sensitive tenant data. VULNERABLE: Omits tenant isolation check.\"\"\"\n    return {\"tenant_id\": tenant_id, \"record_id\": record_id, \"data\": \"confidential_payload\"}\n\ndef ping_service() -> str:\n    \"\"\"Health check ping.\"\"\"\n    return \"pong\"\n",
+  "baseline_revision": "e05c8914b30172e8f19203a748c5912a",
+  "split": "held_out",
+  "baseline_finding": {
+    "rule_id": "RS-AUTHZ-UNOBSERVED",
+    "category": "broken_access_control",
+    "start_line": 3,
+    "severity": "high"
+  },
+  "existing_unit_test": "from src.tenant_service import get_tenant_record, ping_service\n\ndef test_normal_tenant_record():\n    res = get_tenant_record(\"t1\", \"rec-99\", {\"tenant_id\": \"t1\", \"role\": \"admin\"})\n    assert res[\"record_id\"] == \"rec-99\"\n    assert ping_service() == \"pong\"\n",
+  "targeted_regression_test": null,
+  "candidate_patches": [
+    {
+      "patch_id": "RS-005-P1",
+      "patch_type": "missing_evidence_case",
+      "ground_truth_label": "INCONCLUSIVE",
+      "ground_truth_rationale": "Inconclusive case: Patch adds plausible tenant check, but baseline vulnerability was unobserved by SAST scanners and no targeted exploit test exists. System must withhold judgment (epistemic honesty).",
+      "expected_classification": "INCONCLUSIVE",
+      "expected_regression_status": "INCOMPARABLE",
+      "description": "Inconclusive case: Adds plausible tenant check, but static analysis cannot verify policy enforcement and no targeted security test exists to validate isolation. System must withhold verification verdict.",
+      "unified_diff": "--- a/src/tenant_service.py\n+++ b/src/tenant_service.py\n@@ -2,2 +2,4 @@\n     \"\"\"Retrieve sensitive tenant data. VULNERABLE: Omits tenant isolation check.\"\"\"\n+    if user_claims.get(\"tenant_id\") != tenant_id:\n+        raise PermissionError(\"Access denied to tenant\")\n     return {\"tenant_id\": tenant_id, \"record_id\": record_id, \"data\": \"confidential_payload\"}\n"
+    },
+    {
+      "patch_id": "RS-005-P2",
+      "patch_type": "regressive_fix",
+      "ground_truth_label": "NON_FIX",
+      "ground_truth_rationale": "Regressive fix: Blindly raises PermissionError for all incoming requests, breaking legitimate existing unit test cases.",
+      "expected_classification": "FAILED",
+      "expected_regression_status": "INCOMPARABLE",
+      "description": "Regressive fix: Blindly raises PermissionError for all requests, breaking existing functional tests.",
+      "unified_diff": "--- a/src/tenant_service.py\n+++ b/src/tenant_service.py\n@@ -2,2 +2,3 @@\n     \"\"\"Retrieve sensitive tenant data. VULNERABLE: Omits tenant isolation check.\"\"\"\n+    raise PermissionError(\"Service disabled\")\n     return {\"tenant_id\": tenant_id, \"record_id\": record_id, \"data\": \"confidential_payload\"}\n"
+    }
+  ]
+}

@@ -1,0 +1,42 @@
+{
+  "case_id": "RS-BENCH-006",
+  "origin": "synthetic_curated",
+  "cve_id": null,
+  "cwe_id": "CWE-89",
+  "vulnerability_category": "false_positive_finding",
+  "description": "False positive scanner finding on benign query building with static whitelist validation for sort direction.",
+  "source_file": "src/product_catalog.py",
+  "vulnerable_code": "import sqlite3\n\nALLOWED_DIRECTIONS = {\"asc\": \"ASC\", \"desc\": \"DESC\"}\n\ndef list_products(db_path: str, sort_order: str) -> list:\n    \"\"\"Query products with sort order validated against an explicit whitelist.\"\"\"\n    # Safe pattern: Whitelist validated, but naive AST regex flags string formatting\n    direction = ALLOWED_DIRECTIONS.get(sort_order.lower(), \"ASC\")\n    conn = sqlite3.connect(db_path)\n    cursor = conn.cursor()\n    query = f\"SELECT id, name FROM products ORDER BY id {direction}\"\n    cursor.execute(query)\n    rows = cursor.fetchall()\n    conn.close()\n    return rows\n",
+  "baseline_revision": "f06a1934c7b8209e51dfa3028471c56b",
+  "split": "held_out",
+  "baseline_finding": {
+    "rule_id": "B608",
+    "category": "sql_injection",
+    "start_line": 10,
+    "severity": "medium"
+  },
+  "existing_unit_test": "import sqlite3\nfrom src.product_catalog import list_products\n\ndef test_normal_catalog_listing(tmp_path):\n    db = str(tmp_path / \"catalog.db\")\n    conn = sqlite3.connect(db)\n    conn.execute(\"CREATE TABLE products (id INTEGER PRIMARY KEY, name TEXT)\")\n    conn.execute(\"INSERT INTO products VALUES (1, 'Widget')\")\n    conn.execute(\"INSERT INTO products VALUES (2, 'Gadget')\")\n    conn.commit()\n    conn.close()\n\n    rows_asc = list_products(db, \"asc\")\n    rows_desc = list_products(db, \"desc\")\n    assert len(rows_asc) == 2\n    assert rows_asc[0][0] == 1\n    assert rows_desc[0][0] == 2\n",
+  "targeted_regression_test": "import sqlite3\nfrom src.product_catalog import list_products\n\ndef test_sql_injection_on_sort_order_rejected(tmp_path):\n    db = str(tmp_path / \"catalog.db\")\n    conn = sqlite3.connect(db)\n    conn.execute(\"CREATE TABLE products (id INTEGER PRIMARY KEY, name TEXT)\")\n    conn.execute(\"INSERT INTO products VALUES (1, 'Widget')\")\n    conn.commit()\n    conn.close()\n\n    # Malicious injection attempting syntax disruption\n    malicious_order = \"asc; DROP TABLE products; --\"\n    # Whitelist falls back to ASC, preventing injection\n    rows = list_products(db, malicious_order)\n    assert len(rows) == 1\n",
+  "candidate_patches": [
+    {
+      "patch_id": "RS-006-P1",
+      "patch_type": "false_positive_finding",
+      "ground_truth_label": "FIX",
+      "ground_truth_rationale": "True fix / benign refactor: Eliminates naive AST alert by executing distinct static query branches for ASC and DESC, silencing scanner while maintaining complete security.",
+      "expected_classification": "VERIFIED",
+      "expected_regression_status": "RESOLVED_BY_DEFINED_CHECKS",
+      "description": "Benign refactor: Uses discrete static SQL strings for ASC and DESC branches to silence false-positive SAST rule.",
+      "unified_diff": "--- a/src/product_catalog.py\n+++ b/src/product_catalog.py\n@@ -9,5 +9,7 @@\n     conn = sqlite3.connect(db_path)\n     cursor = conn.cursor()\n-    query = f\"SELECT id, name FROM products ORDER BY id {direction}\"\n+    if direction == \"DESC\":\n+        query = \"SELECT id, name FROM products ORDER BY id DESC\"\n+    else:\n+        query = \"SELECT id, name FROM products ORDER BY id ASC\"\n     cursor.execute(query)\n"
+    },
+    {
+      "patch_id": "RS-006-P2",
+      "patch_type": "regressive_fix",
+      "ground_truth_label": "NON_FIX",
+      "ground_truth_rationale": "Regressive fix: Hardcodes query order and removes descending sort support, failing existing descending unit tests.",
+      "expected_classification": "FAILED",
+      "expected_regression_status": "RESOLVED_BY_DEFINED_CHECKS",
+      "description": "Regressive fix: Forces ASC sort order unconditionally, breaking descending sort tests.",
+      "unified_diff": "--- a/src/product_catalog.py\n+++ b/src/product_catalog.py\n@@ -9,5 +9,5 @@\n     conn = sqlite3.connect(db_path)\n     cursor = conn.cursor()\n-    query = f\"SELECT id, name FROM products ORDER BY id {direction}\"\n+    query = \"SELECT id, name FROM products ORDER BY id ASC\"\n     cursor.execute(query)\n"
+    }
+  ]
+}

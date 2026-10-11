@@ -1,0 +1,12 @@
+{
+  "name": "reposhield-ai-workspace",
+  "private": true,
+  "description": "RepoShield AI Workspace by Xerova Digital Solutions",
+  "scripts": {
+    "frontend:dev": "npm --prefix frontend run dev",
+    "frontend:build": "npm --prefix frontend run build",
+    "frontend:test": "npm --prefix frontend run test",
+    "backend:test": "python -m pytest tests/",
+    "test": "npm --prefix frontend run test && python -m pytest tests/"
+  }
+}

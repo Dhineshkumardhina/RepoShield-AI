@@ -1,0 +1,140 @@
+name: "RepoShield AI — Code Review Security Gate"
+
+on:
+  pull_request:
+    types: [opened, synchronize, reopened]
+    branches: ["main", "master", "develop"]
+
+# Strictly adhere to least-privilege GitHub permissions
+permissions:
+  contents: read        # Read repository code and commit diff
+  pull-requests: write  # Post security review summary comment to PR
+  checks: write         # Create check runs on the commit
+  issues: read
+
+concurrency:
+  group: reposhield-gate-${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  security-gate:
+    name: "RepoShield Security Gate & Fix Verification"
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+
+    steps:
+      - name: "Checkout repository code (full depth for commit correlation)"
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: "Set up Python Environment"
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+          cache: "pip"
+
+      - name: "Install Security Scanners & CI Gate Dependencies"
+        run: |
+          python -m pip install --upgrade pip
+          python -m pip install semgrep bandit pip-audit requests
+
+      - name: "Execute RepoShield CI Security Gate"
+        id: gate
+        continue-on-error: true
+        env:
+          HEAD_SHA: ${{ github.event.pull_request.head.sha }}
+          BASE_SHA: ${{ github.event.pull_request.base.sha }}
+          PR_NUMBER: ${{ github.event.pull_request.number }}
+        run: |
+          mkdir -p .reposhield_artifacts
+          echo "Starting RepoShield Security Gate on Head SHA ${HEAD_SHA} (Base ${BASE_SHA})..."
+          
+          python -m scripts.ci_security_gate \
+            --repo-path . \
+            --head-sha "${HEAD_SHA}" \
+            --base-sha "${BASE_SHA}" \
+            --pr-number "${PR_NUMBER}" \
+            --fail-on HIGH \
+            --strict-checks \
+            --format json \
+            --output-file .reposhield_artifacts/ci_gate_result.json
+          
+          GATE_EXIT_CODE=$?
+          echo "GATE_EXIT_CODE=${GATE_EXIT_CODE}" >> $GITHUB_ENV
+          echo "gate_exit_code=${GATE_EXIT_CODE}" >> $GITHUB_OUTPUT
+
+      - name: "Upload Machine-Readable Evaluation Artifact"
+        uses: actions/upload-artifact@v4
+        with:
+          name: reposhield-ci-evaluation-${{ github.event.pull_request.number }}
+          path: .reposhield_artifacts/ci_gate_result.json
+          retention-days: 14
+
+      - name: "Publish Pull Request Security Summary Comment"
+        if: always() && github.event.pull_request.number != ''
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const fs = require('fs');
+            const resultPath = '.reposhield_artifacts/ci_gate_result.json';
+            
+            if (!fs.existsSync(resultPath)) {
+              console.log("No evaluation artifact found to publish.");
+              return;
+            }
+            
+            const rawData = fs.readFileSync(resultPath, 'utf8');
+            const data = JSON.parse(rawData);
+            const body = data.summary_markdown || "### RepoShield AI Security Summary\n*Evaluation completed.*";
+            
+            // Search for existing comment from RepoShield to update instead of spamming
+            const { data: comments } = await github.rest.issues.listComments({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: context.issue.number,
+            });
+            
+            const botComment = comments.find(comment => 
+              comment.user.type === 'Bot' && comment.body.includes('RepoShield AI')
+            );
+            
+            if (botComment) {
+              await github.rest.issues.updateComment({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                comment_id: botComment.id,
+                body: body
+              });
+              console.log(`Updated existing PR security comment #${botComment.id}`);
+            } else {
+              await github.rest.issues.createComment({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                issue_number: context.issue.number,
+                body: body
+              });
+              console.log("Created new PR security comment.");
+            }
+
+      - name: "Enforce DevSecOps Gate Decision"
+        run: |
+          echo "=========================================================="
+          echo "RepoShield Security Gate Exit Code: ${GATE_EXIT_CODE}"
+          echo "=========================================================="
+          
+          if [ "${GATE_EXIT_CODE}" -eq 0 ]; then
+            echo "✅ Gate PASSED: All security checks clean, zero policy violations."
+            exit 0
+          elif [ "${GATE_EXIT_CODE}" -eq 1 ]; then
+            echo "❌ Gate FAILED: Security policy violated (new/regressed High or Critical findings detected)."
+            echo "Review the PR comments and reproduction instructions before re-requesting review."
+            exit 1
+          elif [ "${GATE_EXIT_CODE}" -eq 2 ]; then
+            echo "⚠️ Gate INCOMPLETE: Configured security checks were omitted, unavailable, or timed out."
+            echo "Per security policy, unverified code cannot be merged. Ensure all required scanners are installed."
+            exit 2
+          else
+            echo "❌ Gate ERROR: Unexpected exit code ${GATE_EXIT_CODE}."
+            exit 1
+          fi

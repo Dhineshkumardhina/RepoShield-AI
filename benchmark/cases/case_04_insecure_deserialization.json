@@ -1,0 +1,62 @@
+{
+  "case_id": "RS-BENCH-004",
+  "origin": "synthetic_curated",
+  "cve_id": null,
+  "cwe_id": "CWE-502",
+  "vulnerability_category": "deserialization",
+  "description": "Insecure Deserialization via yaml.load with unsafe Loader leading to Remote Code Execution.",
+  "source_file": "src/config_loader.py",
+  "vulnerable_code": "import yaml\n\ndef load_user_config(yaml_content: str) -> dict:\n    \"\"\"Parse user-provided YAML configuration.\"\"\"\n    # VULNERABLE: yaml.load with FullLoader or no Loader allows arbitrary object instantiation\n    return yaml.load(yaml_content, Loader=yaml.Loader)\n\ndef get_default_config() -> dict:\n    \"\"\"Return safe defaults.\"\"\"\n    return {\"theme\": \"dark\", \"notifications\": True}\n",
+  "baseline_revision": "d04a62e19b5c30872ef41982631a09dc",
+  "split": "held_out",
+  "baseline_finding": {
+    "rule_id": "B506",
+    "category": "deserialization",
+    "start_line": 6,
+    "severity": "critical"
+  },
+  "existing_unit_test": "from src.config_loader import load_user_config, get_default_config\n\ndef test_normal_yaml_config():\n    cfg = \"theme: light\\nnotifications: false\\n\"\n    res = load_user_config(cfg)\n    assert res == {\"theme\": \"light\", \"notifications\": False}\n    assert get_default_config() == {\"theme\": \"dark\", \"notifications\": True}\n",
+  "targeted_regression_test": "import pytest\nimport yaml\nfrom src.config_loader import load_user_config\n\ndef test_unsafe_deserialization_payload_blocked():\n    # Attempt unsafe object instantiation payload\n    malicious_yaml = \"!!python/object/apply:os.system ['echo pwned']\"\n    with pytest.raises((yaml.YAMLError, AttributeError, Exception)):\n        load_user_config(malicious_yaml)\n",
+  "candidate_patches": [
+    {
+      "patch_id": "RS-004-P1",
+      "patch_type": "true_fix",
+      "ground_truth_label": "FIX",
+      "ground_truth_rationale": "True fix: Uses yaml.safe_load, restricting YAML parsing strictly to primitive types and preventing arbitrary Python class instantiation.",
+      "expected_classification": "VERIFIED",
+      "expected_regression_status": "RESOLVED_BY_DEFINED_CHECKS",
+      "description": "True fix: Uses yaml.safe_load, restricting parsing strictly to safe standard primitives.",
+      "unified_diff": "--- a/src/config_loader.py\n+++ b/src/config_loader.py\n@@ -5,2 +5,2 @@\n-    # VULNERABLE: yaml.load with FullLoader or no Loader allows arbitrary object instantiation\n-    return yaml.load(yaml_content, Loader=yaml.Loader)\n+    # FIXED: Restrict to safe YAML primitives\n+    return yaml.safe_load(yaml_content)\n"
+    },
+    {
+      "patch_id": "RS-004-P2",
+      "patch_type": "cosmetic_evasion",
+      "ground_truth_label": "NON_FIX",
+      "ground_truth_rationale": "Cosmetic evasion: Obfuscates Loader resolution using getattr(yaml, 'FullLoader') to evade simple string search, while retaining unsafe deserialization.",
+      "expected_classification": "FAILED",
+      "expected_regression_status": "STILL_PRESENT",
+      "description": "Cosmetic evasion: Uses yaml.UnsafeLoader or alias via getattr to bypass simple linter checks while remaining vulnerable.",
+      "unified_diff": "--- a/src/config_loader.py\n+++ b/src/config_loader.py\n@@ -5,2 +5,3 @@\n-    # VULNERABLE: yaml.load with FullLoader or no Loader allows arbitrary object instantiation\n-    return yaml.load(yaml_content, Loader=yaml.Loader)\n+    # EVASIVE: Indirect loader reference\n+    custom_loader = getattr(yaml, 'FullLoader')\n+    return yaml.load(yaml_content, Loader=custom_loader)\n"
+    },
+    {
+      "patch_id": "RS-004-P3",
+      "patch_type": "regressive_fix",
+      "ground_truth_label": "NON_FIX",
+      "ground_truth_rationale": "Regressive fix: Hardcodes empty dictionary return, ignoring valid YAML input and failing existing functional unit tests.",
+      "expected_classification": "FAILED",
+      "expected_regression_status": "RESOLVED_BY_DEFINED_CHECKS",
+      "description": "Regressive fix: Returns an empty dictionary ignoring user input, breaking functional unit tests.",
+      "unified_diff": "--- a/src/config_loader.py\n+++ b/src/config_loader.py\n@@ -5,2 +5,2 @@\n-    # VULNERABLE: yaml.load with FullLoader or no Loader allows arbitrary object instantiation\n-    return yaml.load(yaml_content, Loader=yaml.Loader)\n+    # REGRESSIVE: Breaks parsing\n+    return {}\n"
+    },
+    {
+      "patch_id": "RS-004-P4",
+      "patch_type": "incomplete_fix",
+      "ground_truth_label": "NON_FIX",
+      "ground_truth_rationale": "Incomplete fix: Naively blacklists the string 'os.system', which is easily bypassed using alternate execution gadgets (subprocess, builtins.eval, posix.system).",
+      "expected_classification": "FAILED",
+      "expected_regression_status": "STILL_PRESENT",
+      "description": "Incomplete fix: Naively blacklists 'os.system' string in YAML content, which can be bypassed using alternate execution gadgets or encodings.",
+      "unified_diff": "--- a/src/config_loader.py\n+++ b/src/config_loader.py\n@@ -5,2 +5,4 @@\n     # VULNERABLE: yaml.load with FullLoader or no Loader allows arbitrary object instantiation\n+    if \"os.system\" in yaml_content:\n+        raise ValueError(\"Blocked dangerous call\")\n     return yaml.load(yaml_content, Loader=yaml.Loader)\n"
+    }
+  ]
+}

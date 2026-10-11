@@ -1,0 +1,62 @@
+{
+  "case_id": "RS-BENCH-002",
+  "origin": "synthetic_curated",
+  "cve_id": null,
+  "cwe_id": "CWE-78",
+  "vulnerability_category": "command_injection",
+  "description": "OS Command Injection via unsanitized user argument passed to shell command.",
+  "source_file": "src/backup_tool.py",
+  "vulnerable_code": "import subprocess\n\ndef run_backup(target_dir: str, archive_name: str) -> int:\n    \"\"\"Create archive of target directory using tar.\"\"\"\n    # VULNERABLE: shell=True with unquoted string concatenation\n    cmd = f\"tar -czf {archive_name}.tar.gz {target_dir}\"\n    proc = subprocess.run(cmd, shell=True, capture_output=True, text=True)\n    return proc.returncode\n\ndef list_archives(storage_dir: str) -> list:\n    \"\"\"List backups safely.\"\"\"\n    import os\n    if not os.path.exists(storage_dir):\n        return []\n    return [f for f in os.listdir(storage_dir) if f.endswith('.tar.gz')]\n",
+  "baseline_revision": "b02d7c541e39a82645f0912cb8491c34",
+  "split": "dev",
+  "baseline_finding": {
+    "rule_id": "B602",
+    "category": "command_injection",
+    "start_line": 7,
+    "severity": "high"
+  },
+  "existing_unit_test": "import os\nfrom src.backup_tool import run_backup, list_archives\n\ndef test_normal_backup_execution(tmp_path):\n    source = tmp_path / \"data\"\n    source.mkdir()\n    (source / \"file.txt\").write_text(\"hello\")\n    dest = str(tmp_path / \"backup_valid\")\n    ret = run_backup(str(source), dest)\n    assert ret == 0\n    assert os.path.exists(dest + \".tar.gz\") or os.path.exists(dest + \".tar\") or os.path.exists(dest + \".zip\")\n",
+  "targeted_regression_test": "import os, sys\nfrom pathlib import Path\nfrom src.backup_tool import run_backup\n\ndef test_command_injection_exploit_fails(tmp_path):\n    source = tmp_path / \"data\"\n    source.mkdir()\n    marker = tmp_path / \"pwned.txt\"\n    sep = '&' if os.name == 'nt' else ';'\n    # Portable payload executing python sub-command if shell interprets metacharacters\n    malicious_archive = f\"test {sep} \\\"{sys.executable}\\\" -c \\\"open(r'{marker}','w').close()\\\"\"\n    try:\n        run_backup(str(source), str(malicious_archive))\n    except (OSError, ValueError):\n        pass\n    # If properly fixed, shell command chaining must NOT execute\n    assert not marker.exists()\n",
+  "candidate_patches": [
+    {
+      "patch_id": "RS-002-P1",
+      "patch_type": "true_fix",
+      "ground_truth_label": "FIX",
+      "ground_truth_rationale": "True fix: Replaces unsafe shell invocation with native Python shutil.make_archive, entirely eliminating subprocess and shell execution risks.",
+      "expected_classification": "VERIFIED",
+      "expected_regression_status": "RESOLVED_BY_DEFINED_CHECKS",
+      "description": "True fix: Replaces unsafe shell execution with native Python shutil.make_archive.",
+      "unified_diff": "--- a/src/backup_tool.py\n+++ b/src/backup_tool.py\n@@ -1,8 +1,8 @@\n-import subprocess\n+import shutil\n \n def run_backup(target_dir: str, archive_name: str) -> int:\n     \"\"\"Create archive of target directory using tar.\"\"\"\n-    # VULNERABLE: shell=True with unquoted string concatenation\n-    cmd = f\"tar -czf {archive_name}.tar.gz {target_dir}\"\n-    proc = subprocess.run(cmd, shell=True, capture_output=True, text=True)\n-    return proc.returncode\n+    # FIXED: Native Python archive creation eliminates shell invocation\n+    shutil.make_archive(archive_name, \"gztar\", root_dir=target_dir)\n+    return 0\n"
+    },
+    {
+      "patch_id": "RS-002-P2",
+      "patch_type": "cosmetic_evasion",
+      "ground_truth_label": "NON_FIX",
+      "ground_truth_rationale": "Cosmetic evasion: Substitutes subprocess.run with os.system to avoid Bandit B602 rule, but shell injection remains completely exploitable under rule B605.",
+      "expected_classification": "FAILED",
+      "expected_regression_status": "POTENTIALLY_REGRESSED",
+      "description": "Cosmetic evasion: Calls os.system via variable indirection, avoiding the Bandit B602 subprocess rule while remaining exploitable.",
+      "unified_diff": "--- a/src/backup_tool.py\n+++ b/src/backup_tool.py\n@@ -1,8 +1,8 @@\n-import subprocess\n+import os\n \n def run_backup(target_dir: str, archive_name: str) -> int:\n     \"\"\"Create archive of target directory using tar.\"\"\"\n-    # VULNERABLE: shell=True with unquoted string concatenation\n-    cmd = f\"tar -czf {archive_name}.tar.gz {target_dir}\"\n-    proc = subprocess.run(cmd, shell=True, capture_output=True, text=True)\n-    return proc.returncode\n+    # EVASIVE: Uses os.system instead of subprocess\n+    cmd = f\"tar -czf {archive_name}.tar.gz {target_dir}\"\n+    return os.system(cmd)\n"
+    },
+    {
+      "patch_id": "RS-002-P3",
+      "patch_type": "regressive_fix",
+      "ground_truth_label": "NON_FIX",
+      "ground_truth_rationale": "Regressive fix: Hardcodes command return value to 1, causing functional failure across all backup requests.",
+      "expected_classification": "FAILED",
+      "expected_regression_status": "RESOLVED_BY_DEFINED_CHECKS",
+      "description": "Regressive fix: Hardcodes command failure return code 1, breaking existing functional backup tests.",
+      "unified_diff": "--- a/src/backup_tool.py\n+++ b/src/backup_tool.py\n@@ -5,4 +5,3 @@\n-    # VULNERABLE: shell=True with unquoted string concatenation\n-    cmd = f\"tar -czf {archive_name}.tar.gz {target_dir}\"\n-    proc = subprocess.run(cmd, shell=True, capture_output=True, text=True)\n-    return proc.returncode\n+    # REGRESSIVE: Fails command completely\n+    return 1\n"
+    },
+    {
+      "patch_id": "RS-002-P4",
+      "patch_type": "incomplete_fix",
+      "ground_truth_label": "NON_FIX",
+      "ground_truth_rationale": "Incomplete fix: Naively strips semicolon ';' from archive name, but shell=True remains enabled and allows chaining via other shell operators (&, |, &&, newline).",
+      "expected_classification": "FAILED",
+      "expected_regression_status": "STILL_PRESENT",
+      "description": "Incomplete fix: Naive string replacement stripping semicolon ';' while leaving shell=True command execution with other metacharacters unresolved.",
+      "unified_diff": "--- a/src/backup_tool.py\n+++ b/src/backup_tool.py\n@@ -6,3 +6,4 @@\n-    cmd = f\"tar -czf {archive_name}.tar.gz {target_dir}\"\n+    clean_name = archive_name.replace(\";\", \"\")\n+    cmd = f\"tar -czf {clean_name}.tar.gz {target_dir}\"\n     proc = subprocess.run(cmd, shell=True, capture_output=True, text=True)\n     return proc.returncode\n"
+    }
+  ]
+}

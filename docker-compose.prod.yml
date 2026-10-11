@@ -1,0 +1,148 @@
+version: "3.8"
+
+networks:
+  reposhield_internal:
+    driver: bridge
+  reposhield_public:
+    driver: bridge
+
+volumes:
+  postgres_data:
+  workspace_data:
+  worker_temp:
+
+services:
+  # ----------------------------------------------------------------------------
+  # Production PostgreSQL Database
+  # ----------------------------------------------------------------------------
+  postgres:
+    image: postgres:16-alpine
+    container_name: reposhield_postgres
+    restart: always
+    environment:
+      POSTGRES_DB: ${POSTGRES_DB:-reposhield_prod}
+      POSTGRES_USER: ${POSTGRES_USER:-reposhield_admin}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:?Database password must be set in production}
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    networks:
+      - reposhield_internal
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER:-reposhield_admin} -d ${POSTGRES_DB:-reposhield_prod}"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    deploy:
+      resources:
+        limits:
+          cpus: "2.0"
+          memory: 4096M
+
+  # ----------------------------------------------------------------------------
+  # FastAPI Application Server (Non-root, unprivileged)
+  # ----------------------------------------------------------------------------
+  api:
+    build:
+      context: .
+      dockerfile: Dockerfile.api
+    container_name: reposhield_api
+    restart: always
+    depends_on:
+      postgres:
+        condition: service_healthy
+    environment:
+      APP_ENV: production
+      DATABASE_URL: postgresql+psycopg://${POSTGRES_USER:-reposhield_admin}:${POSTGRES_PASSWORD}@postgres:5432/${POSTGRES_DB:-reposhield_prod}
+      SECRET_KEY: ${SECRET_KEY:?SECRET_KEY must be set in production}
+      CORS_ORIGINS: ${CORS_ORIGINS:-https://reposhield.xerova.com}
+      LOG_LEVEL: ${LOG_LEVEL:-INFO}
+      LOG_FORMAT_JSON: "true"
+      DOCS_ENABLED: "false"
+      GEMINI_API_KEY: ${GEMINI_API_KEY:-}
+    volumes:
+      - workspace_data:/app/data/workspaces
+    networks:
+      - reposhield_internal
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://127.0.0.1:8000/live"]
+      interval: 15s
+      timeout: 3s
+      retries: 3
+    deploy:
+      resources:
+        limits:
+          cpus: "2.0"
+          memory: 2048M
+
+  # ----------------------------------------------------------------------------
+  # Sandboxed Scanner Worker (Strict cgroups, cap-drop, isolated user)
+  # ----------------------------------------------------------------------------
+  worker:
+    build:
+      context: .
+      dockerfile: Dockerfile.worker
+    container_name: reposhield_worker
+    restart: always
+    depends_on:
+      postgres:
+        condition: service_healthy
+    environment:
+      APP_ENV: production
+      DATABASE_URL: postgresql+psycopg://${POSTGRES_USER:-reposhield_admin}:${POSTGRES_PASSWORD}@postgres:5432/${POSTGRES_DB:-reposhield_prod}
+      SECRET_KEY: ${SECRET_KEY}
+      WORKSPACE_ROOT: /sandbox/workspaces
+      PIP_NO_INDEX: "1"
+      NO_PROXY: "*"
+    volumes:
+      - workspace_data:/sandbox/workspaces:ro # Read-only access to repository archives
+      - worker_temp:/sandbox/temp
+    networks:
+      - reposhield_internal
+    # Hardened Linux Security Settings
+    cap_drop:
+      - ALL
+    security_opt:
+      - no-new-privileges:true
+    pids_limit: 100
+    deploy:
+      resources:
+        limits:
+          cpus: "2.0"
+          memory: 2048M
+
+  # ----------------------------------------------------------------------------
+  # React Frontend (Static SPA on unprivileged Nginx)
+  # ----------------------------------------------------------------------------
+  frontend:
+    build:
+      context: .
+      dockerfile: Dockerfile.frontend
+    container_name: reposhield_frontend
+    restart: always
+    networks:
+      - reposhield_internal
+    healthcheck:
+      test: ["CMD", "wget", "-q", "--spider", "http://127.0.0.1:8080/"]
+      interval: 15s
+      timeout: 3s
+      retries: 3
+
+  # ----------------------------------------------------------------------------
+  # Production Reverse Proxy (TLS termination, rate limiting, routing)
+  # ----------------------------------------------------------------------------
+  nginx:
+    image: nginx:1.27-alpine
+    container_name: reposhield_proxy
+    restart: always
+    depends_on:
+      - api
+      - frontend
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./nginx/production.conf:/etc/nginx/conf.d/default.conf:ro
+      - ./ssl:/etc/nginx/ssl:ro
+    networks:
+      - reposhield_internal
+      - reposhield_public

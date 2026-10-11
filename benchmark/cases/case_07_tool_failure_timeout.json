@@ -1,0 +1,42 @@
+{
+  "case_id": "RS-BENCH-007",
+  "origin": "synthetic_curated",
+  "cve_id": null,
+  "cwe_id": "CWE-400",
+  "vulnerability_category": "tool_failure_timeout",
+  "description": "Evaluation case for testing framework resilience against tool failures, harness crashes, and test timeouts.",
+  "source_file": "src/computation_service.py",
+  "vulnerable_code": "def process_data(items: list) -> int:\n    \"\"\"Process collection of items.\"\"\"\n    total = 0\n    for item in items:\n        total += int(item)\n    return total\n\ndef check_status() -> str:\n    return \"operational\"\n",
+  "baseline_revision": "707b9231f4e6018a95c812d7634f01ba",
+  "split": "held_out",
+  "baseline_finding": {
+    "rule_id": "B999_UNSUPPORTED",
+    "category": "resource_management",
+    "start_line": 2,
+    "severity": "medium"
+  },
+  "existing_unit_test": "from src.computation_service import process_data, check_status\n\ndef test_process_data_normal():\n    assert process_data([1, 2, 3]) == 6\n    assert check_status() == \"operational\"\n",
+  "targeted_regression_test": null,
+  "candidate_patches": [
+    {
+      "patch_id": "RS-007-P1",
+      "patch_type": "tool_failure_timeout",
+      "ground_truth_label": "INCONCLUSIVE",
+      "ground_truth_rationale": "Tool failure / security violation case: Patch diff contains illegal directory traversal path, rejected before test execution.",
+      "expected_classification": "INCONCLUSIVE",
+      "expected_regression_status": "INCOMPARABLE",
+      "description": "Malformed patch diff with path traversal attempt triggering patch validation failure.",
+      "unified_diff": "--- a/../../../../etc/passwd\n+++ b/../../../../etc/passwd\n@@ -1,1 +1,1 @@\n-root:x:0:0\n+root:pwned:0:0\n"
+    },
+    {
+      "patch_id": "RS-007-P2",
+      "patch_type": "tool_failure_timeout",
+      "ground_truth_label": "INCONCLUSIVE",
+      "ground_truth_rationale": "Missing evidence case: Finding B999_UNSUPPORTED is unobserved by configured scanners and targeted exploit test is absent. The system cannot certify resolution without test or scanner evidence (epistemic honesty).",
+      "expected_classification": "INCONCLUSIVE",
+      "expected_regression_status": "INCOMPARABLE",
+      "description": "Valid patch but unobserved scanner finding and absent targeted test harness forces inconclusive verdict.",
+      "unified_diff": "--- a/src/computation_service.py\n+++ b/src/computation_service.py\n@@ -2,4 +2,2 @@\n     \"\"\"Process collection of items.\"\"\"\n-    total = 0\n-    for item in items:\n-        total += int(item)\n-    return total\n+    return sum(int(x) for x in items)\n"
+    }
+  ]
+}

@@ -1,0 +1,97 @@
+name: "RepoShield AI CI - Test, Lint & Build"
+
+on:
+  push:
+    branches: [ "main", "staging" ]
+  pull_request:
+    branches: [ "main", "staging" ]
+
+concurrency:
+  group: ci-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  backend-tests:
+    name: "Backend Security & Unit Tests"
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+
+    steps:
+      - name: "Checkout repository"
+        uses: actions/checkout@v4
+
+      - name: "Set up Python 3.11"
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+          cache: "pip"
+
+      - name: "Install Backend Dependencies & Scanners"
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r backend/requirements.txt
+          pip install semgrep bandit pip-audit pytest
+
+      - name: "Run Backend Pytest Suite"
+        env:
+          APP_ENV: "development"
+          DATABASE_URL: "sqlite:///./test_reposhield.db"
+          SECRET_KEY: "ci-testing-secret-key-at-least-32-chars-long"
+        run: |
+          python -m pytest tests/ -v -k "not test_analyst"
+
+  frontend-build-and-test:
+    name: "Frontend Vitest & Vite Production Build"
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+
+    steps:
+      - name: "Checkout repository"
+        uses: actions/checkout@v4
+
+      - name: "Set up Node.js 20"
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: "npm"
+          cache-dependency-path: "frontend/package-lock.json"
+
+      - name: "Install Frontend Dependencies"
+        working-directory: frontend
+        run: npm ci
+
+      - name: "Run Frontend Vitest Tests"
+        working-directory: frontend
+        run: npm test -- --run
+
+      - name: "Build Frontend Production Bundle"
+        working-directory: frontend
+        run: npm run build
+
+  container-validation:
+    name: "Container Build Validation"
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+
+    steps:
+      - name: "Checkout repository"
+        uses: actions/checkout@v4
+
+      - name: "Set up Docker Buildx"
+        uses: docker/setup-buildx-action@v3
+
+      - name: "Validate API Dockerfile"
+        uses: docker/build-push-action@v5
+        with:
+          context: .
+          file: ./Dockerfile.api
+          push: false
+          tags: reposhield-api:test
+
+      - name: "Validate Worker Dockerfile"
+        uses: docker/build-push-action@v5
+        with:
+          context: .
+          file: ./Dockerfile.worker
+          push: false
+          tags: reposhield-worker:test

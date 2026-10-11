@@ -1,0 +1,6 @@
+{
+  "name": "RepoShield AI - Automated AppSec & Fix Verification Engine",
+  "description": "Enterprise AppSec control center by Xerova with AST taint verification, automated fix generation, and test runner regression gates.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

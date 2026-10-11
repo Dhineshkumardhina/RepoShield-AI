@@ -1,0 +1,152 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "RepoShieldSecurityFixBenchmarkCase",
+  "description": "Standardized schema for evaluating security fix verification baselines on vulnerable code and candidate patches.",
+  "type": "object",
+  "required": [
+    "case_id",
+    "origin",
+    "cwe_id",
+    "vulnerability_category",
+    "description",
+    "source_file",
+    "vulnerable_code",
+    "baseline_revision",
+    "baseline_finding",
+    "split",
+    "candidate_patches"
+  ],
+  "properties": {
+    "case_id": {
+      "type": "string",
+      "description": "Unique identifier for the benchmark case (e.g. RS-BENCH-001)"
+    },
+    "origin": {
+      "type": "string",
+      "description": "Dataset source or provenance (e.g. synthetic_curated, cve_adapted, juliet_benchmark)"
+    },
+    "cve_id": {
+      "type": ["string", "null"],
+      "description": "Associated Common Vulnerabilities and Exposures identifier if applicable"
+    },
+    "cwe_id": {
+      "type": "string",
+      "description": "Common Weakness Enumeration identifier (e.g. CWE-89, CWE-78, CWE-22)"
+    },
+    "vulnerability_category": {
+      "type": "string",
+      "description": "Normalized category of vulnerability (e.g. sql_injection, command_injection, path_traversal, deserialization, broken_access_control, false_positive_finding, tool_failure_timeout)"
+    },
+    "description": {
+      "type": "string",
+      "description": "Concise summary of the vulnerability and security context"
+    },
+    "source_file": {
+      "type": "string",
+      "description": "Relative file path of the affected source code module (e.g. src/auth_service.py)"
+    },
+    "vulnerable_code": {
+      "type": "string",
+      "description": "Complete baseline source code containing the vulnerability or benign target construct"
+    },
+    "baseline_revision": {
+      "type": "string",
+      "description": "Source revision identifier or SHA-256 hash of the baseline source content"
+    },
+    "baseline_finding": {
+      "type": "object",
+      "required": ["rule_id", "category", "start_line"],
+      "properties": {
+        "rule_id": { "type": "string" },
+        "category": { "type": "string" },
+        "start_line": { "type": "integer" },
+        "severity": { "type": "string", "enum": ["critical", "high", "medium", "low", "info"] }
+      }
+    },
+    "split": {
+      "type": "string",
+      "enum": ["dev", "held_out"],
+      "description": "Evaluation partition separating development tuning examples from held-out evaluation cases"
+    },
+    "existing_unit_test": {
+      "type": ["string", "null"],
+      "description": "Existing functional unit test code asserting normal application behavior, or null if unconfigured"
+    },
+    "targeted_regression_test": {
+      "type": ["string", "null"],
+      "description": "Targeted security test code asserting non-exploitability of the vulnerability, or null if test evidence is absent"
+    },
+    "candidate_patches": {
+      "type": "array",
+      "description": "Set of candidate patches representing different real-world fix qualities and adversarial evasions",
+      "items": {
+        "type": "object",
+        "required": [
+          "patch_id",
+          "patch_type",
+          "ground_truth_label",
+          "ground_truth_rationale",
+          "expected_classification",
+          "unified_diff",
+          "description"
+        ],
+        "properties": {
+          "patch_id": {
+            "type": "string",
+            "description": "Unique identifier for candidate patch (e.g. RS-001-P1)"
+          },
+          "patch_type": {
+            "type": "string",
+            "enum": [
+              "true_fix",
+              "ineffective_fix",
+              "cosmetic_evasion",
+              "incomplete_fix",
+              "regressive_fix",
+              "security_regression",
+              "false_positive_finding",
+              "missing_evidence_case",
+              "tool_failure_timeout"
+            ],
+            "description": "Empirical taxonomy of patch quality: true fix, ineffective fix, cosmetic evasion, partial/incomplete fix, functional regression, security regression, false positive finding, missing evidence, or tool failure"
+          },
+          "ground_truth_label": {
+            "type": "string",
+            "enum": ["FIX", "NON_FIX", "INCONCLUSIVE"],
+            "description": "Ground truth: FIX (safe to deploy), NON_FIX (should be blocked), or INCONCLUSIVE (insufficient evidence/tool crash)"
+          },
+          "ground_truth_rationale": {
+            "type": "string",
+            "description": "Scientific justification explaining why this patch is labeled as FIX, NON_FIX, or INCONCLUSIVE"
+          },
+          "expected_classification": {
+            "type": "string",
+            "enum": ["VERIFIED", "FAILED", "INCONCLUSIVE"],
+            "description": "Expected verification verdict: VERIFIED, FAILED, or INCONCLUSIVE"
+          },
+          "expected_regression_status": {
+            "type": ["string", "null"],
+            "enum": [
+              "RESOLVED_BY_DEFINED_CHECKS",
+              "STILL_PRESENT",
+              "POTENTIALLY_REGRESSED",
+              "NEW",
+              "UNCHANGED",
+              "INCOMPARABLE",
+              null
+            ],
+            "description": "Expected finding regression classification from comparator"
+          },
+          "unified_diff": {
+            "type": "string",
+            "description": "Standard unified diff representing the proposed code change"
+          },
+          "description": {
+            "type": "string",
+            "description": "Explanation of the patch mechanics and why it succeeds or fails"
+          }
+        }
+      }
+    }
+  }
+}

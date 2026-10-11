@@ -1,0 +1,62 @@
+{
+  "case_id": "RS-BENCH-003",
+  "origin": "synthetic_curated",
+  "cve_id": null,
+  "cwe_id": "CWE-22",
+  "vulnerability_category": "path_traversal",
+  "description": "Path Traversal in Static Asset Retrieval allowing reading arbitrary files outside root directory.",
+  "source_file": "src/file_server.py",
+  "vulnerable_code": "import os\nfrom pathlib import Path\n\ndef read_static_file(base_dir: str, filename: str) -> str:\n    \"\"\"Read file from base directory.\"\"\"\n    # VULNERABLE: Direct concatenation without canonicalization checks\n    target = os.path.join(base_dir, filename)\n    with open(target, 'r', encoding='utf-8') as f:\n        return f.read()\n\ndef get_file_size(base_dir: str, filename: str) -> int:\n    \"\"\"Get size of static file.\"\"\"\n    target = os.path.join(base_dir, filename)\n    return os.path.getsize(target)\n",
+  "baseline_revision": "c03f91e4a628b03715cde901724a81bc",
+  "split": "dev",
+  "baseline_finding": {
+    "rule_id": "RS-PATH-TRAVERSAL",
+    "category": "path_traversal",
+    "start_line": 7,
+    "severity": "high"
+  },
+  "existing_unit_test": "from src.file_server import read_static_file, get_file_size\n\ndef test_normal_file_read(tmp_path):\n    doc = tmp_path / \"hello.txt\"\n    doc.write_text(\"welcome\", encoding=\"utf-8\")\n    assert read_static_file(str(tmp_path), \"hello.txt\") == \"welcome\"\n    assert get_file_size(str(tmp_path), \"hello.txt\") == 7\n",
+  "targeted_regression_test": "import pytest\nfrom src.file_server import read_static_file\n\ndef test_path_traversal_exploit_fails(tmp_path):\n    secret = tmp_path / \"secret.txt\"\n    secret.write_text(\"super_secret_token\", encoding=\"utf-8\")\n    public_dir = tmp_path / \"public\"\n    public_dir.mkdir()\n\n    # Attempt directory traversal out of public folder\n    with pytest.raises((ValueError, PermissionError)):\n        read_static_file(str(public_dir), \"../secret.txt\")\n",
+  "candidate_patches": [
+    {
+      "patch_id": "RS-003-P1",
+      "patch_type": "true_fix",
+      "ground_truth_label": "FIX",
+      "ground_truth_rationale": "True fix: Resolves target path to canonical absolute representation and verifies that it is strictly confined within base directory boundaries.",
+      "expected_classification": "VERIFIED",
+      "expected_regression_status": "RESOLVED_BY_DEFINED_CHECKS",
+      "description": "True fix: Resolves canonical path and validates commonpath against allowed base directory.",
+      "unified_diff": "--- a/src/file_server.py\n+++ b/src/file_server.py\n@@ -6,3 +6,5 @@\n-    # VULNERABLE: Direct concatenation without canonicalization checks\n-    target = os.path.join(base_dir, filename)\n+    # FIXED: Path canonicalization and boundary verification\n+    resolved_base = Path(base_dir).resolve()\n+    resolved_target = (resolved_base / filename).resolve()\n+    if not str(resolved_target).startswith(str(resolved_base)):\n+        raise PermissionError(\"Path traversal detected outside base directory\")\n+    target = resolved_target\n"
+    },
+    {
+      "patch_id": "RS-003-P2",
+      "patch_type": "incomplete_fix",
+      "ground_truth_label": "NON_FIX",
+      "ground_truth_rationale": "Incomplete fix: Naively strips '../' via single string replace, which can be bypassed using nested sequences ('....//') or absolute paths.",
+      "expected_classification": "FAILED",
+      "expected_regression_status": "POTENTIALLY_REGRESSED",
+      "description": "Incomplete fix: Naive string replace of '../' which can be bypassed using nested or URL-encoded traversals '....//'.",
+      "unified_diff": "--- a/src/file_server.py\n+++ b/src/file_server.py\n@@ -6,2 +6,3 @@\n-    # VULNERABLE: Direct concatenation without canonicalization checks\n-    target = os.path.join(base_dir, filename)\n+    # INCOMPLETE: Flawed string replacement\n+    safe_name = filename.replace(\"../\", \"\")\n+    target = os.path.join(base_dir, safe_name)\n"
+    },
+    {
+      "patch_id": "RS-003-P3",
+      "patch_type": "regressive_fix",
+      "ground_truth_label": "NON_FIX",
+      "ground_truth_rationale": "Regressive fix: Rejects any filename containing a dot, blocking legitimate filenames like 'hello.txt' and breaking valid application functionality.",
+      "expected_classification": "FAILED",
+      "expected_regression_status": "RESOLVED_BY_DEFINED_CHECKS",
+      "description": "Regressive fix: Rejects all filenames containing a dot, blocking normal files like hello.txt and breaking functional tests.",
+      "unified_diff": "--- a/src/file_server.py\n+++ b/src/file_server.py\n@@ -6,2 +6,4 @@\n-    # VULNERABLE: Direct concatenation without canonicalization checks\n-    target = os.path.join(base_dir, filename)\n+    # REGRESSIVE: Breaks valid files\n+    if \".\" in filename:\n+        raise ValueError(\"Dots not permitted\")\n+    target = os.path.join(base_dir, filename)\n"
+    },
+    {
+      "patch_id": "RS-003-P4",
+      "patch_type": "cosmetic_evasion",
+      "ground_truth_label": "NON_FIX",
+      "ground_truth_rationale": "Cosmetic evasion: Switches to pathlib Path division syntax but does not canonicalize or check bounds, leaving path traversal completely functional.",
+      "expected_classification": "FAILED",
+      "expected_regression_status": "POTENTIALLY_REGRESSED",
+      "description": "Cosmetic evasion: Rewrites path concatenation using Path object division without canonical boundary validation, leaving traversal exploitable.",
+      "unified_diff": "--- a/src/file_server.py\n+++ b/src/file_server.py\n@@ -6,2 +6,3 @@\n-    # VULNERABLE: Direct concatenation without canonicalization checks\n-    target = os.path.join(base_dir, filename)\n+    # EVASIVE: Path syntax without boundary check\n+    target = str(Path(base_dir) / filename)\n"
+    }
+  ]
+}

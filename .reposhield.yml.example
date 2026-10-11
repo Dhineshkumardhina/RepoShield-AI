@@ -1,0 +1,53 @@
+# RepoShield AI — Reproducible Security Scanner Configuration
+# Version: 1.0
+
+version: "1"
+
+policy:
+  # Default mode: read-only analysis without writing comments unless enabled
+  publish_pr_comments: false
+  # Block PR checks if any NEW findings of given severity are introduced
+  fail_on_severity: "CRITICAL"
+  # Require verification evidence before marking vulnerabilities resolved
+  require_fix_verification: true
+
+scanners:
+  semgrep:
+    enabled: true
+    config: "p/security-audit"
+    timeout_seconds: 60
+    exclude:
+      - "tests/**"
+      - "fixtures/**"
+      - "node_modules/**"
+      - "vendor/**"
+
+  bandit:
+    enabled: true
+    profile: "default"
+    confidence_threshold: "MEDIUM"
+    severity_threshold: "LOW"
+    timeout_seconds: 45
+    exclude_dirs:
+      - "tests"
+      - "venv"
+      - ".venv"
+
+  pip_audit:
+    enabled: true
+    manifests:
+      - "requirements.txt"
+    ignore_vulns: []
+    timeout_seconds: 45
+
+  gitleaks:
+    enabled: true
+    redact_findings: true
+    timeout_seconds: 30
+    exclude_paths:
+      - "tests/fixtures"
+
+reporting:
+  redact_secrets_in_logs: true
+  max_code_snippet_lines: 10
+  anonymize_git_authors: false

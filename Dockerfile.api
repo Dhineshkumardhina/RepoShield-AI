@@ -1,0 +1,84 @@
+# ==============================================================================
+# RepoShield AI - Production API Container
+# Multi-stage, minimal, hardened, unprivileged container for FastAPI backend
+# ==============================================================================
+
+# ------------------------------------------------------------------------------
+# Stage 1: Build Dependencies
+# ------------------------------------------------------------------------------
+FROM python:3.11-slim-bookworm AS builder
+
+WORKDIR /build
+
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    build-essential \
+    libpq-dev \
+    curl \
+    && rm -rf /var/lib/apt/lists/*
+
+COPY backend/requirements.txt .
+RUN pip install --no-cache-dir --prefix=/install -r requirements.txt
+RUN pip install --no-cache-dir --prefix=/install gunicorn uvicorn[standard] psycopg[binary]
+
+# ------------------------------------------------------------------------------
+# Stage 2: Hardened Runtime
+# ------------------------------------------------------------------------------
+FROM python:3.11-slim-bookworm AS runtime
+
+LABEL maintainer="Xerova Digital Solutions <security@xerova.com>"
+LABEL service="reposhield-api"
+LABEL description="RepoShield AI Production Application Server"
+
+WORKDIR /app
+
+# Install runtime dependencies and security init
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    tini \
+    curl \
+    libpq5 \
+    ca-certificates \
+    && rm -rf /var/lib/apt/lists/*
+
+# Create unprivileged system user and group
+RUN groupadd -g 10001 reposhield && \
+    useradd -u 10001 -g reposhield -s /bin/false -M reposhield
+
+# Copy installed python dependencies from builder
+COPY --from=builder /install /usr/local
+
+# Copy backend application code
+COPY backend/app /app/app
+COPY backend/alembic /app/alembic
+COPY backend/alembic.ini /app/alembic.ini
+
+# Create workspace directory with restricted permissions
+RUN mkdir -p /app/data/workspaces && \
+    chown -R reposhield:reposhield /app
+
+# Switch to non-root user
+USER reposhield:reposhield
+
+# Production environment defaults
+ENV PYTHONUNBUFFERED=1 \
+    PYTHONDONTWRITEBYTECODE=1 \
+    APP_ENV=production \
+    HOST=0.0.0.0 \
+    PORT=8000
+
+EXPOSE 8000
+
+# Health check using lightweight liveness probe
+HEALTHCHECK --interval=15s --timeout=3s --start-period=5s --retries=3 \
+    CMD curl -f http://127.0.0.1:8000/live || exit 1
+
+ENTRYPOINT ["/usr/bin/tini", "--"]
+
+# Production ASGI server with multiple worker processes
+CMD ["gunicorn", "app.main:app", \
+     "--workers", "4", \
+     "--worker-class", "uvicorn.workers.UvicornWorker", \
+     "--bind", "0.0.0.0:8000", \
+     "--timeout", "120", \
+     "--keep-alive", "5", \
+     "--access-logfile", "-", \
+     "--error-logfile", "-"]
