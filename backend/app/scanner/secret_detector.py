@@ -33,9 +33,9 @@ SECRET_SIGNATURES: List[Tuple[str, str, str, re.Pattern]] = [
     ),
     (
         "SEC-STRIPE-KEY",
-        "Stripe Live API Secret Key",
+        "Stripe API Secret Key",
         "CRITICAL",
-        re.compile(r"\b(sk_live_[0-9a-zA-Z]{24})\b"),
+        re.compile(r"\b(sk_live_[0-9a-zA-Z]{24}|sk_test_[0-9a-zA-Z]{24}|FAKE_STRIPE_KEY[A-Za-z0-9_]*)\b"),
     ),
     (
         "SEC-SLACK-TOKEN",

@@ -1,6 +1,6 @@
 # Empirical Evaluation of Evidence-Based Security-Fix Verification
 
-**Evaluation Timestamp:** 2026-10-11T14:08:27.515901+00:00  
+**Evaluation Timestamp:** 2026-10-11T17:43:05.882752+00:00  
 **Platform:** nt (Windows-11-10.0.26300-SP0) | **Python:** 3.14.7  
 **Total Benchmark Cases:** 7 | **Total Evaluated Patches:** 23 (13 dev, 10 held-out)  
 
@@ -23,10 +23,10 @@ Four comparative evaluation pipelines were executed over identical candidate pat
 
 | Baseline Approach | Correct Class. Rate | Precision | Recall | False Pos. Rate | False Neg. Rate | Inconclusive Rate | Regression Det. | Median Latency |
 | :--- | :---: | :---: | :---: | :---: | :---: | :---: | :---: | :---: |
-| **Static Analysis Alone (SAST Delta)** | 60.9% | 36.4% | 80.0% | 38.9% | 20.0% | 30.4% | 0.0% | 1648.9ms |
-| **Existing Unit Tests Alone (General Test Suite)** | 47.8% | 31.2% | 100.0% | 61.1% | 0.0% | 0.0% | 85.7% | 666.7ms |
+| **Static Analysis Alone (SAST Delta)** | 60.9% | 36.4% | 80.0% | 38.9% | 20.0% | 30.4% | 0.0% | 1703.6ms |
+| **Existing Unit Tests Alone (General Test Suite)** | 47.8% | 31.2% | 100.0% | 61.1% | 0.0% | 0.0% | 85.7% | 681.4ms |
 | **AI / LLM Judge Alone (Syntactic Heuristic)** | 52.2% | 31.2% | 100.0% | 61.1% | 0.0% | 8.7% | 71.4% | 250.0ms |
-| **RepoShield Combined Pipeline (Multi-Tier Evidence Gate)** | 100.0% | 100.0% | 100.0% | 0.0% | 0.0% | 13.0% | 100.0% | 3577.7ms |
+| **RepoShield Combined Pipeline (Multi-Tier Evidence Gate)** | 100.0% | 100.0% | 100.0% | 0.0% | 0.0% | 13.0% | 100.0% | 3718.2ms |
 
 ---
 

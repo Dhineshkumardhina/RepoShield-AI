@@ -77,7 +77,7 @@ SECRET_PATTERNS = [
     (re.compile(r"ghp_[a-zA-Z0-9]{36}"), "[REDACTED_GITHUB_TOKEN]"),
     (re.compile(r"glpat-[a-zA-Z0-9_\-]{20}"), "[REDACTED_GITLAB_TOKEN]"),
     (re.compile(r"eyJ[a-zA-Z0-9_\-]+\.eyJ[a-zA-Z0-9_\-]+\.[a-zA-Z0-9_\-]+"), "[REDACTED_JWT_TOKEN]"),
-    (re.compile(r"sk_live_[0-9a-zA-Z]{24}"), "[REDACTED_STRIPE_SECRET]"),
+    (re.compile(r"\b(sk_live_[0-9a-zA-Z]{24}|sk_test_[0-9a-zA-Z]{24}|FAKE_STRIPE_KEY[A-Za-z0-9_]*)\b"), "[REDACTED_STRIPE_SECRET]"),
     (re.compile(r"(password|passwd|secret|api_key|token)\s*[:=]\s*['\"][^'\"]+['\"]", re.IGNORECASE), r"\1 = '[REDACTED_SECRET]'"),
 ]
 

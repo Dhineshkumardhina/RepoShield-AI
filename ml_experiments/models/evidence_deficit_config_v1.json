@@ -1,0 +1,39 @@
+{
+  "fit_time_ms": 1.1181000154465437,
+  "samples_trained": 28,
+  "features_used": [
+    "severity_normalized",
+    "scanner_confidence",
+    "has_local_sink",
+    "is_constant_arg",
+    "is_test_file",
+    "is_entrypoint_file",
+    "has_custom_sanitizer",
+    "has_prompt_injection",
+    "context_lines_normalized",
+    "num_variables_in_sink",
+    "cross_file_reference",
+    "has_framework_validation"
+  ],
+  "classes": [
+    0,
+    1
+  ],
+  "intercept": 0.041119876843735886,
+  "coefficients": {
+    "severity_normalized": 0.033352130042695154,
+    "scanner_confidence": -0.7445874805339716,
+    "has_local_sink": -0.0992942004953926,
+    "is_constant_arg": -0.6960355528222953,
+    "is_test_file": -0.6151130343864746,
+    "is_entrypoint_file": 0.21768665113471938,
+    "has_custom_sanitizer": 0.756446165660998,
+    "has_prompt_injection": 0.408819346921545,
+    "context_lines_normalized": -0.5086298456704001,
+    "num_variables_in_sink": 0.43236004246956,
+    "cross_file_reference": 1.6676393638355647,
+    "has_framework_validation": 0.408819346921545
+  },
+  "version": "v1.0.0",
+  "timestamp": "2026-10-11T17:52:00.966585+00:00"
+}

@@ -1,0 +1,594 @@
+{
+  "timestamp": "2026-10-11T17:45:18.348575+00:00",
+  "metadata": {
+    "evaluator": "RepoShield AI Machine Learning Evaluation Researcher",
+    "environment": "Authorized Local Sandbox",
+    "total_triage_samples": 10,
+    "total_verification_cases": 7,
+    "total_verification_patches": 23
+  },
+  "vulnerability_analysis_module": {
+    "overall": {
+      "total_samples": 10,
+      "true_positives": 2,
+      "false_positives": 1,
+      "true_negatives": 5,
+      "false_negatives": 2,
+      "inconclusive_count": 5,
+      "correct_count": 7,
+      "accuracy": 0.7,
+      "precision": 0.6666666666666666,
+      "recall": 0.5,
+      "specificity": 0.8333333333333334,
+      "false_positive_rate": 0.16666666666666666,
+      "false_negative_rate": 0.5,
+      "inconclusive_rate": 0.5
+    },
+    "dev_split": {
+      "total_samples": 6,
+      "true_positives": 2,
+      "false_positives": 0,
+      "true_negatives": 3,
+      "false_negatives": 1,
+      "inconclusive_count": 2,
+      "correct_count": 5,
+      "accuracy": 0.8333333333333334,
+      "precision": 1.0,
+      "recall": 0.6666666666666666,
+      "specificity": 1.0,
+      "false_positive_rate": 0.0,
+      "false_negative_rate": 0.3333333333333333,
+      "inconclusive_rate": 0.3333333333333333
+    },
+    "held_out_split": {
+      "total_samples": 4,
+      "true_positives": 0,
+      "false_positives": 1,
+      "true_negatives": 2,
+      "false_negatives": 1,
+      "inconclusive_count": 3,
+      "correct_count": 2,
+      "accuracy": 0.5,
+      "precision": 0.0,
+      "recall": 0.0,
+      "specificity": 0.6666666666666666,
+      "false_positive_rate": 0.3333333333333333,
+      "false_negative_rate": 1.0,
+      "inconclusive_rate": 0.75
+    },
+    "samples": [
+      {
+        "sample_id": "VAL-001-SQLI",
+        "cwe_id": "CWE-89",
+        "category": "sql_injection",
+        "ground_truth": "TRUE_POSITIVE_FINDING",
+        "predicted": "SUPPORTED_BY_EVIDENCE",
+        "confidence": 0.92,
+        "is_correct": true,
+        "explanation": "Observable code evidence strongly supports scanner finding 'python.sqli.raw-format'. AST analysis reveals direct dynamic formatting or unparameterized variable interpolation into an execution sink without sanitizing or boundary-checking routines."
+      },
+      {
+        "sample_id": "VAL-002-CMDI",
+        "cwe_id": "CWE-78",
+        "category": "command_injection",
+        "ground_truth": "TRUE_POSITIVE_FINDING",
+        "predicted": "SUPPORTED_BY_EVIDENCE",
+        "confidence": 0.92,
+        "is_correct": true,
+        "explanation": "Observable code evidence strongly supports scanner finding 'B602'. AST analysis reveals direct dynamic formatting or unparameterized variable interpolation into an execution sink without sanitizing or boundary-checking routines."
+      },
+      {
+        "sample_id": "VAL-003-TRAVERSAL",
+        "cwe_id": "CWE-22",
+        "category": "path_traversal",
+        "ground_truth": "TRUE_POSITIVE_FINDING",
+        "predicted": "HUMAN_REVIEW_REQUIRED",
+        "confidence": 0.5,
+        "is_correct": false,
+        "explanation": "The available static evidence is neither definitively corroborating nor refuting. Human application security review is recommended to evaluate business context."
+      },
+      {
+        "sample_id": "VAL-004-DESERIAL",
+        "cwe_id": "CWE-502",
+        "category": "deserialization",
+        "ground_truth": "TRUE_POSITIVE_FINDING",
+        "predicted": "HUMAN_REVIEW_REQUIRED",
+        "confidence": 0.5,
+        "is_correct": false,
+        "explanation": "The available static evidence is neither definitively corroborating nor refuting. Human application security review is recommended to evaluate business context."
+      },
+      {
+        "sample_id": "VAL-005-FP-CONST",
+        "cwe_id": "CWE-89",
+        "category": "sql_injection",
+        "ground_truth": "FALSE_POSITIVE_FINDING",
+        "predicted": "POSSIBLE_FALSE_POSITIVE",
+        "confidence": 0.9,
+        "is_correct": true,
+        "explanation": "Static analysis finding 'B608' flagged a sensitive sink, but AST inspection confirms the argument is a static compile-time constant string with no user variable interpolation or external data formatting."
+      },
+      {
+        "sample_id": "VAL-006-FP-WHITELIST",
+        "cwe_id": "CWE-89",
+        "category": "sql_injection",
+        "ground_truth": "FALSE_POSITIVE_FINDING",
+        "predicted": "SUPPORTED_BY_EVIDENCE",
+        "confidence": 0.92,
+        "is_correct": false,
+        "explanation": "Observable code evidence strongly supports scanner finding 'B608'. AST analysis reveals direct dynamic formatting or unparameterized variable interpolation into an execution sink without sanitizing or boundary-checking routines."
+      },
+      {
+        "sample_id": "VAL-007-FP-TESTDIR",
+        "cwe_id": "CWE-89",
+        "category": "sql_injection",
+        "ground_truth": "FALSE_POSITIVE_FINDING",
+        "predicted": "POSSIBLE_FALSE_POSITIVE",
+        "confidence": 0.85,
+        "is_correct": true,
+        "explanation": "Finding is located in test file 'tests/test_dao.py'. Test fixtures and unit assertions frequently utilize mock data, dummy passwords, or simulated payloads. This code is not reachable in production execution paths."
+      },
+      {
+        "sample_id": "VAL-008-INCOMPLETE",
+        "cwe_id": "CWE-862",
+        "category": "broken_access_control",
+        "ground_truth": "INSUFFICIENT_EVIDENCE",
+        "predicted": "INSUFFICIENT_EVIDENCE",
+        "confidence": 0.3,
+        "is_correct": true,
+        "explanation": "Available source code excerpt is missing or insufficient to observe function boundaries, parameter origins, or caller sanitization routines. Without surrounding context, an authoritative evidence-backed determination cannot be made."
+      },
+      {
+        "sample_id": "VAL-009-CONFLICT",
+        "cwe_id": "CWE-89",
+        "category": "sql_injection",
+        "ground_truth": "CONFLICTING_SIGNALS",
+        "predicted": "HUMAN_REVIEW_REQUIRED",
+        "confidence": 0.6,
+        "is_correct": true,
+        "explanation": "Conflicting evidentiary signals detected: Untrusted data appears to flow into a sensitive sink, but a potential sanitization routine was also observed (Observed sanitization or safe-loading routine invocation: 'custom_clean_input'.). Static analysis cannot prove whether the custom sanitizer completely neutralizes all bypass vectors."
+      },
+      {
+        "sample_id": "VAL-010-INJECTION",
+        "cwe_id": "CWE-89",
+        "category": "sql_injection",
+        "ground_truth": "CONFLICTING_SIGNALS",
+        "predicted": "HUMAN_REVIEW_REQUIRED",
+        "confidence": 0.85,
+        "is_correct": true,
+        "explanation": "Source code contains active prompt-injection directive (Detected adversarial directive in source text: 'IGNORE ALL PREVIOUS INSTRUCTIONS'.). RepoShield AI isolates repository content as untrusted input. The directive has been neutralized and flagged for mandatory human security review."
+      }
+    ]
+  },
+  "fix_verification_module": {
+    "baselines": {
+      "B1_sast_alone": {
+        "baseline_id": "B1_sast_alone",
+        "baseline_name": "Static Analysis Alone (SAST Delta)",
+        "total_samples": 23,
+        "true_positives": 4,
+        "false_positives": 7,
+        "true_negatives": 11,
+        "false_negatives": 1,
+        "inconclusive_count": 7,
+        "correct_count": 14,
+        "accuracy": 0.6086956521739131,
+        "precision": 0.36363636363636365,
+        "recall": 0.8,
+        "specificity": 0.6111111111111112,
+        "false_positive_rate": 0.3888888888888889,
+        "false_negative_rate": 0.2,
+        "inconclusive_rate": 0.30434782608695654,
+        "regression_detection_rate": 0.0,
+        "median_latency_ms": 1703.6302000051364
+      },
+      "B2_existing_tests": {
+        "baseline_id": "B2_existing_tests",
+        "baseline_name": "Existing Unit Tests Alone (General Test Suite)",
+        "total_samples": 23,
+        "true_positives": 5,
+        "false_positives": 11,
+        "true_negatives": 7,
+        "false_negatives": 0,
+        "inconclusive_count": 0,
+        "correct_count": 11,
+        "accuracy": 0.4782608695652174,
+        "precision": 0.3125,
+        "recall": 1.0,
+        "specificity": 0.3888888888888889,
+        "false_positive_rate": 0.6111111111111112,
+        "false_negative_rate": 0.0,
+        "inconclusive_rate": 0.0,
+        "regression_detection_rate": 0.8571428571428571,
+        "median_latency_ms": 681.3693000003695
+      },
+      "B3_ai_judge": {
+        "baseline_id": "B3_ai_judge",
+        "baseline_name": "AI / LLM Judge Alone (Syntactic Heuristic)",
+        "total_samples": 23,
+        "true_positives": 5,
+        "false_positives": 11,
+        "true_negatives": 7,
+        "false_negatives": 0,
+        "inconclusive_count": 2,
+        "correct_count": 12,
+        "accuracy": 0.5217391304347826,
+        "precision": 0.3125,
+        "recall": 1.0,
+        "specificity": 0.3888888888888889,
+        "false_positive_rate": 0.6111111111111112,
+        "false_negative_rate": 0.0,
+        "inconclusive_rate": 0.08695652173913043,
+        "regression_detection_rate": 0.7142857142857143,
+        "median_latency_ms": 250.00129995169118
+      },
+      "B4_reposhield_pipeline": {
+        "baseline_id": "B4_reposhield_pipeline",
+        "baseline_name": "RepoShield Combined Pipeline (Multi-Tier Evidence Gate)",
+        "total_samples": 23,
+        "true_positives": 5,
+        "false_positives": 0,
+        "true_negatives": 18,
+        "false_negatives": 0,
+        "inconclusive_count": 3,
+        "correct_count": 23,
+        "accuracy": 1.0,
+        "precision": 1.0,
+        "recall": 1.0,
+        "specificity": 1.0,
+        "false_positive_rate": 0.0,
+        "false_negative_rate": 0.0,
+        "inconclusive_rate": 0.13043478260869565,
+        "regression_detection_rate": 1.0,
+        "median_latency_ms": 3718.167799990624
+      }
+    },
+    "dev_split_b4": {
+      "total": 0,
+      "accuracy": 0.0,
+      "precision": 0.0,
+      "recall": 0.0
+    },
+    "held_out_split_b4": {
+      "total": 0,
+      "accuracy": 0.0,
+      "precision": 0.0,
+      "recall": 0.0
+    }
+  },
+  "stratified_errors": {
+    "by_category": {
+      "broken_access_control": {
+        "B1_sast_alone": {
+          "total": 2,
+          "errors": 0,
+          "error_rate": 0.0
+        },
+        "B2_existing_tests": {
+          "total": 2,
+          "errors": 1,
+          "error_rate": 0.5
+        },
+        "B3_ai_judge": {
+          "total": 2,
+          "errors": 1,
+          "error_rate": 0.5
+        },
+        "B4_reposhield_pipeline": {
+          "total": 2,
+          "errors": 0,
+          "error_rate": 0.0
+        }
+      },
+      "command_injection": {
+        "B1_sast_alone": {
+          "total": 4,
+          "errors": 2,
+          "error_rate": 0.5
+        },
+        "B2_existing_tests": {
+          "total": 4,
+          "errors": 2,
+          "error_rate": 0.5
+        },
+        "B3_ai_judge": {
+          "total": 4,
+          "errors": 2,
+          "error_rate": 0.5
+        },
+        "B4_reposhield_pipeline": {
+          "total": 4,
+          "errors": 0,
+          "error_rate": 0.0
+        }
+      },
+      "deserialization": {
+        "B1_sast_alone": {
+          "total": 4,
+          "errors": 1,
+          "error_rate": 0.25
+        },
+        "B2_existing_tests": {
+          "total": 4,
+          "errors": 2,
+          "error_rate": 0.5
+        },
+        "B3_ai_judge": {
+          "total": 4,
+          "errors": 2,
+          "error_rate": 0.5
+        },
+        "B4_reposhield_pipeline": {
+          "total": 4,
+          "errors": 0,
+          "error_rate": 0.0
+        }
+      },
+      "false_positive_finding": {
+        "B1_sast_alone": {
+          "total": 2,
+          "errors": 1,
+          "error_rate": 0.5
+        },
+        "B2_existing_tests": {
+          "total": 2,
+          "errors": 0,
+          "error_rate": 0.0
+        },
+        "B3_ai_judge": {
+          "total": 2,
+          "errors": 1,
+          "error_rate": 0.5
+        },
+        "B4_reposhield_pipeline": {
+          "total": 2,
+          "errors": 0,
+          "error_rate": 0.0
+        }
+      },
+      "path_traversal": {
+        "B1_sast_alone": {
+          "total": 4,
+          "errors": 1,
+          "error_rate": 0.25
+        },
+        "B2_existing_tests": {
+          "total": 4,
+          "errors": 2,
+          "error_rate": 0.5
+        },
+        "B3_ai_judge": {
+          "total": 4,
+          "errors": 2,
+          "error_rate": 0.5
+        },
+        "B4_reposhield_pipeline": {
+          "total": 4,
+          "errors": 0,
+          "error_rate": 0.0
+        }
+      },
+      "sql_injection": {
+        "B1_sast_alone": {
+          "total": 5,
+          "errors": 3,
+          "error_rate": 0.6
+        },
+        "B2_existing_tests": {
+          "total": 5,
+          "errors": 3,
+          "error_rate": 0.6
+        },
+        "B3_ai_judge": {
+          "total": 5,
+          "errors": 3,
+          "error_rate": 0.6
+        },
+        "B4_reposhield_pipeline": {
+          "total": 5,
+          "errors": 0,
+          "error_rate": 0.0
+        }
+      },
+      "tool_failure_timeout": {
+        "B1_sast_alone": {
+          "total": 2,
+          "errors": 1,
+          "error_rate": 0.5
+        },
+        "B2_existing_tests": {
+          "total": 2,
+          "errors": 2,
+          "error_rate": 1.0
+        },
+        "B3_ai_judge": {
+          "total": 2,
+          "errors": 0,
+          "error_rate": 0.0
+        },
+        "B4_reposhield_pipeline": {
+          "total": 2,
+          "errors": 0,
+          "error_rate": 0.0
+        }
+      }
+    },
+    "by_patch_type": {
+      "cosmetic_evasion": {
+        "B1_sast_alone": {
+          "total": 4,
+          "errors": 2,
+          "error_rate": 0.5
+        },
+        "B2_existing_tests": {
+          "total": 4,
+          "errors": 4,
+          "error_rate": 1.0
+        },
+        "B3_ai_judge": {
+          "total": 4,
+          "errors": 4,
+          "error_rate": 1.0
+        },
+        "B4_reposhield_pipeline": {
+          "total": 4,
+          "errors": 0,
+          "error_rate": 0.0
+        }
+      },
+      "false_positive_finding": {
+        "B1_sast_alone": {
+          "total": 1,
+          "errors": 0,
+          "error_rate": 0.0
+        },
+        "B2_existing_tests": {
+          "total": 1,
+          "errors": 0,
+          "error_rate": 0.0
+        },
+        "B3_ai_judge": {
+          "total": 1,
+          "errors": 0,
+          "error_rate": 0.0
+        },
+        "B4_reposhield_pipeline": {
+          "total": 1,
+          "errors": 0,
+          "error_rate": 0.0
+        }
+      },
+      "incomplete_fix": {
+        "B1_sast_alone": {
+          "total": 4,
+          "errors": 0,
+          "error_rate": 0.0
+        },
+        "B2_existing_tests": {
+          "total": 4,
+          "errors": 4,
+          "error_rate": 1.0
+        },
+        "B3_ai_judge": {
+          "total": 4,
+          "errors": 4,
+          "error_rate": 1.0
+        },
+        "B4_reposhield_pipeline": {
+          "total": 4,
+          "errors": 0,
+          "error_rate": 0.0
+        }
+      },
+      "missing_evidence_case": {
+        "B1_sast_alone": {
+          "total": 1,
+          "errors": 0,
+          "error_rate": 0.0
+        },
+        "B2_existing_tests": {
+          "total": 1,
+          "errors": 1,
+          "error_rate": 1.0
+        },
+        "B3_ai_judge": {
+          "total": 1,
+          "errors": 1,
+          "error_rate": 1.0
+        },
+        "B4_reposhield_pipeline": {
+          "total": 1,
+          "errors": 0,
+          "error_rate": 0.0
+        }
+      },
+      "regressive_fix": {
+        "B1_sast_alone": {
+          "total": 6,
+          "errors": 4,
+          "error_rate": 0.6666666666666666
+        },
+        "B2_existing_tests": {
+          "total": 6,
+          "errors": 0,
+          "error_rate": 0.0
+        },
+        "B3_ai_judge": {
+          "total": 6,
+          "errors": 1,
+          "error_rate": 0.16666666666666666
+        },
+        "B4_reposhield_pipeline": {
+          "total": 6,
+          "errors": 0,
+          "error_rate": 0.0
+        }
+      },
+      "security_regression": {
+        "B1_sast_alone": {
+          "total": 1,
+          "errors": 1,
+          "error_rate": 1.0
+        },
+        "B2_existing_tests": {
+          "total": 1,
+          "errors": 1,
+          "error_rate": 1.0
+        },
+        "B3_ai_judge": {
+          "total": 1,
+          "errors": 1,
+          "error_rate": 1.0
+        },
+        "B4_reposhield_pipeline": {
+          "total": 1,
+          "errors": 0,
+          "error_rate": 0.0
+        }
+      },
+      "tool_failure_timeout": {
+        "B1_sast_alone": {
+          "total": 2,
+          "errors": 1,
+          "error_rate": 0.5
+        },
+        "B2_existing_tests": {
+          "total": 2,
+          "errors": 2,
+          "error_rate": 1.0
+        },
+        "B3_ai_judge": {
+          "total": 2,
+          "errors": 0,
+          "error_rate": 0.0
+        },
+        "B4_reposhield_pipeline": {
+          "total": 2,
+          "errors": 0,
+          "error_rate": 0.0
+        }
+      },
+      "true_fix": {
+        "B1_sast_alone": {
+          "total": 4,
+          "errors": 1,
+          "error_rate": 0.25
+        },
+        "B2_existing_tests": {
+          "total": 4,
+          "errors": 0,
+          "error_rate": 0.0
+        },
+        "B3_ai_judge": {
+          "total": 4,
+          "errors": 0,
+          "error_rate": 0.0
+        },
+        "B4_reposhield_pipeline": {
+          "total": 4,
+          "errors": 0,
+          "error_rate": 0.0
+        }
+      }
+    }
+  }
+}

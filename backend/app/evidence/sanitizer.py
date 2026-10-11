@@ -14,7 +14,7 @@ SECRET_PATTERNS = [
     (re.compile(r"\b(github_pat_[a-zA-Z0-9_]{22,82})\b"), "[REDACTED_GITHUB_PAT]"),
     (re.compile(r"\b(gh[pousr]_[a-zA-Z0-9]{36,255})\b"), "[REDACTED_GITHUB_TOKEN]"),
     # Slack, Stripe, Generic API Keys
-    (re.compile(r"\b(xox[baprs]-[0-9a-zA-Z]{10,48}|sk_live_[0-9a-zA-Z]{24})\b"), "[REDACTED_API_KEY]"),
+    (re.compile(r"\b(xox[baprs]-[0-9a-zA-Z]{10,48}|sk_live_[0-9a-zA-Z]{24}|sk_test_[0-9a-zA-Z]{24}|FAKE_STRIPE_KEY[A-Za-z0-9_]*)\b"), "[REDACTED_API_KEY]"),
     # HTTP Authorization Bearer Tokens
     (re.compile(r"(?i)\b(bearer\s+)([a-zA-Z0-9_\-\.]{16,})\b"), r"\1[REDACTED_BEARER_TOKEN]"),
     # JWT Tokens

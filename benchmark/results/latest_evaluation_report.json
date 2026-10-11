@@ -1,5 +1,5 @@
 {
-  "timestamp": "2026-10-11T14:08:27.515901+00:00",
+  "timestamp": "2026-10-11T17:43:05.882752+00:00",
   "platform_info": {
     "os": "nt",
     "platform": "Windows-11-10.0.26300-SP0",
@@ -44,9 +44,9 @@
       "false_negative_rate": 0.2,
       "inconclusive_rate": 0.30434782608695654,
       "regression_detection_rate": 0.0,
-      "mean_latency_ms": 1705.6707739096094,
-      "median_latency_ms": 1648.8719999906607,
-      "p95_latency_ms": 1832.1704000118189
+      "mean_latency_ms": 1762.2542565172214,
+      "median_latency_ms": 1703.6302000051364,
+      "p95_latency_ms": 1880.8811999624595
     },
     {
       "baseline_id": "B2_existing_tests",
@@ -65,9 +65,9 @@
       "false_negative_rate": 0.0,
       "inconclusive_rate": 0.0,
       "regression_detection_rate": 0.8571428571428571,
-      "mean_latency_ms": 646.4171217395115,
-      "median_latency_ms": 666.7079000035301,
-      "p95_latency_ms": 752.7545000193641
+      "mean_latency_ms": 653.1266304310006,
+      "median_latency_ms": 681.3693000003695,
+      "p95_latency_ms": 727.343300008215
     },
     {
       "baseline_id": "B3_ai_judge",
@@ -86,9 +86,9 @@
       "false_negative_rate": 0.0,
       "inconclusive_rate": 0.08695652173913043,
       "regression_detection_rate": 0.7142857142857143,
-      "mean_latency_ms": 250.0013304297286,
-      "median_latency_ms": 250.00110000837594,
-      "p95_latency_ms": 250.00250001903623
+      "mean_latency_ms": 250.00158260556182,
+      "median_latency_ms": 250.00129995169118,
+      "p95_latency_ms": 250.00349996844307
     },
     {
       "baseline_id": "B4_reposhield_pipeline",
@@ -107,9 +107,9 @@
       "false_negative_rate": 0.0,
       "inconclusive_rate": 0.13043478260869565,
       "regression_detection_rate": 1.0,
-      "mean_latency_ms": 3402.3434260819595,
-      "median_latency_ms": 3577.7327999821864,
-      "p95_latency_ms": 4029.910099983681
+      "mean_latency_ms": 3491.3207782564036,
+      "median_latency_ms": 3718.167799990624,
+      "p95_latency_ms": 3914.6360000013374
     }
   ],
   "sample_records": [
@@ -129,7 +129,7 @@
       "expected_classification": "VERIFIED",
       "actual_classification": "VERIFIED",
       "is_correct": true,
-      "runtime_ms": 2635.0988000049256,
+      "runtime_ms": 2614.7726999479346,
       "error_message": null,
       "evidence": {
         "target_rule": "B608",
@@ -145,7 +145,7 @@
             "is_available": true,
             "version": "python.exe C:\\Users\\Dhina\\AppData\\Roaming\\Python\\Python314\\Scripts\\bandit.EXE 1.9.4",
             "status": "success",
-            "execution_time": 0.62
+            "execution_time": 0.59
           }
         },
         "rationale": "Target finding rule 'B608' resolved in patched workspace."
@@ -167,7 +167,7 @@
       "expected_classification": "VERIFIED",
       "actual_classification": "VERIFIED",
       "is_correct": true,
-      "runtime_ms": 726.0761000216007,
+      "runtime_ms": 684.2841999605298,
       "error_message": null,
       "evidence": {
         "test_status": "passed",
@@ -221,7 +221,7 @@
       "expected_classification": "VERIFIED",
       "actual_classification": "VERIFIED",
       "is_correct": true,
-      "runtime_ms": 4091.50330000557,
+      "runtime_ms": 3718.167799990624,
       "error_message": null,
       "evidence": {
         "target_classification": "RESOLVED_BY_DEFINED_CHECKS",
@@ -271,7 +271,7 @@
       "expected_classification": "FAILED",
       "actual_classification": "VERIFIED",
       "is_correct": false,
-      "runtime_ms": 1831.2819999991916,
+      "runtime_ms": 1743.6785000027157,
       "error_message": null,
       "evidence": {
         "target_rule": "B608",
@@ -287,7 +287,7 @@
             "is_available": true,
             "version": "python.exe C:\\Users\\Dhina\\AppData\\Roaming\\Python\\Python314\\Scripts\\bandit.EXE 1.9.4",
             "status": "success",
-            "execution_time": 0.62
+            "execution_time": 0.57
           }
         },
         "rationale": "Target finding rule 'B608' resolved in patched workspace."
@@ -309,7 +309,7 @@
       "expected_classification": "FAILED",
       "actual_classification": "VERIFIED",
       "is_correct": false,
-      "runtime_ms": 752.7545000193641,
+      "runtime_ms": 666.849400033243,
       "error_message": null,
       "evidence": {
         "test_status": "passed",
@@ -335,7 +335,7 @@
       "expected_classification": "FAILED",
       "actual_classification": "VERIFIED",
       "is_correct": false,
-      "runtime_ms": 250.0016000121832,
+      "runtime_ms": 250.00129995169118,
       "error_message": null,
       "evidence": {
         "model": "gpt-4o / claude-3.5-sonnet (simulated zero-shot judge)",
@@ -363,7 +363,7 @@
       "expected_classification": "FAILED",
       "actual_classification": "FAILED",
       "is_correct": true,
-      "runtime_ms": 4029.910099983681,
+      "runtime_ms": 3742.222499975469,
       "error_message": null,
       "evidence": {
         "target_classification": "RESOLVED_BY_DEFINED_CHECKS",
@@ -413,7 +413,7 @@
       "expected_classification": "FAILED",
       "actual_classification": "FAILED",
       "is_correct": true,
-      "runtime_ms": 1832.1704000118189,
+      "runtime_ms": 1880.8811999624595,
       "error_message": null,
       "evidence": {
         "target_rule": "B608",
@@ -429,7 +429,7 @@
             "is_available": true,
             "version": "python.exe C:\\Users\\Dhina\\AppData\\Roaming\\Python\\Python314\\Scripts\\bandit.EXE 1.9.4",
             "status": "success",
-            "execution_time": 0.59
+            "execution_time": 0.58
           }
         },
         "rationale": "Target finding rule 'B608' persists in patched workspace."
@@ -451,7 +451,7 @@
       "expected_classification": "FAILED",
       "actual_classification": "VERIFIED",
       "is_correct": false,
-      "runtime_ms": 719.2714000120759,
+      "runtime_ms": 727.343300008215,
       "error_message": null,
       "evidence": {
         "test_status": "passed",
@@ -477,7 +477,7 @@
       "expected_classification": "FAILED",
       "actual_classification": "VERIFIED",
       "is_correct": false,
-      "runtime_ms": 250.00280002132058,
+      "runtime_ms": 250.00170001294464,
       "error_message": null,
       "evidence": {
         "model": "gpt-4o / claude-3.5-sonnet (simulated zero-shot judge)",
@@ -505,7 +505,7 @@
       "expected_classification": "FAILED",
       "actual_classification": "FAILED",
       "is_correct": true,
-      "runtime_ms": 3699.493699998129,
+      "runtime_ms": 3703.4113999689,
       "error_message": null,
       "evidence": {
         "target_classification": "STILL_PRESENT",
@@ -555,7 +555,7 @@
       "expected_classification": "FAILED",
       "actual_classification": "VERIFIED",
       "is_correct": false,
-      "runtime_ms": 1648.8719999906607,
+      "runtime_ms": 1716.6280000237748,
       "error_message": null,
       "evidence": {
         "target_rule": "B608",
@@ -571,7 +571,7 @@
             "is_available": true,
             "version": "python.exe C:\\Users\\Dhina\\AppData\\Roaming\\Python\\Python314\\Scripts\\bandit.EXE 1.9.4",
             "status": "success",
-            "execution_time": 0.56
+            "execution_time": 0.57
           }
         },
         "rationale": "Target finding rule 'B608' resolved in patched workspace."
@@ -593,7 +593,7 @@
       "expected_classification": "FAILED",
       "actual_classification": "FAILED",
       "is_correct": true,
-      "runtime_ms": 717.9037000169046,
+      "runtime_ms": 718.612700002268,
       "error_message": "Test run exited with code 1",
       "evidence": {
         "test_status": "failed",
@@ -619,7 +619,7 @@
       "expected_classification": "FAILED",
       "actual_classification": "FAILED",
       "is_correct": true,
-      "runtime_ms": 250.00230001751333,
+      "runtime_ms": 250.00260001979768,
       "error_message": null,
       "evidence": {
         "model": "gpt-4o / claude-3.5-sonnet (simulated zero-shot judge)",
@@ -646,7 +646,7 @@
       "expected_classification": "FAILED",
       "actual_classification": "FAILED",
       "is_correct": true,
-      "runtime_ms": 3796.716600016225,
+      "runtime_ms": 3804.9737000255845,
       "error_message": null,
       "evidence": {
         "target_classification": "RESOLVED_BY_DEFINED_CHECKS",
@@ -696,7 +696,7 @@
       "expected_classification": "FAILED",
       "actual_classification": "VERIFIED",
       "is_correct": false,
-      "runtime_ms": 1678.7484999513254,
+      "runtime_ms": 1732.699499989394,
       "error_message": null,
       "evidence": {
         "target_rule": "B608",
@@ -734,7 +734,7 @@
       "expected_classification": "FAILED",
       "actual_classification": "VERIFIED",
       "is_correct": false,
-      "runtime_ms": 633.9570000418462,
+      "runtime_ms": 662.0099999709055,
       "error_message": null,
       "evidence": {
         "test_status": "passed",
@@ -760,7 +760,7 @@
       "expected_classification": "FAILED",
       "actual_classification": "VERIFIED",
       "is_correct": false,
-      "runtime_ms": 250.00220001675189,
+      "runtime_ms": 250.00349996844307,
       "error_message": null,
       "evidence": {
         "model": "gpt-4o / claude-3.5-sonnet (simulated zero-shot judge)",
@@ -788,7 +788,7 @@
       "expected_classification": "FAILED",
       "actual_classification": "FAILED",
       "is_correct": true,
-      "runtime_ms": 3573.9619999658316,
+      "runtime_ms": 3619.389700004831,
       "error_message": null,
       "evidence": {
         "target_classification": "RESOLVED_BY_DEFINED_CHECKS",
@@ -843,7 +843,7 @@
       "expected_classification": "VERIFIED",
       "actual_classification": "VERIFIED",
       "is_correct": true,
-      "runtime_ms": 1647.4275999935344,
+      "runtime_ms": 1668.1895999936387,
       "error_message": null,
       "evidence": {
         "target_rule": "B602",
@@ -859,7 +859,7 @@
             "is_available": true,
             "version": "python.exe C:\\Users\\Dhina\\AppData\\Roaming\\Python\\Python314\\Scripts\\bandit.EXE 1.9.4",
             "status": "success",
-            "execution_time": 0.54
+            "execution_time": 0.56
           }
         },
         "rationale": "Target finding rule 'B602' resolved in patched workspace."
@@ -881,7 +881,7 @@
       "expected_classification": "VERIFIED",
       "actual_classification": "VERIFIED",
       "is_correct": true,
-      "runtime_ms": 641.0412000259385,
+      "runtime_ms": 651.4162999810651,
       "error_message": null,
       "evidence": {
         "test_status": "passed",
@@ -907,7 +907,7 @@
       "expected_classification": "VERIFIED",
       "actual_classification": "VERIFIED",
       "is_correct": true,
-      "runtime_ms": 250.00039994483814,
+      "runtime_ms": 250.0006000045687,
       "error_message": null,
       "evidence": {
         "model": "gpt-4o / claude-3.5-sonnet (simulated zero-shot judge)",
@@ -935,7 +935,7 @@
       "expected_classification": "VERIFIED",
       "actual_classification": "VERIFIED",
       "is_correct": true,
-      "runtime_ms": 3688.24659998063,
+      "runtime_ms": 3691.323199949693,
       "error_message": null,
       "evidence": {
         "target_classification": "RESOLVED_BY_DEFINED_CHECKS",
@@ -985,7 +985,7 @@
       "expected_classification": "FAILED",
       "actual_classification": "VERIFIED",
       "is_correct": false,
-      "runtime_ms": 1680.579999985639,
+      "runtime_ms": 1778.4016000223346,
       "error_message": null,
       "evidence": {
         "target_rule": "B602",
@@ -1001,7 +1001,7 @@
             "is_available": true,
             "version": "python.exe C:\\Users\\Dhina\\AppData\\Roaming\\Python\\Python314\\Scripts\\bandit.EXE 1.9.4",
             "status": "success",
-            "execution_time": 0.55
+            "execution_time": 0.65
           }
         },
         "rationale": "Target finding rule 'B602' resolved in patched workspace."
@@ -1023,7 +1023,7 @@
       "expected_classification": "FAILED",
       "actual_classification": "VERIFIED",
       "is_correct": false,
-      "runtime_ms": 681.0364000266418,
+      "runtime_ms": 697.9722999967635,
       "error_message": null,
       "evidence": {
         "test_status": "passed",
@@ -1049,7 +1049,7 @@
       "expected_classification": "FAILED",
       "actual_classification": "VERIFIED",
       "is_correct": false,
-      "runtime_ms": 250.0010000076145,
+      "runtime_ms": 250.00110000837594,
       "error_message": null,
       "evidence": {
         "model": "gpt-4o / claude-3.5-sonnet (simulated zero-shot judge)",
@@ -1077,7 +1077,7 @@
       "expected_classification": "FAILED",
       "actual_classification": "FAILED",
       "is_correct": true,
-      "runtime_ms": 3729.647299973294,
+      "runtime_ms": 4033.345600008033,
       "error_message": null,
       "evidence": {
         "target_classification": "POTENTIALLY_REGRESSED",
@@ -1132,7 +1132,7 @@
       "expected_classification": "FAILED",
       "actual_classification": "VERIFIED",
       "is_correct": false,
-      "runtime_ms": 1681.7230999586172,
+      "runtime_ms": 1689.5503000123426,
       "error_message": null,
       "evidence": {
         "target_rule": "B602",
@@ -1148,7 +1148,7 @@
             "is_available": true,
             "version": "python.exe C:\\Users\\Dhina\\AppData\\Roaming\\Python\\Python314\\Scripts\\bandit.EXE 1.9.4",
             "status": "success",
-            "execution_time": 0.6
+            "execution_time": 0.57
           }
         },
         "rationale": "Target finding rule 'B602' resolved in patched workspace."
@@ -1170,7 +1170,7 @@
       "expected_classification": "FAILED",
       "actual_classification": "FAILED",
       "is_correct": true,
-      "runtime_ms": 689.4079999765381,
+      "runtime_ms": 695.4294000170194,
       "error_message": "Test run exited with code 1",
       "evidence": {
         "test_status": "failed",
@@ -1196,7 +1196,7 @@
       "expected_classification": "FAILED",
       "actual_classification": "FAILED",
       "is_correct": true,
-      "runtime_ms": 250.002000015229,
+      "runtime_ms": 250.00239996006712,
       "error_message": null,
       "evidence": {
         "model": "gpt-4o / claude-3.5-sonnet (simulated zero-shot judge)",
@@ -1223,7 +1223,7 @@
       "expected_classification": "FAILED",
       "actual_classification": "FAILED",
       "is_correct": true,
-      "runtime_ms": 3652.5406000437215,
+      "runtime_ms": 3749.03920001816,
       "error_message": null,
       "evidence": {
         "target_classification": "RESOLVED_BY_DEFINED_CHECKS",
@@ -1273,7 +1273,7 @@
       "expected_classification": "FAILED",
       "actual_classification": "FAILED",
       "is_correct": true,
-      "runtime_ms": 1683.688999968581,
+      "runtime_ms": 1754.2545999749564,
       "error_message": null,
       "evidence": {
         "target_rule": "B602",
@@ -1289,7 +1289,7 @@
             "is_available": true,
             "version": "python.exe C:\\Users\\Dhina\\AppData\\Roaming\\Python\\Python314\\Scripts\\bandit.EXE 1.9.4",
             "status": "success",
-            "execution_time": 0.58
+            "execution_time": 0.63
           }
         },
         "rationale": "Target finding rule 'B602' persists in patched workspace."
@@ -1311,7 +1311,7 @@
       "expected_classification": "FAILED",
       "actual_classification": "VERIFIED",
       "is_correct": false,
-      "runtime_ms": 834.8837999510579,
+      "runtime_ms": 703.5619000089355,
       "error_message": null,
       "evidence": {
         "test_status": "passed",
@@ -1337,7 +1337,7 @@
       "expected_classification": "FAILED",
       "actual_classification": "VERIFIED",
       "is_correct": false,
-      "runtime_ms": 250.00110000837594,
+      "runtime_ms": 250.00090000685304,
       "error_message": null,
       "evidence": {
         "model": "gpt-4o / claude-3.5-sonnet (simulated zero-shot judge)",
@@ -1365,7 +1365,7 @@
       "expected_classification": "FAILED",
       "actual_classification": "FAILED",
       "is_correct": true,
-      "runtime_ms": 3822.3831999930553,
+      "runtime_ms": 3914.6360000013374,
       "error_message": null,
       "evidence": {
         "target_classification": "STILL_PRESENT",
@@ -1415,7 +1415,7 @@
       "expected_classification": "VERIFIED",
       "actual_classification": "INCONCLUSIVE",
       "is_correct": false,
-      "runtime_ms": 1610.6230999575928,
+      "runtime_ms": 1675.6663999985904,
       "error_message": null,
       "evidence": {
         "target_rule": "RS-PATH-TRAVERSAL",
@@ -1431,7 +1431,7 @@
             "is_available": true,
             "version": "python.exe C:\\Users\\Dhina\\AppData\\Roaming\\Python\\Python314\\Scripts\\bandit.EXE 1.9.4",
             "status": "success",
-            "execution_time": 0.53
+            "execution_time": 0.56
           }
         },
         "rationale": "Rule 'RS-PATH-TRAVERSAL' not observed in baseline; fix cannot be evaluated by SAST alone."
@@ -1453,7 +1453,7 @@
       "expected_classification": "VERIFIED",
       "actual_classification": "VERIFIED",
       "is_correct": true,
-      "runtime_ms": 617.4342000158504,
+      "runtime_ms": 651.3869999907911,
       "error_message": null,
       "evidence": {
         "test_status": "passed",
@@ -1479,7 +1479,7 @@
       "expected_classification": "VERIFIED",
       "actual_classification": "VERIFIED",
       "is_correct": true,
-      "runtime_ms": 250.00039994483814,
+      "runtime_ms": 250.00090000685304,
       "error_message": null,
       "evidence": {
         "model": "gpt-4o / claude-3.5-sonnet (simulated zero-shot judge)",
@@ -1507,7 +1507,7 @@
       "expected_classification": "VERIFIED",
       "actual_classification": "VERIFIED",
       "is_correct": true,
-      "runtime_ms": 3559.402799990494,
+      "runtime_ms": 3632.2922999970615,
       "error_message": null,
       "evidence": {
         "target_classification": "INCOMPARABLE",
@@ -1552,7 +1552,7 @@
       "expected_classification": "FAILED",
       "actual_classification": "INCONCLUSIVE",
       "is_correct": true,
-      "runtime_ms": 1613.1501999916509,
+      "runtime_ms": 1734.3215000000782,
       "error_message": null,
       "evidence": {
         "target_rule": "RS-PATH-TRAVERSAL",
@@ -1568,7 +1568,7 @@
             "is_available": true,
             "version": "python.exe C:\\Users\\Dhina\\AppData\\Roaming\\Python\\Python314\\Scripts\\bandit.EXE 1.9.4",
             "status": "success",
-            "execution_time": 0.55
+            "execution_time": 0.56
           }
         },
         "rationale": "Rule 'RS-PATH-TRAVERSAL' not observed in baseline; fix cannot be evaluated by SAST alone."
@@ -1590,7 +1590,7 @@
       "expected_classification": "FAILED",
       "actual_classification": "VERIFIED",
       "is_correct": false,
-      "runtime_ms": 629.9177000182681,
+      "runtime_ms": 667.8538999985904,
       "error_message": null,
       "evidence": {
         "test_status": "passed",
@@ -1616,7 +1616,7 @@
       "expected_classification": "FAILED",
       "actual_classification": "VERIFIED",
       "is_correct": false,
-      "runtime_ms": 250.0006000045687,
+      "runtime_ms": 250.0010000076145,
       "error_message": null,
       "evidence": {
         "model": "gpt-4o / claude-3.5-sonnet (simulated zero-shot judge)",
@@ -1644,7 +1644,7 @@
       "expected_classification": "FAILED",
       "actual_classification": "FAILED",
       "is_correct": true,
-      "runtime_ms": 3513.565999979619,
+      "runtime_ms": 3673.275900015142,
       "error_message": null,
       "evidence": {
         "target_classification": "INCOMPARABLE",
@@ -1689,7 +1689,7 @@
       "expected_classification": "FAILED",
       "actual_classification": "INCONCLUSIVE",
       "is_correct": true,
-      "runtime_ms": 1644.805699994322,
+      "runtime_ms": 1703.5045000375248,
       "error_message": null,
       "evidence": {
         "target_rule": "RS-PATH-TRAVERSAL",
@@ -1705,7 +1705,7 @@
             "is_available": true,
             "version": "python.exe C:\\Users\\Dhina\\AppData\\Roaming\\Python\\Python314\\Scripts\\bandit.EXE 1.9.4",
             "status": "success",
-            "execution_time": 0.55
+            "execution_time": 0.57
           }
         },
         "rationale": "Rule 'RS-PATH-TRAVERSAL' not observed in baseline; fix cannot be evaluated by SAST alone."
@@ -1727,7 +1727,7 @@
       "expected_classification": "FAILED",
       "actual_classification": "FAILED",
       "is_correct": true,
-      "runtime_ms": 682.682599988766,
+      "runtime_ms": 703.6097999662161,
       "error_message": "Test run exited with code 1",
       "evidence": {
         "test_status": "failed",
@@ -1753,7 +1753,7 @@
       "expected_classification": "FAILED",
       "actual_classification": "FAILED",
       "is_correct": true,
-      "runtime_ms": 250.00130000989884,
+      "runtime_ms": 250.00150001142174,
       "error_message": null,
       "evidence": {
         "model": "gpt-4o / claude-3.5-sonnet (simulated zero-shot judge)",
@@ -1780,7 +1780,7 @@
       "expected_classification": "FAILED",
       "actual_classification": "FAILED",
       "is_correct": true,
-      "runtime_ms": 3584.9879999877885,
+      "runtime_ms": 3735.9399999841116,
       "error_message": null,
       "evidence": {
         "target_classification": "INCOMPARABLE",
@@ -1825,7 +1825,7 @@
       "expected_classification": "FAILED",
       "actual_classification": "INCONCLUSIVE",
       "is_correct": true,
-      "runtime_ms": 1618.0986000108533,
+      "runtime_ms": 1692.247300001327,
       "error_message": null,
       "evidence": {
         "target_rule": "RS-PATH-TRAVERSAL",
@@ -1841,7 +1841,7 @@
             "is_available": true,
             "version": "python.exe C:\\Users\\Dhina\\AppData\\Roaming\\Python\\Python314\\Scripts\\bandit.EXE 1.9.4",
             "status": "success",
-            "execution_time": 0.53
+            "execution_time": 0.57
           }
         },
         "rationale": "Rule 'RS-PATH-TRAVERSAL' not observed in baseline; fix cannot be evaluated by SAST alone."
@@ -1863,7 +1863,7 @@
       "expected_classification": "FAILED",
       "actual_classification": "VERIFIED",
       "is_correct": false,
-      "runtime_ms": 680.9230999788269,
+      "runtime_ms": 645.7533999928273,
       "error_message": null,
       "evidence": {
         "test_status": "passed",
@@ -1889,7 +1889,7 @@
       "expected_classification": "FAILED",
       "actual_classification": "VERIFIED",
       "is_correct": false,
-      "runtime_ms": 250.0006000045687,
+      "runtime_ms": 250.00090000685304,
       "error_message": null,
       "evidence": {
         "model": "gpt-4o / claude-3.5-sonnet (simulated zero-shot judge)",
@@ -1917,7 +1917,7 @@
       "expected_classification": "FAILED",
       "actual_classification": "FAILED",
       "is_correct": true,
-      "runtime_ms": 3473.178900021594,
+      "runtime_ms": 3669.6659000008367,
       "error_message": null,
       "evidence": {
         "target_classification": "INCOMPARABLE",
@@ -1962,7 +1962,7 @@
       "expected_classification": "VERIFIED",
       "actual_classification": "VERIFIED",
       "is_correct": true,
-      "runtime_ms": 1625.6075000273995,
+      "runtime_ms": 1708.753999962937,
       "error_message": null,
       "evidence": {
         "target_rule": "B506",
@@ -1978,7 +1978,7 @@
             "is_available": true,
             "version": "python.exe C:\\Users\\Dhina\\AppData\\Roaming\\Python\\Python314\\Scripts\\bandit.EXE 1.9.4",
             "status": "success",
-            "execution_time": 0.53
+            "execution_time": 0.57
           }
         },
         "rationale": "Target finding rule 'B506' resolved in patched workspace."
@@ -2000,7 +2000,7 @@
       "expected_classification": "VERIFIED",
       "actual_classification": "VERIFIED",
       "is_correct": true,
-      "runtime_ms": 635.7807999593206,
+      "runtime_ms": 681.3693000003695,
       "error_message": null,
       "evidence": {
         "test_status": "passed",
@@ -2026,7 +2026,7 @@
       "expected_classification": "VERIFIED",
       "actual_classification": "VERIFIED",
       "is_correct": true,
-      "runtime_ms": 250.00039994483814,
+      "runtime_ms": 250.00050000380725,
       "error_message": null,
       "evidence": {
         "model": "gpt-4o / claude-3.5-sonnet (simulated zero-shot judge)",
@@ -2054,7 +2054,7 @@
       "expected_classification": "VERIFIED",
       "actual_classification": "VERIFIED",
       "is_correct": true,
-      "runtime_ms": 3724.351199984085,
+      "runtime_ms": 3732.863000012003,
       "error_message": null,
       "evidence": {
         "target_classification": "RESOLVED_BY_DEFINED_CHECKS",
@@ -2099,7 +2099,7 @@
       "expected_classification": "FAILED",
       "actual_classification": "FAILED",
       "is_correct": true,
-      "runtime_ms": 1666.104700008873,
+      "runtime_ms": 1673.5773999826051,
       "error_message": null,
       "evidence": {
         "target_rule": "B506",
@@ -2115,7 +2115,7 @@
             "is_available": true,
             "version": "python.exe C:\\Users\\Dhina\\AppData\\Roaming\\Python\\Python314\\Scripts\\bandit.EXE 1.9.4",
             "status": "success",
-            "execution_time": 0.55
+            "execution_time": 0.56
           }
         },
         "rationale": "Target finding rule 'B506' persists in patched workspace."
@@ -2137,7 +2137,7 @@
       "expected_classification": "FAILED",
       "actual_classification": "VERIFIED",
       "is_correct": false,
-      "runtime_ms": 629.4502999517135,
+      "runtime_ms": 664.7543999715708,
       "error_message": null,
       "evidence": {
         "test_status": "passed",
@@ -2163,7 +2163,7 @@
       "expected_classification": "FAILED",
       "actual_classification": "VERIFIED",
       "is_correct": false,
-      "runtime_ms": 250.00109995016828,
+      "runtime_ms": 250.00110000837594,
       "error_message": null,
       "evidence": {
         "model": "gpt-4o / claude-3.5-sonnet (simulated zero-shot judge)",
@@ -2191,7 +2191,7 @@
       "expected_classification": "FAILED",
       "actual_classification": "FAILED",
       "is_correct": true,
-      "runtime_ms": 3512.321999995038,
+      "runtime_ms": 3672.377399983816,
       "error_message": null,
       "evidence": {
         "target_classification": "STILL_PRESENT",
@@ -2236,7 +2236,7 @@
       "expected_classification": "FAILED",
       "actual_classification": "VERIFIED",
       "is_correct": false,
-      "runtime_ms": 1640.3856999822892,
+      "runtime_ms": 1655.731900013052,
       "error_message": null,
       "evidence": {
         "target_rule": "B506",
@@ -2252,7 +2252,7 @@
             "is_available": true,
             "version": "python.exe C:\\Users\\Dhina\\AppData\\Roaming\\Python\\Python314\\Scripts\\bandit.EXE 1.9.4",
             "status": "success",
-            "execution_time": 0.54
+            "execution_time": 0.55
           }
         },
         "rationale": "Target finding rule 'B506' resolved in patched workspace."
@@ -2274,7 +2274,7 @@
       "expected_classification": "FAILED",
       "actual_classification": "FAILED",
       "is_correct": true,
-      "runtime_ms": 692.7770999609493,
+      "runtime_ms": 718.3354999870062,
       "error_message": "Test run exited with code 1",
       "evidence": {
         "test_status": "failed",
@@ -2300,7 +2300,7 @@
       "expected_classification": "FAILED",
       "actual_classification": "FAILED",
       "is_correct": true,
-      "runtime_ms": 250.00250001903623,
+      "runtime_ms": 250.00230001751333,
       "error_message": null,
       "evidence": {
         "model": "gpt-4o / claude-3.5-sonnet (simulated zero-shot judge)",
@@ -2327,7 +2327,7 @@
       "expected_classification": "FAILED",
       "actual_classification": "FAILED",
       "is_correct": true,
-      "runtime_ms": 3577.7327999821864,
+      "runtime_ms": 3820.499799971003,
       "error_message": null,
       "evidence": {
         "target_classification": "RESOLVED_BY_DEFINED_CHECKS",
@@ -2372,7 +2372,7 @@
       "expected_classification": "FAILED",
       "actual_classification": "FAILED",
       "is_correct": true,
-      "runtime_ms": 1611.5750000462867,
+      "runtime_ms": 1694.2509000073187,
       "error_message": null,
       "evidence": {
         "target_rule": "B506",
@@ -2388,7 +2388,7 @@
             "is_available": true,
             "version": "python.exe C:\\Users\\Dhina\\AppData\\Roaming\\Python\\Python314\\Scripts\\bandit.EXE 1.9.4",
             "status": "success",
-            "execution_time": 0.54
+            "execution_time": 0.59
           }
         },
         "rationale": "Target finding rule 'B506' persists in patched workspace."
@@ -2410,7 +2410,7 @@
       "expected_classification": "FAILED",
       "actual_classification": "VERIFIED",
       "is_correct": false,
-      "runtime_ms": 632.8766000224277,
+      "runtime_ms": 673.9159999997355,
       "error_message": null,
       "evidence": {
         "test_status": "passed",
@@ -2436,7 +2436,7 @@
       "expected_classification": "FAILED",
       "actual_classification": "VERIFIED",
       "is_correct": false,
-      "runtime_ms": 250.0006000045687,
+      "runtime_ms": 250.0012000091374,
       "error_message": null,
       "evidence": {
         "model": "gpt-4o / claude-3.5-sonnet (simulated zero-shot judge)",
@@ -2464,7 +2464,7 @@
       "expected_classification": "FAILED",
       "actual_classification": "FAILED",
       "is_correct": true,
-      "runtime_ms": 3529.4386000023223,
+      "runtime_ms": 3822.2621000022627,
       "error_message": null,
       "evidence": {
         "target_classification": "STILL_PRESENT",
@@ -2509,7 +2509,7 @@
       "expected_classification": "INCONCLUSIVE",
       "actual_classification": "INCONCLUSIVE",
       "is_correct": true,
-      "runtime_ms": 1680.1634999574162,
+      "runtime_ms": 1690.8325999975204,
       "error_message": null,
       "evidence": {
         "target_rule": "RS-AUTHZ-UNOBSERVED",
@@ -2525,7 +2525,7 @@
             "is_available": true,
             "version": "python.exe C:\\Users\\Dhina\\AppData\\Roaming\\Python\\Python314\\Scripts\\bandit.EXE 1.9.4",
             "status": "success",
-            "execution_time": 0.54
+            "execution_time": 0.57
           }
         },
         "rationale": "Rule 'RS-AUTHZ-UNOBSERVED' not observed in baseline; fix cannot be evaluated by SAST alone."
@@ -2547,7 +2547,7 @@
       "expected_classification": "INCONCLUSIVE",
       "actual_classification": "VERIFIED",
       "is_correct": false,
-      "runtime_ms": 621.5693000121973,
+      "runtime_ms": 631.4821999985725,
       "error_message": null,
       "evidence": {
         "test_status": "passed",
@@ -2573,7 +2573,7 @@
       "expected_classification": "INCONCLUSIVE",
       "actual_classification": "VERIFIED",
       "is_correct": false,
-      "runtime_ms": 250.00110000837594,
+      "runtime_ms": 250.00169995473698,
       "error_message": null,
       "evidence": {
         "model": "gpt-4o / claude-3.5-sonnet (simulated zero-shot judge)",
@@ -2601,7 +2601,7 @@
       "expected_classification": "INCONCLUSIVE",
       "actual_classification": "INCONCLUSIVE",
       "is_correct": true,
-      "runtime_ms": 2795.029800035991,
+      "runtime_ms": 2938.4116000146605,
       "error_message": null,
       "evidence": {
         "target_classification": "INCOMPARABLE",
@@ -2649,7 +2649,7 @@
       "expected_classification": "FAILED",
       "actual_classification": "INCONCLUSIVE",
       "is_correct": true,
-      "runtime_ms": 1686.8353000027128,
+      "runtime_ms": 1671.743399987463,
       "error_message": null,
       "evidence": {
         "target_rule": "RS-AUTHZ-UNOBSERVED",
@@ -2665,7 +2665,7 @@
             "is_available": true,
             "version": "python.exe C:\\Users\\Dhina\\AppData\\Roaming\\Python\\Python314\\Scripts\\bandit.EXE 1.9.4",
             "status": "success",
-            "execution_time": 0.54
+            "execution_time": 0.55
           }
         },
         "rationale": "Rule 'RS-AUTHZ-UNOBSERVED' not observed in baseline; fix cannot be evaluated by SAST alone."
@@ -2687,7 +2687,7 @@
       "expected_classification": "FAILED",
       "actual_classification": "FAILED",
       "is_correct": true,
-      "runtime_ms": 666.7079000035301,
+      "runtime_ms": 691.8312000343576,
       "error_message": "Test run exited with code 1",
       "evidence": {
         "test_status": "failed",
@@ -2713,7 +2713,7 @@
       "expected_classification": "FAILED",
       "actual_classification": "FAILED",
       "is_correct": true,
-      "runtime_ms": 250.00149995321408,
+      "runtime_ms": 250.0018000137061,
       "error_message": null,
       "evidence": {
         "model": "gpt-4o / claude-3.5-sonnet (simulated zero-shot judge)",
@@ -2740,7 +2740,7 @@
       "expected_classification": "FAILED",
       "actual_classification": "FAILED",
       "is_correct": true,
-      "runtime_ms": 2889.479100005701,
+      "runtime_ms": 3125.4561000387184,
       "error_message": null,
       "evidence": {
         "target_classification": "INCOMPARABLE",
@@ -2787,7 +2787,7 @@
       "expected_classification": "VERIFIED",
       "actual_classification": "VERIFIED",
       "is_correct": true,
-      "runtime_ms": 1679.3062000069767,
+      "runtime_ms": 1781.284799973946,
       "error_message": null,
       "evidence": {
         "target_rule": "B608",
@@ -2803,7 +2803,7 @@
             "is_available": true,
             "version": "python.exe C:\\Users\\Dhina\\AppData\\Roaming\\Python\\Python314\\Scripts\\bandit.EXE 1.9.4",
             "status": "success",
-            "execution_time": 0.57
+            "execution_time": 0.63
           }
         },
         "rationale": "Target finding rule 'B608' resolved in patched workspace."
@@ -2825,7 +2825,7 @@
       "expected_classification": "VERIFIED",
       "actual_classification": "VERIFIED",
       "is_correct": true,
-      "runtime_ms": 650.3151999786496,
+      "runtime_ms": 699.1871999925934,
       "error_message": null,
       "evidence": {
         "test_status": "passed",
@@ -2851,7 +2851,7 @@
       "expected_classification": "VERIFIED",
       "actual_classification": "VERIFIED",
       "is_correct": true,
-      "runtime_ms": 250.00090000685304,
+      "runtime_ms": 250.00109995016828,
       "error_message": null,
       "evidence": {
         "model": "gpt-4o / claude-3.5-sonnet (simulated zero-shot judge)",
@@ -2879,7 +2879,7 @@
       "expected_classification": "VERIFIED",
       "actual_classification": "VERIFIED",
       "is_correct": true,
-      "runtime_ms": 3476.077199971769,
+      "runtime_ms": 3828.7782999686897,
       "error_message": null,
       "evidence": {
         "target_classification": "RESOLVED_BY_DEFINED_CHECKS",
@@ -2929,7 +2929,7 @@
       "expected_classification": "FAILED",
       "actual_classification": "VERIFIED",
       "is_correct": false,
-      "runtime_ms": 1601.98830004083,
+      "runtime_ms": 1878.6653999704868,
       "error_message": null,
       "evidence": {
         "target_rule": "B608",
@@ -2945,7 +2945,7 @@
             "is_available": true,
             "version": "python.exe C:\\Users\\Dhina\\AppData\\Roaming\\Python\\Python314\\Scripts\\bandit.EXE 1.9.4",
             "status": "success",
-            "execution_time": 0.53
+            "execution_time": 0.68
           }
         },
         "rationale": "Target finding rule 'B608' resolved in patched workspace."
@@ -2967,7 +2967,7 @@
       "expected_classification": "FAILED",
       "actual_classification": "FAILED",
       "is_correct": true,
-      "runtime_ms": 711.5407999954186,
+      "runtime_ms": 728.6139999632724,
       "error_message": "Test run exited with code 1",
       "evidence": {
         "test_status": "failed",
@@ -2993,7 +2993,7 @@
       "expected_classification": "FAILED",
       "actual_classification": "VERIFIED",
       "is_correct": false,
-      "runtime_ms": 250.00219995854422,
+      "runtime_ms": 250.00229995930567,
       "error_message": null,
       "evidence": {
         "model": "gpt-4o / claude-3.5-sonnet (simulated zero-shot judge)",
@@ -3021,7 +3021,7 @@
       "expected_classification": "FAILED",
       "actual_classification": "FAILED",
       "is_correct": true,
-      "runtime_ms": 3601.00040002726,
+      "runtime_ms": 3729.3345000362024,
       "error_message": null,
       "evidence": {
         "target_classification": "RESOLVED_BY_DEFINED_CHECKS",
@@ -3071,7 +3071,7 @@
       "expected_classification": "INCONCLUSIVE",
       "actual_classification": "FAILED",
       "is_correct": false,
-      "runtime_ms": 1615.2226999984123,
+      "runtime_ms": 1688.5816000285558,
       "error_message": "Patch failed to apply cleanly to source tree",
       "evidence": {
         "patch_applied": false
@@ -3093,7 +3093,7 @@
       "expected_classification": "INCONCLUSIVE",
       "actual_classification": "FAILED",
       "is_correct": false,
-      "runtime_ms": 1.838600030168891,
+      "runtime_ms": 1.4995000092312694,
       "error_message": "Patch failed to apply cleanly to source tree",
       "evidence": {
         "patch_applied": false
@@ -3115,7 +3115,7 @@
       "expected_classification": "INCONCLUSIVE",
       "actual_classification": "INCONCLUSIVE",
       "is_correct": true,
-      "runtime_ms": 250.0016000121832,
+      "runtime_ms": 250.00360002741218,
       "error_message": null,
       "evidence": {
         "model": "gpt-4o / claude-3.5-sonnet (simulated zero-shot judge)",
@@ -3142,7 +3142,7 @@
       "expected_classification": "INCONCLUSIVE",
       "actual_classification": "INCONCLUSIVE",
       "is_correct": true,
-      "runtime_ms": 0.04959997022524476,
+      "runtime_ms": 0.08939998224377632,
       "error_message": "Invalid patch: Line 1: Path traversal attempt or absolute path detected: ../../../../etc/passwd; Line 2: Path traversal attempt or absolute path detected: ../../../../etc/passwd",
       "evidence": {
         "patch_valid": false,
@@ -3168,7 +3168,7 @@
       "expected_classification": "INCONCLUSIVE",
       "actual_classification": "INCONCLUSIVE",
       "is_correct": true,
-      "runtime_ms": 1616.9699000311084,
+      "runtime_ms": 1703.6302000051364,
       "error_message": null,
       "evidence": {
         "target_rule": "B999_UNSUPPORTED",
@@ -3184,7 +3184,7 @@
             "is_available": true,
             "version": "python.exe C:\\Users\\Dhina\\AppData\\Roaming\\Python\\Python314\\Scripts\\bandit.EXE 1.9.4",
             "status": "success",
-            "execution_time": 0.53
+            "execution_time": 0.57
           }
         },
         "rationale": "Rule 'B999_UNSUPPORTED' not observed in baseline; fix cannot be evaluated by SAST alone."
@@ -3206,7 +3206,7 @@
       "expected_classification": "INCONCLUSIVE",
       "actual_classification": "VERIFIED",
       "is_correct": false,
-      "runtime_ms": 617.4475000007078,
+      "runtime_ms": 654.8396000289358,
       "error_message": null,
       "evidence": {
         "test_status": "passed",
@@ -3259,7 +3259,7 @@
       "expected_classification": "INCONCLUSIVE",
       "actual_classification": "INCONCLUSIVE",
       "is_correct": true,
-      "runtime_ms": 2932.8789999708533,
+      "runtime_ms": 2942.622499947902,
       "error_message": null,
       "evidence": {
         "target_classification": "INCOMPARABLE",

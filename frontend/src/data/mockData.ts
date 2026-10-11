@@ -546,62 +546,62 @@ export const MOCK_COMPLIANCE_FRAMEWORKS: ComplianceFramework[] = [
 export const MOCK_INTEGRATIONS: Integration[] = [
   {
     id: 'github',
-    name: 'GitHub Enterprise',
+    name: 'GitHub App / CI/CD Gate',
     category: 'VCS',
-    status: 'active',
-    version: 'v3.12 Cloud API',
-    description: 'PR status check webhook synchronization, automated branch protection enforcement, and direct fix branch generation.',
-    eventsProcessed: '14,290 webhook payloads',
-    lastSync: 'Live (2 seconds ago)'
+    status: 'disconnected',
+    version: 'GitHub App API',
+    description: 'PR status check webhook synchronization, automated branch protection enforcement, and inline security comments.',
+    eventsProcessed: '0 webhook payloads (Unconfigured)',
+    lastSync: 'Not Configured — Requires App ID & Private Key'
   },
   {
     id: 'gitlab',
     name: 'GitLab CI / Enterprise',
     category: 'VCS',
-    status: 'active',
-    version: 'GitLab v16.8',
+    status: 'disconnected',
+    version: 'GitLab API v4',
     description: 'Pipeline stage gates, merge request AST taint security audits, and automated merge bot credentials.',
-    eventsProcessed: '8,412 pipeline jobs',
-    lastSync: 'Live (1 min ago)'
+    eventsProcessed: '0 pipeline jobs',
+    lastSync: 'Not Configured'
   },
   {
-    id: 'semgrep',
-    name: 'Semgrep Enterprise AST',
+    id: 'bandit',
+    name: 'Bandit Python SAST',
     category: 'SAST',
     status: 'active',
-    version: 'Scanner v1.42.0',
-    description: 'Deep inter-procedural AST taint tracking engine for SQLi, XSS, and SSRF detection.',
-    eventsProcessed: '348 PR gates analyzed',
-    lastSync: 'Active runner pool'
+    version: 'Bandit v1.9.4',
+    description: 'AST-based static security analysis engine for Python code, detecting SQLi, command injection, and insecure crypto.',
+    eventsProcessed: 'Integrated & Ready',
+    lastSync: 'Local Python Environment'
   },
   {
-    id: 'snyk',
-    name: 'Snyk SCA & OSV Vulnerability DB',
+    id: 'pip-audit',
+    name: 'pip-audit Dependency SCA',
     category: 'SCA',
     status: 'active',
-    version: 'OSV Engine v2.4',
-    description: 'Real-time open source dependency CVE lookup and automated package version bumper.',
-    eventsProcessed: '1,894 lockfile dependencies',
-    lastSync: 'Synced 10m ago'
+    version: 'OSV / PyPI Advisory DB',
+    description: 'Software composition analysis auditing Python requirements against real-time advisory databases.',
+    eventsProcessed: 'Integrated & Ready',
+    lastSync: 'Connected to Advisory DB'
   },
   {
-    id: 'trufflehog',
-    name: 'Trufflehog Secrets Scanner',
+    id: 'secrets',
+    name: 'RepoShield Secret Redactor',
     category: 'Secrets',
     status: 'active',
-    version: 'v3.1.2 Native',
-    description: 'High-entropy and regex verified secret detection across 800+ credential patterns.',
-    eventsProcessed: '4,210 commits inspected',
-    lastSync: 'Active pre-commit hook'
+    version: 'Engine v1.0.0',
+    description: 'High-entropy and regex verified secret detection and sanitization across AWS, GitHub, JWT, and database keys.',
+    eventsProcessed: 'Integrated & Ready',
+    lastSync: 'Active Pre-Ingestion Hook'
   },
   {
     id: 'slack',
     name: 'Slack SecOps Incident Channel',
     category: 'Alerting',
-    status: 'active',
+    status: 'disconnected',
     version: 'Webhook v2',
     description: 'Real-time notifications for critical zero-day discoveries and failed fix verification regressions.',
-    eventsProcessed: '28 alerts dispatched',
-    lastSync: 'Connected #secops-alerts'
+    eventsProcessed: '0 alerts dispatched',
+    lastSync: 'Not Configured — Awaiting Webhook URL'
   }
 ];
