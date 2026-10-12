@@ -70,11 +70,11 @@ export const Sidebar: React.FC<SidebarProps> = ({
     },
     {
       id: 'ai-analyzer',
-      label: 'AI Security Prototype',
-      icon: 'psychology',
+      label: 'Patch Analyzer',
+      icon: 'code_blocks',
       badge: (
-        <span className="font-label-caps text-label-caps px-1 py-0.2 rounded bg-tertiary-fixed text-on-tertiary-fixed-variant font-bold uppercase">
-          AI
+        <span className="font-mono text-[10px] px-1.5 py-0.5 rounded bg-slate-100 text-slate-700 font-semibold border border-slate-200">
+          Beta
         </span>
       )
     },
