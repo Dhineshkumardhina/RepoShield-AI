@@ -19,7 +19,7 @@ export const AiSecurityAnalystCard: React.FC<AiSecurityAnalystCardProps> = ({
   onRunAnalysis,
 }) => {
   return (
-    <div className="rounded-lg bg-surface-container-lowest border border-outline-variant/80 shadow-xs overflow-hidden">
+    <div className="rounded-xl bg-white border border-slate-200 shadow-2xs overflow-hidden">
       {/* Header Warning Banner */}
       <div className="bg-slate-50 border-b border-slate-200 px-4 py-3 flex items-center justify-between flex-wrap gap-2">
         <div className="flex items-center gap-2">
@@ -95,12 +95,12 @@ export const AiSecurityAnalystCard: React.FC<AiSecurityAnalystCardProps> = ({
         {analysis && !isLoading && (
           <div className="space-y-4">
             {/* Meta bar */}
-            <div className="flex flex-wrap items-center justify-between gap-2 border-b border-outline-variant/40 pb-3">
+            <div className="flex flex-wrap items-center justify-between gap-2 border-b border-slate-200 pb-3">
               <div className="flex items-center gap-3">
-                <span className="px-2 py-0.5 rounded bg-slate-100 text-slate-800 font-mono-sm text-xs font-medium">
+                <span className="px-2 py-0.5 rounded bg-slate-100 text-slate-800 font-mono text-xs font-medium">
                   {analysis.ai_model}
                 </span>
-                <span className="px-2 py-0.5 rounded bg-blue-50 text-blue-700 font-mono-sm text-xs font-semibold">
+                <span className="px-2 py-0.5 rounded bg-blue-50 text-blue-700 font-mono text-xs font-semibold">
                   {analysis.confidence}
                 </span>
               </div>

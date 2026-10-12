@@ -87,7 +87,7 @@ export const EvidenceReviewSection: React.FC<EvidenceReviewSectionProps> = ({
   const currentStatusBadge = getStatusBadge(validation?.assessment_status);
 
   return (
-    <div className="rounded-lg bg-surface-container-lowest border border-outline-variant/80 shadow-xs overflow-hidden">
+    <div className="rounded-xl bg-white border border-slate-200 shadow-2xs overflow-hidden">
       {/* Module Header & Action Bar */}
       <div className="bg-slate-900 text-white px-5 py-4 flex flex-col md:flex-row md:items-center justify-between gap-4">
         <div className="space-y-1">

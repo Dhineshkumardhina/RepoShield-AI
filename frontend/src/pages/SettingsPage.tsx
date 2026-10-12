@@ -45,14 +45,14 @@ export const SettingsPage: React.FC = () => {
       <div className="px-4 lg:px-8 py-5 bg-white border-b border-slate-200 flex flex-col md:flex-row md:items-center justify-between gap-4">
         <div>
           <div className="flex items-center gap-2">
-            <span className="font-label-caps text-xs text-blue-600 uppercase font-bold tracking-wider">
+            <span className="font-mono text-[10px] text-blue-600 uppercase font-bold tracking-wider">
               WORKSPACE POLICY &amp; SAFETY GATES
             </span>
-            <span className="px-1.5 py-0.5 rounded bg-slate-100 text-slate-800 font-mono-sm text-xs font-bold border border-slate-200">
+            <span className="px-1.5 py-0.5 rounded bg-slate-100 text-slate-800 font-mono text-xs font-bold border border-slate-200">
               ENFORCEMENT V4
             </span>
           </div>
-          <h1 className="font-headline-lg text-2xl text-slate-900 tracking-tight mt-0.5 font-bold">
+          <h1 className="text-2xl text-slate-900 tracking-tight mt-0.5 font-bold">
             Security Governance &amp; Application Settings
           </h1>
           <p className="text-xs text-slate-500 mt-0.5">

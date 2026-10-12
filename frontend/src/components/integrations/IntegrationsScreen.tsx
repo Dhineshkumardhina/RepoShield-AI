@@ -24,83 +24,83 @@ export const IntegrationsScreen: React.FC = () => {
   return (
     <div className="flex flex-col w-full">
       {/* Header */}
-      <div className="px-4 lg:px-gutter-desktop py-space-md bg-surface-container-lowest border-b border-outline-variant/60 flex flex-col md:flex-row md:items-center justify-between gap-space-md">
+      <div className="px-6 py-4 bg-white border-b border-slate-200 flex flex-col md:flex-row md:items-center justify-between gap-4">
         <div>
           <div className="flex items-center gap-2">
-            <span className="font-label-caps text-label-caps text-primary uppercase font-bold tracking-wider">
+            <span className="font-mono text-[10px] text-blue-600 uppercase font-bold tracking-wider">
               DEVELOPER &amp; SEC-OPS CONNECTORS
             </span>
-            <span className="px-1.5 py-0.5 rounded bg-surface-container text-on-surface font-mono-sm text-mono-sm font-bold">
+            <span className="px-1.5 py-0.5 rounded bg-slate-100 text-slate-800 font-mono text-[10px] font-bold border border-slate-200">
               {activeCount} READY / {integrations.length} CONFIGURED
             </span>
           </div>
-          <h1 className="font-headline-lg text-headline-lg text-on-surface tracking-tight mt-0.5">
+          <h1 className="text-xl font-bold text-slate-900 tracking-tight mt-0.5">
             Security Engines &amp; VCS Integrations
           </h1>
         </div>
 
         {testStatus && (
-          <div className="p-2 rounded bg-surface-container text-on-surface font-mono-sm text-xs flex items-center gap-1.5 animate-in fade-in border border-outline-variant/60">
-            <span className="material-symbols-outlined text-sm text-primary">info</span>
+          <div className="px-3 py-1.5 rounded-lg bg-slate-100 text-slate-800 font-mono text-xs flex items-center gap-2 animate-in fade-in border border-slate-200 shadow-2xs">
+            <span className="material-symbols-outlined text-sm text-blue-600">info</span>
             <span>{testStatus}</span>
           </div>
         )}
       </div>
 
       {/* Main Grid */}
-      <div className="px-4 lg:px-gutter-desktop py-space-lg">
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+      <div className="p-6">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
           {integrations.map(integ => {
             const isActive = integ.status === 'active';
             return (
               <div
                 key={integ.id}
-                className="p-5 rounded bg-surface-container-lowest border border-outline-variant/60 shadow-xs flex flex-col justify-between"
+                className="p-5 rounded-xl bg-white border border-slate-200 shadow-2xs hover:shadow-xs transition-shadow flex flex-col justify-between"
               >
                 <div>
                   <div className="flex items-center justify-between mb-3">
-                    <span className="font-label-caps text-primary uppercase font-bold text-[10px]">
+                    <span className="font-mono text-blue-600 uppercase font-bold text-[10px] tracking-wide">
                       {integ.category}
                     </span>
                     <span
-                      className={`flex items-center gap-1 font-mono-sm text-[10px] font-bold px-1.5 py-0.5 rounded ${
+                      className={`flex items-center gap-1.5 font-mono text-[10px] font-bold px-2 py-0.5 rounded-full border ${
                         isActive
-                          ? 'text-tertiary bg-tertiary-fixed'
-                          : 'text-outline bg-surface-container text-on-surface-variant'
+                          ? 'text-emerald-700 bg-emerald-50 border-emerald-200'
+                          : 'text-slate-500 bg-slate-100 border-slate-200'
                       }`}
                     >
                       <span
                         className={`w-1.5 h-1.5 rounded-full ${
-                          isActive ? 'bg-tertiary' : 'bg-outline'
+                          isActive ? 'bg-emerald-500' : 'bg-slate-400'
                         }`}
                       ></span>
                       {isActive ? 'READY' : 'NOT CONFIGURED'}
                     </span>
                   </div>
 
-                  <h3 className="font-headline-sm text-on-surface text-base font-semibold mb-1">
+                  <h3 className="font-bold text-slate-900 text-base mb-1">
                     {integ.name}
                   </h3>
-                  <span className="font-mono-sm text-outline text-xs block mb-2">{integ.version}</span>
-                  <p className="font-body-sm text-xs text-on-surface-variant leading-relaxed">
+                  <span className="font-mono text-slate-400 text-xs block mb-2">{integ.version}</span>
+                  <p className="text-xs text-slate-600 leading-relaxed">
                     {integ.description}
                   </p>
                 </div>
 
-                <div className="mt-4 pt-3 border-t border-outline-variant/60">
-                  <div className="flex items-center justify-between text-mono-sm text-xs text-on-surface-variant mb-3">
+                <div className="mt-5 pt-3.5 border-t border-slate-100">
+                  <div className="flex items-center justify-between font-mono text-xs text-slate-500 mb-3">
                     <span>{integ.eventsProcessed}</span>
-                    <span className="text-outline">{integ.lastSync}</span>
+                    <span className="text-slate-400">{integ.lastSync}</span>
                   </div>
 
                   <div className="flex items-center justify-between gap-2">
                     <button
                       onClick={() => handleTestConnection(integ)}
-                      className="px-2.5 py-1 rounded bg-surface-container hover:bg-surface-container-high text-on-surface font-mono-sm text-xs transition-colors"
+                      className="px-3 py-1.5 rounded-lg bg-slate-100 hover:bg-slate-200 text-slate-800 font-mono text-xs font-medium transition-colors border border-slate-200"
                     >
                       {isActive ? 'Test Ping' : 'Check Status'}
                     </button>
-                    <button className="px-2.5 py-1 rounded bg-surface-container-low hover:bg-surface-container text-primary font-mono-sm text-xs font-semibold transition-colors">
+                    <button className="px-3 py-1.5 rounded-lg bg-slate-50 hover:bg-slate-100 text-blue-600 font-mono text-xs font-semibold transition-colors border border-slate-200">
                       Configure
                     </button>
                   </div>

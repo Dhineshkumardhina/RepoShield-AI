@@ -53,25 +53,25 @@ export const VerificationEvidenceModal: React.FC<VerificationEvidenceModalProps>
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/60 backdrop-blur-xs overflow-y-auto">
-      <div className="relative w-full max-w-4xl bg-surface-container-lowest rounded-xl shadow-2xl border border-outline-variant/80 my-8 overflow-hidden">
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/60 backdrop-blur-xs overflow-y-auto font-sans">
+      <div className="relative w-full max-w-4xl bg-white rounded-xl shadow-2xl border border-slate-200 my-8 overflow-hidden animate-in fade-in zoom-in-95 duration-150">
         {/* Header */}
-        <div className="px-6 py-4 bg-surface-container-low border-b border-outline-variant/80 flex items-center justify-between">
+        <div className="px-6 py-4 bg-slate-50 border-b border-slate-200 flex items-center justify-between">
           <div className="flex items-center gap-3">
-            <div className="p-2 rounded bg-primary/10 text-primary">
+            <div className="w-9 h-9 rounded-lg bg-slate-900 flex items-center justify-center text-white shadow-2xs">
               <span className="material-symbols-outlined text-xl">fact_check</span>
             </div>
             <div>
               <div className="flex items-center gap-2">
-                <h3 className="font-headline-sm font-bold text-base text-on-surface">
+                <h3 className="font-bold text-base text-slate-900">
                   Fix Verification Run Evidence
                 </h3>
-                <span className="font-mono-sm text-xs px-2 py-0.5 rounded bg-slate-200 text-slate-700 font-semibold">
+                <span className="font-mono text-xs px-2 py-0.5 rounded-md bg-slate-100 text-slate-700 font-bold border border-slate-200">
                   {run.id}
                 </span>
               </div>
-              <p className="font-mono-sm text-xs text-on-surface-variant">
-                Target Finding: <span className="font-bold text-primary">{run.finding_id}</span>
+              <p className="font-mono text-xs text-slate-500 mt-0.5">
+                Target Finding: <span className="font-bold text-slate-800">{run.finding_id}</span>
                 {run.completed_at && ` • Completed at ${new Date(run.completed_at).toLocaleString()}`}
               </p>
             </div>
@@ -80,7 +80,7 @@ export const VerificationEvidenceModal: React.FC<VerificationEvidenceModalProps>
             {renderStatusBadge(run.status)}
             <button
               onClick={onClose}
-              className="p-1 rounded text-outline hover:text-on-surface hover:bg-surface-variant/40 transition-colors"
+              className="p-1.5 rounded-lg text-slate-400 hover:text-slate-700 hover:bg-slate-100 transition-colors"
               aria-label="Close"
             >
               <span className="material-symbols-outlined text-xl">close</span>
@@ -89,13 +89,13 @@ export const VerificationEvidenceModal: React.FC<VerificationEvidenceModalProps>
         </div>
 
         {/* Navigation Tabs */}
-        <div className="flex border-b border-outline-variant/80 bg-surface-container-low px-6">
+        <div className="flex border-b border-slate-200 bg-slate-50 px-6">
           <button
             onClick={() => setActiveTab('comparison')}
             className={`py-3 px-4 text-xs font-bold font-mono transition-colors border-b-2 flex items-center gap-1.5 ${
               activeTab === 'comparison'
-                ? 'border-primary text-primary bg-surface-container-lowest'
-                : 'border-transparent text-on-surface-variant hover:text-on-surface'
+                ? 'border-slate-900 text-slate-900 bg-white'
+                : 'border-transparent text-slate-500 hover:text-slate-800'
             }`}
           >
             <span className="material-symbols-outlined text-base">compare_arrows</span>
@@ -105,8 +105,8 @@ export const VerificationEvidenceModal: React.FC<VerificationEvidenceModalProps>
             onClick={() => setActiveTab('audit')}
             className={`py-3 px-4 text-xs font-bold font-mono transition-colors border-b-2 flex items-center gap-1.5 ${
               activeTab === 'audit'
-                ? 'border-primary text-primary bg-surface-container-lowest'
-                : 'border-transparent text-on-surface-variant hover:text-on-surface'
+                ? 'border-slate-900 text-slate-900 bg-white'
+                : 'border-transparent text-slate-500 hover:text-slate-800'
             }`}
           >
             <span className="material-symbols-outlined text-base">fact_check</span>
@@ -132,9 +132,9 @@ export const VerificationEvidenceModal: React.FC<VerificationEvidenceModalProps>
               </div>
 
           {/* Step 1: Baseline Establishment */}
-          <div className="border border-outline-variant/60 rounded-lg p-4 space-y-3 bg-surface-container-lowest">
-            <div className="flex items-center justify-between border-b border-outline-variant/40 pb-2">
-              <span className="font-label-caps text-xs text-primary font-bold uppercase">
+          <div className="border border-slate-200 rounded-xl p-4 space-y-3 bg-white shadow-2xs">
+            <div className="flex items-center justify-between border-b border-slate-100 pb-2">
+              <span className="font-mono text-[10px] text-blue-600 font-bold uppercase">
                 STEP 1 — Baseline Established
               </span>
               <span className="font-mono-sm text-[11px] text-outline">Cryptographic Source Reference</span>
@@ -166,9 +166,9 @@ export const VerificationEvidenceModal: React.FC<VerificationEvidenceModalProps>
           </div>
 
           {/* Step 2 & 3: Safe Patch Handling & Isolated Workspace */}
-          <div className="border border-outline-variant/60 rounded-lg p-4 space-y-3 bg-surface-container-lowest">
-            <div className="flex items-center justify-between border-b border-outline-variant/40 pb-2">
-              <span className="font-label-caps text-xs text-primary font-bold uppercase">
+          <div className="border border-slate-200 rounded-xl p-4 space-y-3 bg-white shadow-2xs">
+            <div className="flex items-center justify-between border-b border-slate-100 pb-2">
+              <span className="font-mono text-[10px] text-blue-600 font-bold uppercase">
                 STEP 2 &amp; 3 — Safe Patch Handling &amp; Isolated Workspace
               </span>
               <span className="font-mono-sm text-[11px] text-emerald-700 flex items-center gap-1">
@@ -193,9 +193,9 @@ export const VerificationEvidenceModal: React.FC<VerificationEvidenceModalProps>
           </div>
 
           {/* Step 4: Verification Checks & Before/After Comparison */}
-          <div className="border border-outline-variant/60 rounded-lg p-4 space-y-3 bg-surface-container-lowest">
-            <div className="flex items-center justify-between border-b border-outline-variant/40 pb-2">
-              <span className="font-label-caps text-xs text-primary font-bold uppercase">
+          <div className="border border-slate-200 rounded-xl p-4 space-y-3 bg-white shadow-2xs">
+            <div className="flex items-center justify-between border-b border-slate-100 pb-2">
+              <span className="font-mono text-[10px] text-blue-600 font-bold uppercase">
                 STEP 4 — Before &amp; After Comparison &amp; Regression Gates
               </span>
               <span className="font-mono-sm text-[11px] text-outline">Scanner &amp; Test Matrix</span>
@@ -285,8 +285,8 @@ export const VerificationEvidenceModal: React.FC<VerificationEvidenceModalProps>
           </div>
 
           {/* Step 5: Evidence-Based Conclusion & Rationale */}
-          <div className="border border-outline-variant/60 rounded-lg p-4 space-y-3 bg-surface-container-lowest">
-            <span className="font-label-caps text-xs text-primary font-bold uppercase block border-b border-outline-variant/40 pb-2">
+          <div className="border border-slate-200 rounded-xl p-4 space-y-3 bg-white shadow-2xs">
+            <span className="font-mono text-[10px] text-blue-600 font-bold uppercase block border-b border-slate-100 pb-2">
               STEP 5 — Evidence-Based Conclusion &amp; Traceable Rationale
             </span>
 
@@ -327,7 +327,7 @@ export const VerificationEvidenceModal: React.FC<VerificationEvidenceModalProps>
 
           {/* Patch Diff Viewer */}
           {run.patch_diff && (
-            <div className="border border-outline-variant/60 rounded-lg p-4 bg-slate-900 text-slate-100 font-mono-sm text-xs space-y-2">
+            <div className="border border-slate-800 rounded-lg p-4 bg-slate-900 text-slate-100 font-mono text-xs space-y-2">
               <div className="flex items-center justify-between text-slate-400 border-b border-slate-800 pb-2">
                 <span>Evaluated Unified Diff</span>
                 <span className="text-[11px]">Strict Sandbox Parser</span>
@@ -342,13 +342,13 @@ export const VerificationEvidenceModal: React.FC<VerificationEvidenceModalProps>
         </div>
 
         {/* Footer */}
-        <div className="px-6 py-3 bg-surface-container-low border-t border-outline-variant/80 flex items-center justify-between">
-          <span className="text-xs text-outline font-mono-sm">
-            Status: <span className="font-bold text-on-surface">{run.status}</span>
+        <div className="px-6 py-4 bg-slate-50 border-t border-slate-200 flex items-center justify-between">
+          <span className="text-xs text-slate-500 font-mono">
+            Status: <span className="font-bold text-slate-900">{run.status}</span>
           </span>
           <button
             onClick={onClose}
-            className="px-4 py-1.5 bg-slate-800 hover:bg-slate-700 text-white rounded text-xs font-semibold transition-colors"
+            className="px-4 py-2 bg-slate-900 hover:bg-slate-800 text-white rounded-md text-xs font-semibold transition-all shadow-2xs"
           >
             Close Inspector
           </button>

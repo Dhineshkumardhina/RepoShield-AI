@@ -123,26 +123,26 @@ export const NewVerificationModal: React.FC<NewVerificationModalProps> = ({
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/60 backdrop-blur-xs overflow-y-auto">
-      <div className="relative w-full max-w-3xl bg-surface-container-lowest rounded-xl shadow-2xl border border-outline-variant/80 my-8 overflow-hidden">
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/60 backdrop-blur-xs overflow-y-auto font-sans">
+      <div className="relative w-full max-w-3xl bg-white rounded-xl shadow-2xl border border-slate-200 my-8 overflow-hidden animate-in fade-in zoom-in-95 duration-150">
         {/* Header */}
-        <div className="px-6 py-4 bg-surface-container-low border-b border-outline-variant/80 flex items-center justify-between">
+        <div className="px-6 py-4 bg-slate-50 border-b border-slate-200 flex items-center justify-between">
           <div className="flex items-center gap-3">
-            <div className="p-2 rounded bg-primary/10 text-primary">
+            <div className="w-9 h-9 rounded-lg bg-slate-900 flex items-center justify-center text-white shadow-2xs">
               <span className="material-symbols-outlined text-xl">play_arrow</span>
             </div>
             <div>
-              <h3 className="font-headline-sm font-bold text-base text-on-surface">
+              <h3 className="text-base font-bold text-slate-900">
                 Trigger Fix Verification Engine
               </h3>
-              <p className="font-mono-sm text-xs text-on-surface-variant">
+              <p className="font-mono text-xs text-slate-500 mt-0.5">
                 Evaluate proposed patch in isolated, restricted workspace against defined security gates
               </p>
             </div>
           </div>
           <button
             onClick={onClose}
-            className="p-1 rounded text-outline hover:text-on-surface hover:bg-surface-variant/40 transition-colors"
+            className="p-1.5 rounded-lg text-slate-400 hover:text-slate-700 hover:bg-slate-100 transition-colors"
           >
             <span className="material-symbols-outlined text-xl">close</span>
           </button>
@@ -152,7 +152,7 @@ export const NewVerificationModal: React.FC<NewVerificationModalProps> = ({
         <div className="p-6 space-y-5 max-h-[75vh] overflow-y-auto">
           {/* Controlled Preset Quick Select */}
           <div className="space-y-2">
-            <span className="font-label-caps text-xs text-on-surface-variant uppercase font-bold block">
+            <span className="text-[10px] font-mono text-slate-500 uppercase font-bold block">
               Load Controlled Sample Preset
             </span>
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
@@ -163,11 +163,11 @@ export const NewVerificationModal: React.FC<NewVerificationModalProps> = ({
                     key={key}
                     type="button"
                     onClick={() => handleApplyPreset(key)}
-                    className="p-2.5 rounded-lg border border-slate-200 text-left hover:border-primary/60 hover:bg-slate-50 transition-colors text-xs"
+                    className="p-2.5 rounded-lg border border-slate-200 text-left hover:border-slate-400 hover:bg-slate-50 transition-colors text-xs"
                   >
                     <div className="font-semibold text-slate-800">{preset.label}</div>
-                    <div className="font-mono-sm text-[10px] text-slate-500 mt-0.5">
-                      Expected: <span className="font-bold text-primary">{preset.expectedVerdict}</span>
+                    <div className="font-mono text-[10px] text-slate-500 mt-0.5">
+                      Expected: <span className="font-bold text-slate-900">{preset.expectedVerdict}</span>
                     </div>
                   </button>
                 );
@@ -177,14 +177,14 @@ export const NewVerificationModal: React.FC<NewVerificationModalProps> = ({
 
           {/* Finding ID */}
           <div>
-            <label className="font-label-caps text-xs text-on-surface-variant uppercase font-bold block mb-1">
+            <label className="text-[10px] font-mono text-slate-500 uppercase font-bold block mb-1">
               Target Finding Identifier
             </label>
             <input
               type="text"
               value={findingId}
               onChange={e => setFindingId(e.target.value)}
-              className="w-full px-3 py-2 text-xs font-mono-sm bg-surface-container-lowest border border-outline-variant rounded focus:border-primary focus:outline-hidden"
+              className="w-full px-3 py-2 text-xs font-mono bg-white border border-slate-200 rounded-md focus:border-slate-400 focus:outline-hidden"
               placeholder="e.g. FIND-418"
             />
           </div>
@@ -192,14 +192,14 @@ export const NewVerificationModal: React.FC<NewVerificationModalProps> = ({
           {/* Proposed Patch Diff Textarea */}
           <div>
             <div className="flex items-center justify-between mb-1">
-              <label className="font-label-caps text-xs text-on-surface-variant uppercase font-bold">
+              <label className="text-[10px] font-mono text-slate-500 uppercase font-bold">
                 Proposed Patch (Unified Diff)
               </label>
               <button
                 type="button"
                 onClick={handleValidatePatch}
                 disabled={isValidating || !patchDiff.trim()}
-                className="px-2.5 py-1 text-xs font-semibold rounded bg-slate-100 hover:bg-slate-200 text-slate-700 flex items-center gap-1 transition-colors"
+                className="px-2.5 py-1 text-xs font-semibold rounded bg-slate-100 hover:bg-slate-200 text-slate-700 flex items-center gap-1 transition-colors border border-slate-200"
               >
                 <span className="material-symbols-outlined text-xs">rule</span>
                 {isValidating ? 'Validating...' : 'Validate Patch Safely'}
@@ -212,14 +212,14 @@ export const NewVerificationModal: React.FC<NewVerificationModalProps> = ({
                 setPatchDiff(e.target.value);
                 setValidationResult(null);
               }}
-              className="w-full px-3 py-2 font-mono-sm text-xs bg-slate-900 text-emerald-400 border border-slate-700 rounded-md focus:border-primary focus:outline-hidden"
+              className="w-full px-3 py-2 font-mono text-xs bg-slate-900 text-emerald-400 border border-slate-700 rounded-md focus:border-slate-400 focus:outline-hidden shadow-inner"
               placeholder="--- a/path/to/file.py&#10;+++ b/path/to/file.py&#10;@@ -1,3 +1,3 @@"
             />
           </div>
 
           {/* Patch Validation Results */}
           {validationResult && (
-            <div className={`p-3.5 rounded-lg border text-xs ${
+            <div className={`p-4 rounded-xl border text-xs ${
               validationResult.is_valid
                 ? 'bg-emerald-50 border-emerald-200 text-emerald-900'
                 : 'bg-rose-50 border-rose-200 text-rose-900'
@@ -231,7 +231,7 @@ export const NewVerificationModal: React.FC<NewVerificationModalProps> = ({
                   </span>
                   {validationResult.is_valid ? 'Patch Parsing & Path Validation Passed' : 'Patch Rejected'}
                 </span>
-                <span className="font-mono-sm text-[11px]">
+                <span className="font-mono text-[11px]">
                   +{validationResult.total_added} / -{validationResult.total_deleted} lines
                 </span>
               </div>
@@ -243,7 +243,7 @@ export const NewVerificationModal: React.FC<NewVerificationModalProps> = ({
                 </div>
               )}
               {validationResult.files.length > 0 && (
-                <div className="mt-2 pt-2 border-t border-emerald-200/60 font-mono-sm text-[11px] text-emerald-800 space-y-1">
+                <div className="mt-2 pt-2 border-t border-emerald-200/60 font-mono text-[11px] text-emerald-800 space-y-1">
                   {validationResult.files.map((f, i) => (
                     <div key={i}>
                       Touched: <span className="font-bold">{f.new_path}</span> ({f.modified_lines_range})
@@ -255,43 +255,43 @@ export const NewVerificationModal: React.FC<NewVerificationModalProps> = ({
           )}
 
           {validationError && (
-            <div className="p-3 bg-rose-50 border border-rose-200 rounded text-rose-800 text-xs">
+            <div className="p-3.5 bg-rose-50 border border-rose-200 rounded-xl text-rose-800 text-xs">
               {validationError}
             </div>
           )}
 
           {/* Verification Checks Options */}
-          <div className="space-y-2 pt-2 border-t border-outline-variant/40">
-            <span className="font-label-caps text-xs text-on-surface-variant uppercase font-bold block">
+          <div className="space-y-2 pt-2 border-t border-slate-200">
+            <span className="text-[10px] font-mono text-slate-500 uppercase font-bold block">
               Defined Verification Gates to Execute
             </span>
             <div className="grid grid-cols-1 sm:grid-cols-3 gap-2 text-xs">
-              <label className="flex items-center gap-2 p-2 rounded bg-slate-50 border border-slate-200 cursor-pointer">
+              <label className="flex items-center gap-2 p-2.5 rounded-lg bg-slate-50 border border-slate-200 cursor-pointer hover:bg-slate-100 transition-colors">
                 <input
                   type="checkbox"
                   checked={runScanners}
                   onChange={e => setRunScanners(e.target.checked)}
-                  className="rounded text-primary"
+                  className="rounded text-slate-900"
                 />
                 <span className="font-medium text-slate-800">Re-run Scanners (Semgrep)</span>
               </label>
 
-              <label className="flex items-center gap-2 p-2 rounded bg-slate-50 border border-slate-200 cursor-pointer">
+              <label className="flex items-center gap-2 p-2.5 rounded-lg bg-slate-50 border border-slate-200 cursor-pointer hover:bg-slate-100 transition-colors">
                 <input
                   type="checkbox"
                   checked={runExistingTests}
                   onChange={e => setRunExistingTests(e.target.checked)}
-                  className="rounded text-primary"
+                  className="rounded text-slate-900"
                 />
                 <span className="font-medium text-slate-800">Existing Unit Tests</span>
               </label>
 
-              <label className="flex items-center gap-2 p-2 rounded bg-slate-50 border border-slate-200 cursor-pointer">
+              <label className="flex items-center gap-2 p-2.5 rounded-lg bg-slate-50 border border-slate-200 cursor-pointer hover:bg-slate-100 transition-colors">
                 <input
                   type="checkbox"
                   checked={runRegressionTests}
                   onChange={e => setRunRegressionTests(e.target.checked)}
-                  className="rounded text-primary"
+                  className="rounded text-slate-900"
                 />
                 <span className="font-medium text-slate-800">Targeted Security Tests</span>
               </label>
@@ -299,14 +299,14 @@ export const NewVerificationModal: React.FC<NewVerificationModalProps> = ({
           </div>
 
           {executionError && (
-            <div className="p-3 bg-rose-50 border border-rose-200 rounded text-rose-800 text-xs">
+            <div className="p-3.5 bg-rose-50 border border-rose-200 rounded-xl text-rose-800 text-xs">
               {executionError}
             </div>
           )}
         </div>
 
         {/* Footer */}
-        <div className="px-6 py-4 bg-surface-container-low border-t border-outline-variant/80 flex items-center justify-between">
+        <div className="px-6 py-4 bg-slate-50 border-t border-slate-200 flex items-center justify-between">
           <button
             type="button"
             onClick={onClose}
@@ -318,10 +318,10 @@ export const NewVerificationModal: React.FC<NewVerificationModalProps> = ({
             type="button"
             onClick={handleExecute}
             disabled={isExecuting || !patchDiff.trim()}
-            className={`px-5 py-2 rounded text-xs font-bold text-white shadow-xs transition-colors flex items-center gap-2 ${
+            className={`px-5 py-2 rounded-md text-xs font-bold text-white shadow-2xs transition-all flex items-center gap-2 ${
               isExecuting || !patchDiff.trim()
-                ? 'bg-primary/50 cursor-not-allowed'
-                : 'bg-primary hover:bg-blue-700'
+                ? 'bg-slate-400 cursor-not-allowed'
+                : 'bg-slate-900 hover:bg-slate-800'
             }`}
           >
             <span className="material-symbols-outlined text-sm">

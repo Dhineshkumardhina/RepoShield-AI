@@ -68,36 +68,36 @@ export const BeforeAfterComparisonView: React.FC<BeforeAfterComparisonViewProps>
   return (
     <div className="space-y-6">
       {/* 1. Revision & Content Hash Baseline Comparison Bar */}
-      <div className="bg-surface-container rounded-xl p-4 border border-outline-variant/60 shadow-xs">
-        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b border-outline-variant/40 pb-3 mb-3">
+      <div className="bg-white rounded-xl p-4 border border-slate-200 shadow-2xs">
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b border-slate-100 pb-3 mb-3">
           <div className="flex items-center gap-2">
-            <span className="material-symbols-outlined text-primary text-xl">compare_arrows</span>
-            <span className="text-sm font-bold text-on-surface">Cryptographic Baseline vs Patched Comparison</span>
+            <span className="material-symbols-outlined text-slate-800 text-xl">compare_arrows</span>
+            <span className="text-sm font-bold text-slate-900">Cryptographic Baseline vs Patched Comparison</span>
           </div>
-          <div className="flex items-center gap-2 text-xs font-mono text-on-surface-variant">
-            <span>Run: <span className="font-semibold text-primary">{run.id}</span></span>
+          <div className="flex items-center gap-2 text-xs font-mono text-slate-500">
+            <span>Run: <span className="font-semibold text-slate-900">{run.id}</span></span>
             <span>•</span>
-            <span>Target: <span className="font-semibold text-primary">{run.finding_id}</span></span>
+            <span>Target: <span className="font-semibold text-slate-900">{run.finding_id}</span></span>
           </div>
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-          <div className="p-3 bg-surface-container-low rounded-lg border border-outline-variant/40">
+          <div className="p-3 bg-slate-50 rounded-lg border border-slate-200">
             <div className="flex items-center justify-between mb-1">
               <span className="text-[11px] font-bold uppercase tracking-wider text-slate-500">Baseline Content Hash</span>
-              <span className="px-1.5 py-0.5 text-[10px] font-mono rounded bg-slate-200 dark:bg-slate-700 text-slate-700 dark:text-slate-300">PRE-PATCH</span>
+              <span className="px-1.5 py-0.5 text-[10px] font-mono rounded bg-slate-200 text-slate-700">PRE-PATCH</span>
             </div>
-            <p className="font-mono text-xs text-on-surface font-semibold truncate" title={run.baseline_hash || 'N/A'}>
+            <p className="font-mono text-xs text-slate-900 font-semibold truncate" title={run.baseline_hash || 'N/A'}>
               {run.baseline_hash || 'SHA256:4b91f092e038...'}
             </p>
           </div>
 
-          <div className="p-3 bg-surface-container-low rounded-lg border border-outline-variant/40">
+          <div className="p-3 bg-slate-50 rounded-lg border border-slate-200">
             <div className="flex items-center justify-between mb-1">
               <span className="text-[11px] font-bold uppercase tracking-wider text-slate-500">Patched Content Hash</span>
-              <span className="px-1.5 py-0.5 text-[10px] font-mono rounded bg-primary/10 text-primary">POST-PATCH</span>
+              <span className="px-1.5 py-0.5 text-[10px] font-mono rounded bg-emerald-50 text-emerald-700 border border-emerald-200 font-semibold">POST-PATCH</span>
             </div>
-            <p className="font-mono text-xs text-on-surface font-semibold truncate" title={run.patched_hash || 'N/A'}>
+            <p className="font-mono text-xs text-slate-900 font-semibold truncate" title={run.patched_hash || 'N/A'}>
               {run.patched_hash || 'SHA256:7c82a194df11...'}
             </p>
           </div>
@@ -105,13 +105,13 @@ export const BeforeAfterComparisonView: React.FC<BeforeAfterComparisonViewProps>
       </div>
 
       {/* 2. Test Suite Regression Inspection */}
-      <div className="bg-surface-container rounded-xl p-4 border border-outline-variant/60 shadow-xs space-y-3">
-        <div className="flex items-center justify-between border-b border-outline-variant/40 pb-2">
+      <div className="bg-white rounded-xl p-4 border border-slate-200 shadow-2xs space-y-3">
+        <div className="flex items-center justify-between border-b border-slate-100 pb-2">
           <div className="flex items-center gap-2">
             <span className="material-symbols-outlined text-emerald-600 text-xl">biotech</span>
-            <span className="text-sm font-bold text-on-surface">Isolated Test Suite Regression Analysis</span>
+            <span className="text-sm font-bold text-slate-900">Isolated Test Suite Regression Analysis</span>
           </div>
-          <span className="text-xs font-mono text-on-surface-variant">
+          <span className="text-xs font-mono text-slate-600">
             {testRegressions.length === 0 ? '✓ 0 Test Regressions' : `⚠️ ${testRegressions.length} Test Regression(s)`}
           </span>
         </div>
@@ -131,11 +131,11 @@ export const BeforeAfterComparisonView: React.FC<BeforeAfterComparisonViewProps>
         )}
 
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs">
-          <div className="p-3 rounded bg-surface-container-low border border-outline-variant/40">
+          <div className="p-3 rounded-lg bg-slate-50 border border-slate-200">
             <div className="font-semibold text-slate-500 mb-1 text-[11px] uppercase">Baseline Test Outcome:</div>
             {Object.keys(baselineTests).length > 0 ? (
               Object.entries(baselineTests).map(([name, data]: [string, any]) => (
-                <div key={name} className="font-mono text-[11px] text-on-surface">
+                <div key={name} className="font-mono text-[11px] text-slate-800">
                   <span className="font-bold">{name}</span>: {data.status} (Passed: {data.passed || 0}, Failed: {data.failed || 0})
                 </div>
               ))
@@ -144,13 +144,13 @@ export const BeforeAfterComparisonView: React.FC<BeforeAfterComparisonViewProps>
             )}
           </div>
 
-          <div className="p-3 rounded bg-surface-container-low border border-outline-variant/40">
+          <div className="p-3 rounded-lg bg-slate-50 border border-slate-200">
             <div className="font-semibold text-slate-500 mb-1 text-[11px] uppercase">Patched Test Outcome:</div>
             {Object.keys(patchedTests).length > 0 ? (
               Object.entries(patchedTests)
                 .filter(([k]) => !k.startsWith('_'))
                 .map(([name, data]: [string, any]) => (
-                  <div key={name} className="font-mono text-[11px] text-on-surface">
+                  <div key={name} className="font-mono text-[11px] text-slate-800">
                     <span className="font-bold">{name}</span>: {data.status} (Passed: {data.passed || 0}, Failed: {data.failed || 0})
                   </div>
                 ))
@@ -162,16 +162,16 @@ export const BeforeAfterComparisonView: React.FC<BeforeAfterComparisonViewProps>
       </div>
 
       {/* 3. Classified Findings Before-and-After Matrix */}
-      <div className="bg-surface-container rounded-xl p-4 border border-outline-variant/60 shadow-xs space-y-4">
-        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b border-outline-variant/40 pb-3">
+      <div className="bg-white rounded-xl p-4 border border-slate-200 shadow-2xs space-y-4">
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b border-slate-100 pb-3">
           <div>
             <div className="flex items-center gap-2">
-              <span className="material-symbols-outlined text-primary text-xl">analytics</span>
-              <h4 className="text-sm font-bold text-on-surface">
+              <span className="material-symbols-outlined text-slate-700 text-xl">analytics</span>
+              <h4 className="text-sm font-bold text-slate-900">
                 Before &amp; After Finding Classifications ({classified.length})
               </h4>
             </div>
-            <p className="text-xs text-on-surface-variant">
+            <p className="text-xs text-slate-500">
               Systematic classification of all security checks across pre-patch and post-patch worktrees.
             </p>
           </div>
@@ -184,8 +184,8 @@ export const BeforeAfterComparisonView: React.FC<BeforeAfterComparisonViewProps>
                 onClick={() => setFilterClass(c)}
                 className={`px-2 py-1 text-[10px] font-mono font-bold rounded-md transition-colors ${
                   filterClass === c
-                    ? 'bg-primary text-on-primary'
-                    : 'bg-surface-container-highest text-on-surface-variant hover:bg-surface-variant'
+                    ? 'bg-slate-900 text-white shadow-2xs'
+                    : 'bg-slate-100 text-slate-600 hover:bg-slate-200'
                 }`}
               >
                 {c === 'RESOLVED_BY_DEFINED_CHECKS' ? 'RESOLVED' : c === 'POTENTIALLY_REGRESSED' ? 'REGRESSED' : c}
@@ -195,7 +195,7 @@ export const BeforeAfterComparisonView: React.FC<BeforeAfterComparisonViewProps>
         </div>
 
         {filteredList.length === 0 ? (
-          <div className="p-6 text-center text-xs text-on-surface-variant font-mono bg-surface-container-low rounded-lg border border-outline-variant/40">
+          <div className="p-6 text-center text-xs text-slate-500 font-mono bg-slate-50 rounded-lg border border-slate-200">
             No findings matching selected classification filter.
           </div>
         ) : (
@@ -205,25 +205,25 @@ export const BeforeAfterComparisonView: React.FC<BeforeAfterComparisonViewProps>
                 key={idx}
                 className={`p-3.5 rounded-lg border text-xs font-mono transition-all ${
                   item.classification === 'NEW'
-                    ? 'bg-red-50/60 border-red-300 dark:bg-red-950/20 dark:border-red-900'
+                    ? 'bg-red-50/60 border-red-300'
                     : item.classification === 'RESOLVED_BY_DEFINED_CHECKS'
-                    ? 'bg-emerald-50/60 border-emerald-300 dark:bg-emerald-950/20 dark:border-emerald-900'
+                    ? 'bg-emerald-50/60 border-emerald-300'
                     : item.classification === 'STILL_PRESENT'
-                    ? 'bg-rose-50/60 border-rose-300 dark:bg-rose-950/20 dark:border-rose-900'
+                    ? 'bg-rose-50/60 border-rose-300'
                     : item.classification === 'POTENTIALLY_REGRESSED'
-                    ? 'bg-purple-50/60 border-purple-300 dark:bg-purple-950/20 dark:border-purple-900'
-                    : 'bg-surface-container-low border-outline-variant/40'
+                    ? 'bg-purple-50/60 border-purple-300'
+                    : 'bg-slate-50 border-slate-200'
                 }`}
               >
                 <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-1.5 mb-2">
                   <div className="flex items-center gap-2 flex-wrap">
-                    <span className="font-bold text-on-surface text-sm">{item.rule_id}</span>
-                    <span className="text-[10px] px-1.5 py-0.5 rounded bg-slate-200 dark:bg-slate-700 text-slate-800 dark:text-slate-200 font-semibold">
+                    <span className="font-bold text-slate-900 text-sm">{item.rule_id}</span>
+                    <span className="text-[10px] px-1.5 py-0.5 rounded bg-slate-200 text-slate-800 font-semibold">
                       {item.severity}
                     </span>
                     <span className="text-[10px] text-slate-500">{item.scanner_name}</span>
                     {item.is_target_finding && (
-                      <span className="text-[10px] px-1.5 py-0.5 rounded bg-primary text-on-primary font-bold">
+                      <span className="text-[10px] px-1.5 py-0.5 rounded bg-slate-900 text-white font-bold">
                         TARGET FINDING
                       </span>
                     )}
@@ -233,18 +233,18 @@ export const BeforeAfterComparisonView: React.FC<BeforeAfterComparisonViewProps>
                   </div>
                 </div>
 
-                <p className="text-on-surface-variant font-sans text-xs mb-2">
+                <p className="text-slate-700 font-sans text-xs mb-2">
                   {item.message}
                 </p>
 
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-2 p-2 rounded bg-surface-container-lowest/80 text-[11px] border border-outline-variant/30">
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-2 p-2 rounded-lg bg-white text-[11px] border border-slate-200 shadow-2xs">
                   <div>
                     <span className="text-slate-500 font-semibold block">File Location:</span>
-                    <span className="text-on-surface font-mono">{item.file_path}:{item.line_number || 'N/A'}</span>
+                    <span className="text-slate-800 font-mono">{item.file_path}:{item.line_number || 'N/A'}</span>
                   </div>
                   <div>
                     <span className="text-slate-500 font-semibold block">Classification Rationale:</span>
-                    <span className="text-on-surface font-sans text-xs leading-relaxed">{item.classification_reason}</span>
+                    <span className="text-slate-700 font-sans text-xs leading-relaxed">{item.classification_reason}</span>
                   </div>
                 </div>
               </div>
