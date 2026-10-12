@@ -332,7 +332,7 @@ export const RepositoryDetailPage: React.FC = () => {
                   ruleId: 'audit.rule',
                   description: f.title,
                   taintTrace: { source: 'input', flow: ['param'], sink: 'sink' },
-                  remediationStatus: f.status === 'open' ? 'needs_patch' : 'verified',
+                  remediationStatus: f.status === 'open' ? 'needs_patch' : 'verified_patch',
                 }));
                 setFindings(mapped);
               }

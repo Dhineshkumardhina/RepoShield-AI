@@ -9,6 +9,7 @@ Implements:
 from .base import BaseVerificationBaseline, BaselineEvaluationOutcome
 from .sast_alone import SastAloneBaseline
 from .tests_alone import ExistingTestsAloneBaseline
+from .targeted_tests_alone import TargetedTestsAloneBaseline
 from .ai_judge import AiJudgeBaseline
 from .combined_verifier import RepoShieldCombinedBaseline
 
@@ -17,6 +18,7 @@ __all__ = [
     "BaselineEvaluationOutcome",
     "SastAloneBaseline",
     "ExistingTestsAloneBaseline",
+    "TargetedTestsAloneBaseline",
     "AiJudgeBaseline",
     "RepoShieldCombinedBaseline",
 ]

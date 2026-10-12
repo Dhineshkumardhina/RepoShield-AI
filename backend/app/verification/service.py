@@ -136,7 +136,8 @@ def execute_fix_verification(
         baseline_findings, base_sc_meta, base_sc_errs = run_scanners_on_directory(
             ws.workspace_dir,
             scanner_names=target_scanners,
-            timeout_seconds=request.timeout_seconds
+            timeout_seconds=request.timeout_seconds,
+            options=request.scanner_config,
         )
         scanner_metadata.update(base_sc_meta)
         if base_sc_errs:
@@ -282,7 +283,8 @@ def execute_fix_verification(
         patched_findings, patched_sc_meta, patched_sc_errs = run_scanners_on_directory(
             ws.workspace_dir,
             scanner_names=target_scanners,
-            timeout_seconds=request.timeout_seconds
+            timeout_seconds=request.timeout_seconds,
+            options=request.scanner_config,
         )
         scanner_metadata.update(patched_sc_meta)
         if patched_sc_errs:

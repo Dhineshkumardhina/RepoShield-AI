@@ -120,6 +120,16 @@ class BanditScannerAdapter(BaseScannerAdapter):
         target_path = str(target_dir.resolve())
         args = cmd_base + ["-f", "json", "-r", target_path]
 
+        if options:
+            skips = options.get("skips") or options.get("skip_rules")
+            if skips:
+                skips_str = ",".join(skips) if isinstance(skips, list) else str(skips)
+                args.extend(["-s", skips_str])
+            tests = options.get("tests") or options.get("rules")
+            if tests:
+                tests_str = ",".join(tests) if isinstance(tests, list) else str(tests)
+                args.extend(["-t", tests_str])
+
         start_time = time.perf_counter()
         version_str = self.get_version()
 

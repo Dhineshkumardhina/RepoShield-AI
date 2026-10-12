@@ -1,5 +1,5 @@
 {
-  "timestamp": "2026-10-11T17:43:05.882752+00:00",
+  "timestamp": "2026-10-12T11:47:18.811054+00:00",
   "platform_info": {
     "os": "nt",
     "platform": "Windows-11-10.0.26300-SP0",
@@ -44,9 +44,30 @@
       "false_negative_rate": 0.2,
       "inconclusive_rate": 0.30434782608695654,
       "regression_detection_rate": 0.0,
-      "mean_latency_ms": 1762.2542565172214,
-      "median_latency_ms": 1703.6302000051364,
-      "p95_latency_ms": 1880.8811999624595
+      "mean_latency_ms": 1715.2913565217048,
+      "median_latency_ms": 1669.1931999998815,
+      "p95_latency_ms": 1802.1966999999677
+    },
+    {
+      "baseline_id": "B2_targeted_tests",
+      "baseline_name": "Targeted Tests Alone (Exploit Regression Suite)",
+      "total_samples": 23,
+      "true_positives": 5,
+      "false_positives": 7,
+      "true_negatives": 11,
+      "false_negatives": 0,
+      "inconclusive_count": 3,
+      "correct_count": 15,
+      "correct_classification_rate": 0.6521739130434783,
+      "precision": 0.4166666666666667,
+      "recall": 1.0,
+      "false_positive_rate": 0.3888888888888889,
+      "false_negative_rate": 0.0,
+      "inconclusive_rate": 0.13043478260869565,
+      "regression_detection_rate": 0.2857142857142857,
+      "mean_latency_ms": 576.9214652173698,
+      "median_latency_ms": 656.0004999996636,
+      "p95_latency_ms": 801.3997000002746
     },
     {
       "baseline_id": "B2_existing_tests",
@@ -65,9 +86,9 @@
       "false_negative_rate": 0.0,
       "inconclusive_rate": 0.0,
       "regression_detection_rate": 0.8571428571428571,
-      "mean_latency_ms": 653.1266304310006,
-      "median_latency_ms": 681.3693000003695,
-      "p95_latency_ms": 727.343300008215
+      "mean_latency_ms": 640.6743913043022,
+      "median_latency_ms": 659.2571000001044,
+      "p95_latency_ms": 723.3813999996528
     },
     {
       "baseline_id": "B3_ai_judge",
@@ -86,9 +107,9 @@
       "false_negative_rate": 0.0,
       "inconclusive_rate": 0.08695652173913043,
       "regression_detection_rate": 0.7142857142857143,
-      "mean_latency_ms": 250.00158260556182,
-      "median_latency_ms": 250.00129995169118,
-      "p95_latency_ms": 250.00349996844307
+      "mean_latency_ms": 250.00170869567307,
+      "median_latency_ms": 250.00139999974635,
+      "p95_latency_ms": 250.00390000013795
     },
     {
       "baseline_id": "B4_reposhield_pipeline",
@@ -107,9 +128,9 @@
       "false_negative_rate": 0.0,
       "inconclusive_rate": 0.13043478260869565,
       "regression_detection_rate": 1.0,
-      "mean_latency_ms": 3491.3207782564036,
-      "median_latency_ms": 3718.167799990624,
-      "p95_latency_ms": 3914.6360000013374
+      "mean_latency_ms": 3403.9735739130147,
+      "median_latency_ms": 3604.294799999934,
+      "p95_latency_ms": 3787.362199999734
     }
   ],
   "sample_records": [
@@ -129,7 +150,7 @@
       "expected_classification": "VERIFIED",
       "actual_classification": "VERIFIED",
       "is_correct": true,
-      "runtime_ms": 2614.7726999479346,
+      "runtime_ms": 2490.1224000000184,
       "error_message": null,
       "evidence": {
         "target_rule": "B608",
@@ -145,10 +166,36 @@
             "is_available": true,
             "version": "python.exe C:\\Users\\Dhina\\AppData\\Roaming\\Python\\Python314\\Scripts\\bandit.EXE 1.9.4",
             "status": "success",
-            "execution_time": 0.59
+            "execution_time": 0.56
           }
         },
         "rationale": "Target finding rule 'B608' resolved in patched workspace."
+      }
+    },
+    {
+      "case_id": "RS-BENCH-001",
+      "patch_id": "RS-001-P1",
+      "patch_type": "true_fix",
+      "split": "dev",
+      "origin": "synthetic_curated",
+      "vulnerability_category": "sql_injection",
+      "baseline_revision": "c01a8f93e2b4d5a712e0984f18d73b5e",
+      "proposed_patch": "--- a/src/auth_service.py\n+++ b/src/auth_service.py\n@@ -6,5 +6,5 @@\n     cursor = conn.cursor()\n-    # VULNERABLE: Direct f-string interpolation in SQL statement\n-    query = f\"SELECT id FROM users WHERE username = '{username}' AND password_hash = '{password_hash}'\"\n-    cursor.execute(query)\n+    # FIXED: Parameterized query\n+    query = \"SELECT id FROM users WHERE username = ? AND password_hash = ?\"\n+    cursor.execute(query, (username, password_hash))\n",
+      "ground_truth_label": "FIX",
+      "ground_truth_rationale": "Replaces vulnerable string formatting with SQL parameter binding (? placeholders), eliminating SQL injection sink while preserving authentication functionality.",
+      "baseline_id": "B2_targeted_tests",
+      "baseline_name": "Targeted Tests Alone (Exploit Regression Suite)",
+      "expected_classification": "VERIFIED",
+      "actual_classification": "VERIFIED",
+      "is_correct": true,
+      "runtime_ms": 683.3482000001823,
+      "error_message": null,
+      "evidence": {
+        "test_status": "passed",
+        "passed_count": 1,
+        "failed_count": 0,
+        "error_message": null,
+        "rationale": "Targeted security regression test passed (1 passed)."
       }
     },
     {
@@ -167,7 +214,7 @@
       "expected_classification": "VERIFIED",
       "actual_classification": "VERIFIED",
       "is_correct": true,
-      "runtime_ms": 684.2841999605298,
+      "runtime_ms": 684.2251999996734,
       "error_message": null,
       "evidence": {
         "test_status": "passed",
@@ -193,7 +240,7 @@
       "expected_classification": "VERIFIED",
       "actual_classification": "VERIFIED",
       "is_correct": true,
-      "runtime_ms": 250.00110000837594,
+      "runtime_ms": 250.0011000001905,
       "error_message": null,
       "evidence": {
         "model": "gpt-4o / claude-3.5-sonnet (simulated zero-shot judge)",
@@ -221,7 +268,7 @@
       "expected_classification": "VERIFIED",
       "actual_classification": "VERIFIED",
       "is_correct": true,
-      "runtime_ms": 3718.167799990624,
+      "runtime_ms": 3692.9316999999173,
       "error_message": null,
       "evidence": {
         "target_classification": "RESOLVED_BY_DEFINED_CHECKS",
@@ -271,7 +318,7 @@
       "expected_classification": "FAILED",
       "actual_classification": "VERIFIED",
       "is_correct": false,
-      "runtime_ms": 1743.6785000027157,
+      "runtime_ms": 1718.8474000004135,
       "error_message": null,
       "evidence": {
         "target_rule": "B608",
@@ -287,10 +334,36 @@
             "is_available": true,
             "version": "python.exe C:\\Users\\Dhina\\AppData\\Roaming\\Python\\Python314\\Scripts\\bandit.EXE 1.9.4",
             "status": "success",
-            "execution_time": 0.57
+            "execution_time": 0.58
           }
         },
         "rationale": "Target finding rule 'B608' resolved in patched workspace."
+      }
+    },
+    {
+      "case_id": "RS-BENCH-001",
+      "patch_id": "RS-001-P2",
+      "patch_type": "cosmetic_evasion",
+      "split": "dev",
+      "origin": "synthetic_curated",
+      "vulnerability_category": "sql_injection",
+      "baseline_revision": "c01a8f93e2b4d5a712e0984f18d73b5e",
+      "proposed_patch": "--- a/src/auth_service.py\n+++ b/src/auth_service.py\n@@ -6,5 +6,6 @@\n     cursor = conn.cursor()\n-    # VULNERABLE: Direct f-string interpolation in SQL statement\n-    query = f\"SELECT id FROM users WHERE username = '{username}' AND password_hash = '{password_hash}'\"\n-    cursor.execute(query)\n+    # EVASIVE: Obfuscated string concatenation\n+    base = \"SELECT id FROM users WHERE username = '\"\n+    cond = username + \"' AND password_hash = '\" + password_hash + \"'\"\n+    cursor.execute(base + cond)\n",
+      "ground_truth_label": "NON_FIX",
+      "ground_truth_rationale": "Cosmetic evasion: Obfuscates string concatenation across variables to deceive AST linters, but the runtime query remains concatenated and vulnerable to authentication bypass.",
+      "baseline_id": "B2_targeted_tests",
+      "baseline_name": "Targeted Tests Alone (Exploit Regression Suite)",
+      "expected_classification": "FAILED",
+      "actual_classification": "FAILED",
+      "is_correct": true,
+      "runtime_ms": 730.2757999996174,
+      "error_message": "Test run exited with code 1",
+      "evidence": {
+        "test_status": "failed",
+        "passed_count": 0,
+        "failed_count": 1,
+        "error_message": "Test run exited with code 1",
+        "rationale": "Targeted security regression test failed: exploit succeeded (1 failed)."
       }
     },
     {
@@ -309,7 +382,7 @@
       "expected_classification": "FAILED",
       "actual_classification": "VERIFIED",
       "is_correct": false,
-      "runtime_ms": 666.849400033243,
+      "runtime_ms": 674.3902999996862,
       "error_message": null,
       "evidence": {
         "test_status": "passed",
@@ -335,7 +408,7 @@
       "expected_classification": "FAILED",
       "actual_classification": "VERIFIED",
       "is_correct": false,
-      "runtime_ms": 250.00129995169118,
+      "runtime_ms": 250.00150000005306,
       "error_message": null,
       "evidence": {
         "model": "gpt-4o / claude-3.5-sonnet (simulated zero-shot judge)",
@@ -363,7 +436,7 @@
       "expected_classification": "FAILED",
       "actual_classification": "FAILED",
       "is_correct": true,
-      "runtime_ms": 3742.222499975469,
+      "runtime_ms": 3768.0583000001207,
       "error_message": null,
       "evidence": {
         "target_classification": "RESOLVED_BY_DEFINED_CHECKS",
@@ -413,7 +486,7 @@
       "expected_classification": "FAILED",
       "actual_classification": "FAILED",
       "is_correct": true,
-      "runtime_ms": 1880.8811999624595,
+      "runtime_ms": 1802.1966999999677,
       "error_message": null,
       "evidence": {
         "target_rule": "B608",
@@ -429,10 +502,36 @@
             "is_available": true,
             "version": "python.exe C:\\Users\\Dhina\\AppData\\Roaming\\Python\\Python314\\Scripts\\bandit.EXE 1.9.4",
             "status": "success",
-            "execution_time": 0.58
+            "execution_time": 0.59
           }
         },
         "rationale": "Target finding rule 'B608' persists in patched workspace."
+      }
+    },
+    {
+      "case_id": "RS-BENCH-001",
+      "patch_id": "RS-001-P3",
+      "patch_type": "incomplete_fix",
+      "split": "dev",
+      "origin": "synthetic_curated",
+      "vulnerability_category": "sql_injection",
+      "baseline_revision": "c01a8f93e2b4d5a712e0984f18d73b5e",
+      "proposed_patch": "--- a/src/auth_service.py\n+++ b/src/auth_service.py\n@@ -6,5 +6,6 @@\n     cursor = conn.cursor()\n-    # VULNERABLE: Direct f-string interpolation in SQL statement\n-    query = f\"SELECT id FROM users WHERE username = '{username}' AND password_hash = '{password_hash}'\"\n-    cursor.execute(query)\n+    # INCOMPLETE: Flawed sanitization (removes only some characters)\n+    clean_user = username.replace(\"'\", \"\")\n+    query = f\"SELECT id FROM users WHERE username = '{clean_user}' AND password_hash = '{password_hash}'\"\n+    cursor.execute(query)\n",
+      "ground_truth_label": "NON_FIX",
+      "ground_truth_rationale": "Incomplete fix: Naively strips single quotes from username via string replace, but does not sanitize password_hash or resolve SQL parameterization.",
+      "baseline_id": "B2_targeted_tests",
+      "baseline_name": "Targeted Tests Alone (Exploit Regression Suite)",
+      "expected_classification": "FAILED",
+      "actual_classification": "VERIFIED",
+      "is_correct": false,
+      "runtime_ms": 696.8909000001986,
+      "error_message": null,
+      "evidence": {
+        "test_status": "passed",
+        "passed_count": 1,
+        "failed_count": 0,
+        "error_message": null,
+        "rationale": "Targeted security regression test passed (1 passed)."
       }
     },
     {
@@ -451,7 +550,7 @@
       "expected_classification": "FAILED",
       "actual_classification": "VERIFIED",
       "is_correct": false,
-      "runtime_ms": 727.343300008215,
+      "runtime_ms": 653.7405999997645,
       "error_message": null,
       "evidence": {
         "test_status": "passed",
@@ -477,7 +576,7 @@
       "expected_classification": "FAILED",
       "actual_classification": "VERIFIED",
       "is_correct": false,
-      "runtime_ms": 250.00170001294464,
+      "runtime_ms": 250.0027000000955,
       "error_message": null,
       "evidence": {
         "model": "gpt-4o / claude-3.5-sonnet (simulated zero-shot judge)",
@@ -505,7 +604,7 @@
       "expected_classification": "FAILED",
       "actual_classification": "FAILED",
       "is_correct": true,
-      "runtime_ms": 3703.4113999689,
+      "runtime_ms": 3639.6482000000105,
       "error_message": null,
       "evidence": {
         "target_classification": "STILL_PRESENT",
@@ -555,7 +654,7 @@
       "expected_classification": "FAILED",
       "actual_classification": "VERIFIED",
       "is_correct": false,
-      "runtime_ms": 1716.6280000237748,
+      "runtime_ms": 1654.2592999999215,
       "error_message": null,
       "evidence": {
         "target_rule": "B608",
@@ -571,10 +670,36 @@
             "is_available": true,
             "version": "python.exe C:\\Users\\Dhina\\AppData\\Roaming\\Python\\Python314\\Scripts\\bandit.EXE 1.9.4",
             "status": "success",
-            "execution_time": 0.57
+            "execution_time": 0.55
           }
         },
         "rationale": "Target finding rule 'B608' resolved in patched workspace."
+      }
+    },
+    {
+      "case_id": "RS-BENCH-001",
+      "patch_id": "RS-001-P4",
+      "patch_type": "regressive_fix",
+      "split": "dev",
+      "origin": "synthetic_curated",
+      "vulnerability_category": "sql_injection",
+      "baseline_revision": "c01a8f93e2b4d5a712e0984f18d73b5e",
+      "proposed_patch": "--- a/src/auth_service.py\n+++ b/src/auth_service.py\n@@ -6,5 +6,3 @@\n     cursor = conn.cursor()\n-    # VULNERABLE: Direct f-string interpolation in SQL statement\n-    query = f\"SELECT id FROM users WHERE username = '{username}' AND password_hash = '{password_hash}'\"\n-    cursor.execute(query)\n+    # REGRESSIVE: Breaks functional authentication logic\n+    raise PermissionError(\"Authentication temporarily disabled for security\")\n",
+      "ground_truth_label": "NON_FIX",
+      "ground_truth_rationale": "Regressive fix: Hardcodes PermissionError exception aborting all authentication requests, breaking valid existing test cases.",
+      "baseline_id": "B2_targeted_tests",
+      "baseline_name": "Targeted Tests Alone (Exploit Regression Suite)",
+      "expected_classification": "FAILED",
+      "actual_classification": "FAILED",
+      "is_correct": true,
+      "runtime_ms": 701.6301000003295,
+      "error_message": "Test run exited with code 1",
+      "evidence": {
+        "test_status": "failed",
+        "passed_count": 0,
+        "failed_count": 1,
+        "error_message": "Test run exited with code 1",
+        "rationale": "Targeted security regression test failed: exploit succeeded (1 failed)."
       }
     },
     {
@@ -593,7 +718,7 @@
       "expected_classification": "FAILED",
       "actual_classification": "FAILED",
       "is_correct": true,
-      "runtime_ms": 718.612700002268,
+      "runtime_ms": 694.460799999888,
       "error_message": "Test run exited with code 1",
       "evidence": {
         "test_status": "failed",
@@ -619,7 +744,7 @@
       "expected_classification": "FAILED",
       "actual_classification": "FAILED",
       "is_correct": true,
-      "runtime_ms": 250.00260001979768,
+      "runtime_ms": 250.00390000013795,
       "error_message": null,
       "evidence": {
         "model": "gpt-4o / claude-3.5-sonnet (simulated zero-shot judge)",
@@ -646,7 +771,7 @@
       "expected_classification": "FAILED",
       "actual_classification": "FAILED",
       "is_correct": true,
-      "runtime_ms": 3804.9737000255845,
+      "runtime_ms": 3734.951700000238,
       "error_message": null,
       "evidence": {
         "target_classification": "RESOLVED_BY_DEFINED_CHECKS",
@@ -696,7 +821,7 @@
       "expected_classification": "FAILED",
       "actual_classification": "VERIFIED",
       "is_correct": false,
-      "runtime_ms": 1732.699499989394,
+      "runtime_ms": 1690.7083000000966,
       "error_message": null,
       "evidence": {
         "target_rule": "B608",
@@ -712,10 +837,36 @@
             "is_available": true,
             "version": "python.exe C:\\Users\\Dhina\\AppData\\Roaming\\Python\\Python314\\Scripts\\bandit.EXE 1.9.4",
             "status": "success",
-            "execution_time": 0.56
+            "execution_time": 0.55
           }
         },
         "rationale": "Target finding rule 'B608' resolved in patched workspace."
+      }
+    },
+    {
+      "case_id": "RS-BENCH-001",
+      "patch_id": "RS-001-P5",
+      "patch_type": "security_regression",
+      "split": "dev",
+      "origin": "synthetic_curated",
+      "vulnerability_category": "sql_injection",
+      "baseline_revision": "c01a8f93e2b4d5a712e0984f18d73b5e",
+      "proposed_patch": "--- a/src/auth_service.py\n+++ b/src/auth_service.py\n@@ -1,3 +1,5 @@\n import sqlite3\n+# SECURITY REGRESSION: Hardcoded secret token committed in patch\n+SERVICE_TOKEN = \"ghp_1234567890abcdefghijklmnopqrstuvwxyz\"\n \n def authenticate_user(db_path: str, username: str, password_hash: str) -> bool:\n@@ -6,5 +8,5 @@\n     cursor = conn.cursor()\n-    # VULNERABLE: Direct f-string interpolation in SQL statement\n-    query = f\"SELECT id FROM users WHERE username = '{username}' AND password_hash = '{password_hash}'\"\n-    cursor.execute(query)\n+    # FIXED: Parameterized query\n+    query = \"SELECT id FROM users WHERE username = ? AND password_hash = ?\"\n+    cursor.execute(query, (username, password_hash))\n",
+      "ground_truth_label": "NON_FIX",
+      "ground_truth_rationale": "Security regression: Solves SQL injection via parameterization but introduces hardcoded secret credential token in source file.",
+      "baseline_id": "B2_targeted_tests",
+      "baseline_name": "Targeted Tests Alone (Exploit Regression Suite)",
+      "expected_classification": "FAILED",
+      "actual_classification": "VERIFIED",
+      "is_correct": false,
+      "runtime_ms": 639.5343999997749,
+      "error_message": null,
+      "evidence": {
+        "test_status": "passed",
+        "passed_count": 1,
+        "failed_count": 0,
+        "error_message": null,
+        "rationale": "Targeted security regression test passed (1 passed)."
       }
     },
     {
@@ -734,7 +885,7 @@
       "expected_classification": "FAILED",
       "actual_classification": "VERIFIED",
       "is_correct": false,
-      "runtime_ms": 662.0099999709055,
+      "runtime_ms": 645.824199999879,
       "error_message": null,
       "evidence": {
         "test_status": "passed",
@@ -760,7 +911,7 @@
       "expected_classification": "FAILED",
       "actual_classification": "VERIFIED",
       "is_correct": false,
-      "runtime_ms": 250.00349996844307,
+      "runtime_ms": 250.00260000024355,
       "error_message": null,
       "evidence": {
         "model": "gpt-4o / claude-3.5-sonnet (simulated zero-shot judge)",
@@ -788,7 +939,7 @@
       "expected_classification": "FAILED",
       "actual_classification": "FAILED",
       "is_correct": true,
-      "runtime_ms": 3619.389700004831,
+      "runtime_ms": 3591.6824000000815,
       "error_message": null,
       "evidence": {
         "target_classification": "RESOLVED_BY_DEFINED_CHECKS",
@@ -843,7 +994,7 @@
       "expected_classification": "VERIFIED",
       "actual_classification": "VERIFIED",
       "is_correct": true,
-      "runtime_ms": 1668.1895999936387,
+      "runtime_ms": 1630.5964999996831,
       "error_message": null,
       "evidence": {
         "target_rule": "B602",
@@ -859,10 +1010,36 @@
             "is_available": true,
             "version": "python.exe C:\\Users\\Dhina\\AppData\\Roaming\\Python\\Python314\\Scripts\\bandit.EXE 1.9.4",
             "status": "success",
-            "execution_time": 0.56
+            "execution_time": 0.55
           }
         },
         "rationale": "Target finding rule 'B602' resolved in patched workspace."
+      }
+    },
+    {
+      "case_id": "RS-BENCH-002",
+      "patch_id": "RS-002-P1",
+      "patch_type": "true_fix",
+      "split": "dev",
+      "origin": "synthetic_curated",
+      "vulnerability_category": "command_injection",
+      "baseline_revision": "b02d7c541e39a82645f0912cb8491c34",
+      "proposed_patch": "--- a/src/backup_tool.py\n+++ b/src/backup_tool.py\n@@ -1,8 +1,8 @@\n-import subprocess\n+import shutil\n \n def run_backup(target_dir: str, archive_name: str) -> int:\n     \"\"\"Create archive of target directory using tar.\"\"\"\n-    # VULNERABLE: shell=True with unquoted string concatenation\n-    cmd = f\"tar -czf {archive_name}.tar.gz {target_dir}\"\n-    proc = subprocess.run(cmd, shell=True, capture_output=True, text=True)\n-    return proc.returncode\n+    # FIXED: Native Python archive creation eliminates shell invocation\n+    shutil.make_archive(archive_name, \"gztar\", root_dir=target_dir)\n+    return 0\n",
+      "ground_truth_label": "FIX",
+      "ground_truth_rationale": "True fix: Replaces unsafe shell invocation with native Python shutil.make_archive, entirely eliminating subprocess and shell execution risks.",
+      "baseline_id": "B2_targeted_tests",
+      "baseline_name": "Targeted Tests Alone (Exploit Regression Suite)",
+      "expected_classification": "VERIFIED",
+      "actual_classification": "VERIFIED",
+      "is_correct": true,
+      "runtime_ms": 648.0939999996735,
+      "error_message": null,
+      "evidence": {
+        "test_status": "passed",
+        "passed_count": 1,
+        "failed_count": 0,
+        "error_message": null,
+        "rationale": "Targeted security regression test passed (1 passed)."
       }
     },
     {
@@ -881,7 +1058,7 @@
       "expected_classification": "VERIFIED",
       "actual_classification": "VERIFIED",
       "is_correct": true,
-      "runtime_ms": 651.4162999810651,
+      "runtime_ms": 628.1103999999686,
       "error_message": null,
       "evidence": {
         "test_status": "passed",
@@ -907,7 +1084,7 @@
       "expected_classification": "VERIFIED",
       "actual_classification": "VERIFIED",
       "is_correct": true,
-      "runtime_ms": 250.0006000045687,
+      "runtime_ms": 250.00060000002122,
       "error_message": null,
       "evidence": {
         "model": "gpt-4o / claude-3.5-sonnet (simulated zero-shot judge)",
@@ -935,7 +1112,7 @@
       "expected_classification": "VERIFIED",
       "actual_classification": "VERIFIED",
       "is_correct": true,
-      "runtime_ms": 3691.323199949693,
+      "runtime_ms": 3599.122100000386,
       "error_message": null,
       "evidence": {
         "target_classification": "RESOLVED_BY_DEFINED_CHECKS",
@@ -985,7 +1162,7 @@
       "expected_classification": "FAILED",
       "actual_classification": "VERIFIED",
       "is_correct": false,
-      "runtime_ms": 1778.4016000223346,
+      "runtime_ms": 1669.1931999998815,
       "error_message": null,
       "evidence": {
         "target_rule": "B602",
@@ -1001,10 +1178,36 @@
             "is_available": true,
             "version": "python.exe C:\\Users\\Dhina\\AppData\\Roaming\\Python\\Python314\\Scripts\\bandit.EXE 1.9.4",
             "status": "success",
-            "execution_time": 0.65
+            "execution_time": 0.57
           }
         },
         "rationale": "Target finding rule 'B602' resolved in patched workspace."
+      }
+    },
+    {
+      "case_id": "RS-BENCH-002",
+      "patch_id": "RS-002-P2",
+      "patch_type": "cosmetic_evasion",
+      "split": "dev",
+      "origin": "synthetic_curated",
+      "vulnerability_category": "command_injection",
+      "baseline_revision": "b02d7c541e39a82645f0912cb8491c34",
+      "proposed_patch": "--- a/src/backup_tool.py\n+++ b/src/backup_tool.py\n@@ -1,8 +1,8 @@\n-import subprocess\n+import os\n \n def run_backup(target_dir: str, archive_name: str) -> int:\n     \"\"\"Create archive of target directory using tar.\"\"\"\n-    # VULNERABLE: shell=True with unquoted string concatenation\n-    cmd = f\"tar -czf {archive_name}.tar.gz {target_dir}\"\n-    proc = subprocess.run(cmd, shell=True, capture_output=True, text=True)\n-    return proc.returncode\n+    # EVASIVE: Uses os.system instead of subprocess\n+    cmd = f\"tar -czf {archive_name}.tar.gz {target_dir}\"\n+    return os.system(cmd)\n",
+      "ground_truth_label": "NON_FIX",
+      "ground_truth_rationale": "Cosmetic evasion: Substitutes subprocess.run with os.system to avoid Bandit B602 rule, but shell injection remains completely exploitable under rule B605.",
+      "baseline_id": "B2_targeted_tests",
+      "baseline_name": "Targeted Tests Alone (Exploit Regression Suite)",
+      "expected_classification": "FAILED",
+      "actual_classification": "FAILED",
+      "is_correct": true,
+      "runtime_ms": 905.2686999998514,
+      "error_message": "Test run exited with code 1",
+      "evidence": {
+        "test_status": "failed",
+        "passed_count": 0,
+        "failed_count": 1,
+        "error_message": "Test run exited with code 1",
+        "rationale": "Targeted security regression test failed: exploit succeeded (1 failed)."
       }
     },
     {
@@ -1023,7 +1226,7 @@
       "expected_classification": "FAILED",
       "actual_classification": "VERIFIED",
       "is_correct": false,
-      "runtime_ms": 697.9722999967635,
+      "runtime_ms": 777.8120000002673,
       "error_message": null,
       "evidence": {
         "test_status": "passed",
@@ -1049,7 +1252,7 @@
       "expected_classification": "FAILED",
       "actual_classification": "VERIFIED",
       "is_correct": false,
-      "runtime_ms": 250.00110000837594,
+      "runtime_ms": 250.0011999995877,
       "error_message": null,
       "evidence": {
         "model": "gpt-4o / claude-3.5-sonnet (simulated zero-shot judge)",
@@ -1077,7 +1280,7 @@
       "expected_classification": "FAILED",
       "actual_classification": "FAILED",
       "is_correct": true,
-      "runtime_ms": 4033.345600008033,
+      "runtime_ms": 3787.362199999734,
       "error_message": null,
       "evidence": {
         "target_classification": "POTENTIALLY_REGRESSED",
@@ -1132,7 +1335,7 @@
       "expected_classification": "FAILED",
       "actual_classification": "VERIFIED",
       "is_correct": false,
-      "runtime_ms": 1689.5503000123426,
+      "runtime_ms": 1658.3231999998134,
       "error_message": null,
       "evidence": {
         "target_rule": "B602",
@@ -1148,10 +1351,36 @@
             "is_available": true,
             "version": "python.exe C:\\Users\\Dhina\\AppData\\Roaming\\Python\\Python314\\Scripts\\bandit.EXE 1.9.4",
             "status": "success",
-            "execution_time": 0.57
+            "execution_time": 0.55
           }
         },
         "rationale": "Target finding rule 'B602' resolved in patched workspace."
+      }
+    },
+    {
+      "case_id": "RS-BENCH-002",
+      "patch_id": "RS-002-P3",
+      "patch_type": "regressive_fix",
+      "split": "dev",
+      "origin": "synthetic_curated",
+      "vulnerability_category": "command_injection",
+      "baseline_revision": "b02d7c541e39a82645f0912cb8491c34",
+      "proposed_patch": "--- a/src/backup_tool.py\n+++ b/src/backup_tool.py\n@@ -5,4 +5,3 @@\n-    # VULNERABLE: shell=True with unquoted string concatenation\n-    cmd = f\"tar -czf {archive_name}.tar.gz {target_dir}\"\n-    proc = subprocess.run(cmd, shell=True, capture_output=True, text=True)\n-    return proc.returncode\n+    # REGRESSIVE: Fails command completely\n+    return 1\n",
+      "ground_truth_label": "NON_FIX",
+      "ground_truth_rationale": "Regressive fix: Hardcodes command return value to 1, causing functional failure across all backup requests.",
+      "baseline_id": "B2_targeted_tests",
+      "baseline_name": "Targeted Tests Alone (Exploit Regression Suite)",
+      "expected_classification": "FAILED",
+      "actual_classification": "VERIFIED",
+      "is_correct": false,
+      "runtime_ms": 642.2979999997551,
+      "error_message": null,
+      "evidence": {
+        "test_status": "passed",
+        "passed_count": 1,
+        "failed_count": 0,
+        "error_message": null,
+        "rationale": "Targeted security regression test passed (1 passed)."
       }
     },
     {
@@ -1170,7 +1399,7 @@
       "expected_classification": "FAILED",
       "actual_classification": "FAILED",
       "is_correct": true,
-      "runtime_ms": 695.4294000170194,
+      "runtime_ms": 681.4651999998205,
       "error_message": "Test run exited with code 1",
       "evidence": {
         "test_status": "failed",
@@ -1196,7 +1425,7 @@
       "expected_classification": "FAILED",
       "actual_classification": "FAILED",
       "is_correct": true,
-      "runtime_ms": 250.00239996006712,
+      "runtime_ms": 250.00230000023294,
       "error_message": null,
       "evidence": {
         "model": "gpt-4o / claude-3.5-sonnet (simulated zero-shot judge)",
@@ -1223,7 +1452,7 @@
       "expected_classification": "FAILED",
       "actual_classification": "FAILED",
       "is_correct": true,
-      "runtime_ms": 3749.03920001816,
+      "runtime_ms": 3604.294799999934,
       "error_message": null,
       "evidence": {
         "target_classification": "RESOLVED_BY_DEFINED_CHECKS",
@@ -1273,7 +1502,7 @@
       "expected_classification": "FAILED",
       "actual_classification": "FAILED",
       "is_correct": true,
-      "runtime_ms": 1754.2545999749564,
+      "runtime_ms": 1636.7058999999244,
       "error_message": null,
       "evidence": {
         "target_rule": "B602",
@@ -1289,10 +1518,36 @@
             "is_available": true,
             "version": "python.exe C:\\Users\\Dhina\\AppData\\Roaming\\Python\\Python314\\Scripts\\bandit.EXE 1.9.4",
             "status": "success",
-            "execution_time": 0.63
+            "execution_time": 0.55
           }
         },
         "rationale": "Target finding rule 'B602' persists in patched workspace."
+      }
+    },
+    {
+      "case_id": "RS-BENCH-002",
+      "patch_id": "RS-002-P4",
+      "patch_type": "incomplete_fix",
+      "split": "dev",
+      "origin": "synthetic_curated",
+      "vulnerability_category": "command_injection",
+      "baseline_revision": "b02d7c541e39a82645f0912cb8491c34",
+      "proposed_patch": "--- a/src/backup_tool.py\n+++ b/src/backup_tool.py\n@@ -6,3 +6,4 @@\n-    cmd = f\"tar -czf {archive_name}.tar.gz {target_dir}\"\n+    clean_name = archive_name.replace(\";\", \"\")\n+    cmd = f\"tar -czf {clean_name}.tar.gz {target_dir}\"\n     proc = subprocess.run(cmd, shell=True, capture_output=True, text=True)\n     return proc.returncode\n",
+      "ground_truth_label": "NON_FIX",
+      "ground_truth_rationale": "Incomplete fix: Naively strips semicolon ';' from archive name, but shell=True remains enabled and allows chaining via other shell operators (&, |, &&, newline).",
+      "baseline_id": "B2_targeted_tests",
+      "baseline_name": "Targeted Tests Alone (Exploit Regression Suite)",
+      "expected_classification": "FAILED",
+      "actual_classification": "FAILED",
+      "is_correct": true,
+      "runtime_ms": 786.1888000002182,
+      "error_message": "Test run exited with code 1",
+      "evidence": {
+        "test_status": "failed",
+        "passed_count": 0,
+        "failed_count": 1,
+        "error_message": "Test run exited with code 1",
+        "rationale": "Targeted security regression test failed: exploit succeeded (1 failed)."
       }
     },
     {
@@ -1311,7 +1566,7 @@
       "expected_classification": "FAILED",
       "actual_classification": "VERIFIED",
       "is_correct": false,
-      "runtime_ms": 703.5619000089355,
+      "runtime_ms": 699.2176999997355,
       "error_message": null,
       "evidence": {
         "test_status": "passed",
@@ -1337,7 +1592,7 @@
       "expected_classification": "FAILED",
       "actual_classification": "VERIFIED",
       "is_correct": false,
-      "runtime_ms": 250.00090000685304,
+      "runtime_ms": 250.0014999995983,
       "error_message": null,
       "evidence": {
         "model": "gpt-4o / claude-3.5-sonnet (simulated zero-shot judge)",
@@ -1365,7 +1620,7 @@
       "expected_classification": "FAILED",
       "actual_classification": "FAILED",
       "is_correct": true,
-      "runtime_ms": 3914.6360000013374,
+      "runtime_ms": 3895.375199999762,
       "error_message": null,
       "evidence": {
         "target_classification": "STILL_PRESENT",
@@ -1415,7 +1670,7 @@
       "expected_classification": "VERIFIED",
       "actual_classification": "INCONCLUSIVE",
       "is_correct": false,
-      "runtime_ms": 1675.6663999985904,
+      "runtime_ms": 1650.7204999998066,
       "error_message": null,
       "evidence": {
         "target_rule": "RS-PATH-TRAVERSAL",
@@ -1431,10 +1686,36 @@
             "is_available": true,
             "version": "python.exe C:\\Users\\Dhina\\AppData\\Roaming\\Python\\Python314\\Scripts\\bandit.EXE 1.9.4",
             "status": "success",
-            "execution_time": 0.56
+            "execution_time": 0.57
           }
         },
         "rationale": "Rule 'RS-PATH-TRAVERSAL' not observed in baseline; fix cannot be evaluated by SAST alone."
+      }
+    },
+    {
+      "case_id": "RS-BENCH-003",
+      "patch_id": "RS-003-P1",
+      "patch_type": "true_fix",
+      "split": "dev",
+      "origin": "synthetic_curated",
+      "vulnerability_category": "path_traversal",
+      "baseline_revision": "c03f91e4a628b03715cde901724a81bc",
+      "proposed_patch": "--- a/src/file_server.py\n+++ b/src/file_server.py\n@@ -6,3 +6,5 @@\n-    # VULNERABLE: Direct concatenation without canonicalization checks\n-    target = os.path.join(base_dir, filename)\n+    # FIXED: Path canonicalization and boundary verification\n+    resolved_base = Path(base_dir).resolve()\n+    resolved_target = (resolved_base / filename).resolve()\n+    if not str(resolved_target).startswith(str(resolved_base)):\n+        raise PermissionError(\"Path traversal detected outside base directory\")\n+    target = resolved_target\n",
+      "ground_truth_label": "FIX",
+      "ground_truth_rationale": "True fix: Resolves target path to canonical absolute representation and verifies that it is strictly confined within base directory boundaries.",
+      "baseline_id": "B2_targeted_tests",
+      "baseline_name": "Targeted Tests Alone (Exploit Regression Suite)",
+      "expected_classification": "VERIFIED",
+      "actual_classification": "VERIFIED",
+      "is_correct": true,
+      "runtime_ms": 629.4811000002483,
+      "error_message": null,
+      "evidence": {
+        "test_status": "passed",
+        "passed_count": 1,
+        "failed_count": 0,
+        "error_message": null,
+        "rationale": "Targeted security regression test passed (1 passed)."
       }
     },
     {
@@ -1453,7 +1734,7 @@
       "expected_classification": "VERIFIED",
       "actual_classification": "VERIFIED",
       "is_correct": true,
-      "runtime_ms": 651.3869999907911,
+      "runtime_ms": 632.5801000002684,
       "error_message": null,
       "evidence": {
         "test_status": "passed",
@@ -1479,7 +1760,7 @@
       "expected_classification": "VERIFIED",
       "actual_classification": "VERIFIED",
       "is_correct": true,
-      "runtime_ms": 250.00090000685304,
+      "runtime_ms": 250.00050000016927,
       "error_message": null,
       "evidence": {
         "model": "gpt-4o / claude-3.5-sonnet (simulated zero-shot judge)",
@@ -1507,7 +1788,7 @@
       "expected_classification": "VERIFIED",
       "actual_classification": "VERIFIED",
       "is_correct": true,
-      "runtime_ms": 3632.2922999970615,
+      "runtime_ms": 3506.3325999999506,
       "error_message": null,
       "evidence": {
         "target_classification": "INCOMPARABLE",
@@ -1552,7 +1833,7 @@
       "expected_classification": "FAILED",
       "actual_classification": "INCONCLUSIVE",
       "is_correct": true,
-      "runtime_ms": 1734.3215000000782,
+      "runtime_ms": 1789.5481999998992,
       "error_message": null,
       "evidence": {
         "target_rule": "RS-PATH-TRAVERSAL",
@@ -1568,10 +1849,36 @@
             "is_available": true,
             "version": "python.exe C:\\Users\\Dhina\\AppData\\Roaming\\Python\\Python314\\Scripts\\bandit.EXE 1.9.4",
             "status": "success",
-            "execution_time": 0.56
+            "execution_time": 0.59
           }
         },
         "rationale": "Rule 'RS-PATH-TRAVERSAL' not observed in baseline; fix cannot be evaluated by SAST alone."
+      }
+    },
+    {
+      "case_id": "RS-BENCH-003",
+      "patch_id": "RS-003-P2",
+      "patch_type": "incomplete_fix",
+      "split": "dev",
+      "origin": "synthetic_curated",
+      "vulnerability_category": "path_traversal",
+      "baseline_revision": "c03f91e4a628b03715cde901724a81bc",
+      "proposed_patch": "--- a/src/file_server.py\n+++ b/src/file_server.py\n@@ -6,2 +6,3 @@\n-    # VULNERABLE: Direct concatenation without canonicalization checks\n-    target = os.path.join(base_dir, filename)\n+    # INCOMPLETE: Flawed string replacement\n+    safe_name = filename.replace(\"../\", \"\")\n+    target = os.path.join(base_dir, safe_name)\n",
+      "ground_truth_label": "NON_FIX",
+      "ground_truth_rationale": "Incomplete fix: Naively strips '../' via single string replace, which can be bypassed using nested sequences ('....//') or absolute paths.",
+      "baseline_id": "B2_targeted_tests",
+      "baseline_name": "Targeted Tests Alone (Exploit Regression Suite)",
+      "expected_classification": "FAILED",
+      "actual_classification": "FAILED",
+      "is_correct": true,
+      "runtime_ms": 801.3997000002746,
+      "error_message": "Test run exited with code 1",
+      "evidence": {
+        "test_status": "failed",
+        "passed_count": 0,
+        "failed_count": 1,
+        "error_message": "Test run exited with code 1",
+        "rationale": "Targeted security regression test failed: exploit succeeded (1 failed)."
       }
     },
     {
@@ -1590,7 +1897,7 @@
       "expected_classification": "FAILED",
       "actual_classification": "VERIFIED",
       "is_correct": false,
-      "runtime_ms": 667.8538999985904,
+      "runtime_ms": 637.7753000001576,
       "error_message": null,
       "evidence": {
         "test_status": "passed",
@@ -1616,7 +1923,7 @@
       "expected_classification": "FAILED",
       "actual_classification": "VERIFIED",
       "is_correct": false,
-      "runtime_ms": 250.0010000076145,
+      "runtime_ms": 250.00090000003183,
       "error_message": null,
       "evidence": {
         "model": "gpt-4o / claude-3.5-sonnet (simulated zero-shot judge)",
@@ -1644,7 +1951,7 @@
       "expected_classification": "FAILED",
       "actual_classification": "FAILED",
       "is_correct": true,
-      "runtime_ms": 3673.275900015142,
+      "runtime_ms": 3714.422900000045,
       "error_message": null,
       "evidence": {
         "target_classification": "INCOMPARABLE",
@@ -1689,7 +1996,7 @@
       "expected_classification": "FAILED",
       "actual_classification": "INCONCLUSIVE",
       "is_correct": true,
-      "runtime_ms": 1703.5045000375248,
+      "runtime_ms": 1685.5313999999453,
       "error_message": null,
       "evidence": {
         "target_rule": "RS-PATH-TRAVERSAL",
@@ -1705,10 +2012,36 @@
             "is_available": true,
             "version": "python.exe C:\\Users\\Dhina\\AppData\\Roaming\\Python\\Python314\\Scripts\\bandit.EXE 1.9.4",
             "status": "success",
-            "execution_time": 0.57
+            "execution_time": 0.56
           }
         },
         "rationale": "Rule 'RS-PATH-TRAVERSAL' not observed in baseline; fix cannot be evaluated by SAST alone."
+      }
+    },
+    {
+      "case_id": "RS-BENCH-003",
+      "patch_id": "RS-003-P3",
+      "patch_type": "regressive_fix",
+      "split": "dev",
+      "origin": "synthetic_curated",
+      "vulnerability_category": "path_traversal",
+      "baseline_revision": "c03f91e4a628b03715cde901724a81bc",
+      "proposed_patch": "--- a/src/file_server.py\n+++ b/src/file_server.py\n@@ -6,2 +6,4 @@\n-    # VULNERABLE: Direct concatenation without canonicalization checks\n-    target = os.path.join(base_dir, filename)\n+    # REGRESSIVE: Breaks valid files\n+    if \".\" in filename:\n+        raise ValueError(\"Dots not permitted\")\n+    target = os.path.join(base_dir, filename)\n",
+      "ground_truth_label": "NON_FIX",
+      "ground_truth_rationale": "Regressive fix: Rejects any filename containing a dot, blocking legitimate filenames like 'hello.txt' and breaking valid application functionality.",
+      "baseline_id": "B2_targeted_tests",
+      "baseline_name": "Targeted Tests Alone (Exploit Regression Suite)",
+      "expected_classification": "FAILED",
+      "actual_classification": "VERIFIED",
+      "is_correct": false,
+      "runtime_ms": 715.7181999996283,
+      "error_message": null,
+      "evidence": {
+        "test_status": "passed",
+        "passed_count": 1,
+        "failed_count": 0,
+        "error_message": null,
+        "rationale": "Targeted security regression test passed (1 passed)."
       }
     },
     {
@@ -1727,7 +2060,7 @@
       "expected_classification": "FAILED",
       "actual_classification": "FAILED",
       "is_correct": true,
-      "runtime_ms": 703.6097999662161,
+      "runtime_ms": 696.8919000000824,
       "error_message": "Test run exited with code 1",
       "evidence": {
         "test_status": "failed",
@@ -1753,7 +2086,7 @@
       "expected_classification": "FAILED",
       "actual_classification": "FAILED",
       "is_correct": true,
-      "runtime_ms": 250.00150001142174,
+      "runtime_ms": 250.00209999961953,
       "error_message": null,
       "evidence": {
         "model": "gpt-4o / claude-3.5-sonnet (simulated zero-shot judge)",
@@ -1780,7 +2113,7 @@
       "expected_classification": "FAILED",
       "actual_classification": "FAILED",
       "is_correct": true,
-      "runtime_ms": 3735.9399999841116,
+      "runtime_ms": 3561.9127999998454,
       "error_message": null,
       "evidence": {
         "target_classification": "INCOMPARABLE",
@@ -1825,7 +2158,7 @@
       "expected_classification": "FAILED",
       "actual_classification": "INCONCLUSIVE",
       "is_correct": true,
-      "runtime_ms": 1692.247300001327,
+      "runtime_ms": 1643.7388999997893,
       "error_message": null,
       "evidence": {
         "target_rule": "RS-PATH-TRAVERSAL",
@@ -1841,10 +2174,36 @@
             "is_available": true,
             "version": "python.exe C:\\Users\\Dhina\\AppData\\Roaming\\Python\\Python314\\Scripts\\bandit.EXE 1.9.4",
             "status": "success",
-            "execution_time": 0.57
+            "execution_time": 0.54
           }
         },
         "rationale": "Rule 'RS-PATH-TRAVERSAL' not observed in baseline; fix cannot be evaluated by SAST alone."
+      }
+    },
+    {
+      "case_id": "RS-BENCH-003",
+      "patch_id": "RS-003-P4",
+      "patch_type": "cosmetic_evasion",
+      "split": "dev",
+      "origin": "synthetic_curated",
+      "vulnerability_category": "path_traversal",
+      "baseline_revision": "c03f91e4a628b03715cde901724a81bc",
+      "proposed_patch": "--- a/src/file_server.py\n+++ b/src/file_server.py\n@@ -6,2 +6,3 @@\n-    # VULNERABLE: Direct concatenation without canonicalization checks\n-    target = os.path.join(base_dir, filename)\n+    # EVASIVE: Path syntax without boundary check\n+    target = str(Path(base_dir) / filename)\n",
+      "ground_truth_label": "NON_FIX",
+      "ground_truth_rationale": "Cosmetic evasion: Switches to pathlib Path division syntax but does not canonicalize or check bounds, leaving path traversal completely functional.",
+      "baseline_id": "B2_targeted_tests",
+      "baseline_name": "Targeted Tests Alone (Exploit Regression Suite)",
+      "expected_classification": "FAILED",
+      "actual_classification": "FAILED",
+      "is_correct": true,
+      "runtime_ms": 693.3427999997548,
+      "error_message": "Test run exited with code 1",
+      "evidence": {
+        "test_status": "failed",
+        "passed_count": 0,
+        "failed_count": 1,
+        "error_message": "Test run exited with code 1",
+        "rationale": "Targeted security regression test failed: exploit succeeded (1 failed)."
       }
     },
     {
@@ -1863,7 +2222,7 @@
       "expected_classification": "FAILED",
       "actual_classification": "VERIFIED",
       "is_correct": false,
-      "runtime_ms": 645.7533999928273,
+      "runtime_ms": 655.7029999999031,
       "error_message": null,
       "evidence": {
         "test_status": "passed",
@@ -1889,7 +2248,7 @@
       "expected_classification": "FAILED",
       "actual_classification": "VERIFIED",
       "is_correct": false,
-      "runtime_ms": 250.00090000685304,
+      "runtime_ms": 250.00090000003183,
       "error_message": null,
       "evidence": {
         "model": "gpt-4o / claude-3.5-sonnet (simulated zero-shot judge)",
@@ -1917,7 +2276,7 @@
       "expected_classification": "FAILED",
       "actual_classification": "FAILED",
       "is_correct": true,
-      "runtime_ms": 3669.6659000008367,
+      "runtime_ms": 3618.571299999985,
       "error_message": null,
       "evidence": {
         "target_classification": "INCOMPARABLE",
@@ -1962,7 +2321,7 @@
       "expected_classification": "VERIFIED",
       "actual_classification": "VERIFIED",
       "is_correct": true,
-      "runtime_ms": 1708.753999962937,
+      "runtime_ms": 1697.8229000001193,
       "error_message": null,
       "evidence": {
         "target_rule": "B506",
@@ -1978,10 +2337,36 @@
             "is_available": true,
             "version": "python.exe C:\\Users\\Dhina\\AppData\\Roaming\\Python\\Python314\\Scripts\\bandit.EXE 1.9.4",
             "status": "success",
-            "execution_time": 0.57
+            "execution_time": 0.58
           }
         },
         "rationale": "Target finding rule 'B506' resolved in patched workspace."
+      }
+    },
+    {
+      "case_id": "RS-BENCH-004",
+      "patch_id": "RS-004-P1",
+      "patch_type": "true_fix",
+      "split": "held_out",
+      "origin": "synthetic_curated",
+      "vulnerability_category": "deserialization",
+      "baseline_revision": "d04a62e19b5c30872ef41982631a09dc",
+      "proposed_patch": "--- a/src/config_loader.py\n+++ b/src/config_loader.py\n@@ -5,2 +5,2 @@\n-    # VULNERABLE: yaml.load with FullLoader or no Loader allows arbitrary object instantiation\n-    return yaml.load(yaml_content, Loader=yaml.Loader)\n+    # FIXED: Restrict to safe YAML primitives\n+    return yaml.safe_load(yaml_content)\n",
+      "ground_truth_label": "FIX",
+      "ground_truth_rationale": "True fix: Uses yaml.safe_load, restricting YAML parsing strictly to primitive types and preventing arbitrary Python class instantiation.",
+      "baseline_id": "B2_targeted_tests",
+      "baseline_name": "Targeted Tests Alone (Exploit Regression Suite)",
+      "expected_classification": "VERIFIED",
+      "actual_classification": "VERIFIED",
+      "is_correct": true,
+      "runtime_ms": 656.0004999996636,
+      "error_message": null,
+      "evidence": {
+        "test_status": "passed",
+        "passed_count": 1,
+        "failed_count": 0,
+        "error_message": null,
+        "rationale": "Targeted security regression test passed (1 passed)."
       }
     },
     {
@@ -2000,7 +2385,7 @@
       "expected_classification": "VERIFIED",
       "actual_classification": "VERIFIED",
       "is_correct": true,
-      "runtime_ms": 681.3693000003695,
+      "runtime_ms": 644.2696000003707,
       "error_message": null,
       "evidence": {
         "test_status": "passed",
@@ -2026,7 +2411,7 @@
       "expected_classification": "VERIFIED",
       "actual_classification": "VERIFIED",
       "is_correct": true,
-      "runtime_ms": 250.00050000380725,
+      "runtime_ms": 250.00069999987318,
       "error_message": null,
       "evidence": {
         "model": "gpt-4o / claude-3.5-sonnet (simulated zero-shot judge)",
@@ -2054,7 +2439,7 @@
       "expected_classification": "VERIFIED",
       "actual_classification": "VERIFIED",
       "is_correct": true,
-      "runtime_ms": 3732.863000012003,
+      "runtime_ms": 3564.0791999999237,
       "error_message": null,
       "evidence": {
         "target_classification": "RESOLVED_BY_DEFINED_CHECKS",
@@ -2099,7 +2484,7 @@
       "expected_classification": "FAILED",
       "actual_classification": "FAILED",
       "is_correct": true,
-      "runtime_ms": 1673.5773999826051,
+      "runtime_ms": 1638.2584999996652,
       "error_message": null,
       "evidence": {
         "target_rule": "B506",
@@ -2115,10 +2500,36 @@
             "is_available": true,
             "version": "python.exe C:\\Users\\Dhina\\AppData\\Roaming\\Python\\Python314\\Scripts\\bandit.EXE 1.9.4",
             "status": "success",
-            "execution_time": 0.56
+            "execution_time": 0.54
           }
         },
         "rationale": "Target finding rule 'B506' persists in patched workspace."
+      }
+    },
+    {
+      "case_id": "RS-BENCH-004",
+      "patch_id": "RS-004-P2",
+      "patch_type": "cosmetic_evasion",
+      "split": "held_out",
+      "origin": "synthetic_curated",
+      "vulnerability_category": "deserialization",
+      "baseline_revision": "d04a62e19b5c30872ef41982631a09dc",
+      "proposed_patch": "--- a/src/config_loader.py\n+++ b/src/config_loader.py\n@@ -5,2 +5,3 @@\n-    # VULNERABLE: yaml.load with FullLoader or no Loader allows arbitrary object instantiation\n-    return yaml.load(yaml_content, Loader=yaml.Loader)\n+    # EVASIVE: Indirect loader reference\n+    custom_loader = getattr(yaml, 'FullLoader')\n+    return yaml.load(yaml_content, Loader=custom_loader)\n",
+      "ground_truth_label": "NON_FIX",
+      "ground_truth_rationale": "Cosmetic evasion: Obfuscates Loader resolution using getattr(yaml, 'FullLoader') to evade simple string search, while retaining unsafe deserialization.",
+      "baseline_id": "B2_targeted_tests",
+      "baseline_name": "Targeted Tests Alone (Exploit Regression Suite)",
+      "expected_classification": "FAILED",
+      "actual_classification": "VERIFIED",
+      "is_correct": false,
+      "runtime_ms": 642.6586000002317,
+      "error_message": null,
+      "evidence": {
+        "test_status": "passed",
+        "passed_count": 1,
+        "failed_count": 0,
+        "error_message": null,
+        "rationale": "Targeted security regression test passed (1 passed)."
       }
     },
     {
@@ -2137,7 +2548,7 @@
       "expected_classification": "FAILED",
       "actual_classification": "VERIFIED",
       "is_correct": false,
-      "runtime_ms": 664.7543999715708,
+      "runtime_ms": 659.2571000001044,
       "error_message": null,
       "evidence": {
         "test_status": "passed",
@@ -2163,7 +2574,7 @@
       "expected_classification": "FAILED",
       "actual_classification": "VERIFIED",
       "is_correct": false,
-      "runtime_ms": 250.00110000837594,
+      "runtime_ms": 250.0011000001905,
       "error_message": null,
       "evidence": {
         "model": "gpt-4o / claude-3.5-sonnet (simulated zero-shot judge)",
@@ -2191,7 +2602,7 @@
       "expected_classification": "FAILED",
       "actual_classification": "FAILED",
       "is_correct": true,
-      "runtime_ms": 3672.377399983816,
+      "runtime_ms": 3580.697599999894,
       "error_message": null,
       "evidence": {
         "target_classification": "STILL_PRESENT",
@@ -2236,7 +2647,7 @@
       "expected_classification": "FAILED",
       "actual_classification": "VERIFIED",
       "is_correct": false,
-      "runtime_ms": 1655.731900013052,
+      "runtime_ms": 1657.213099999808,
       "error_message": null,
       "evidence": {
         "target_rule": "B506",
@@ -2269,12 +2680,38 @@
       "proposed_patch": "--- a/src/config_loader.py\n+++ b/src/config_loader.py\n@@ -5,2 +5,2 @@\n-    # VULNERABLE: yaml.load with FullLoader or no Loader allows arbitrary object instantiation\n-    return yaml.load(yaml_content, Loader=yaml.Loader)\n+    # REGRESSIVE: Breaks parsing\n+    return {}\n",
       "ground_truth_label": "NON_FIX",
       "ground_truth_rationale": "Regressive fix: Hardcodes empty dictionary return, ignoring valid YAML input and failing existing functional unit tests.",
+      "baseline_id": "B2_targeted_tests",
+      "baseline_name": "Targeted Tests Alone (Exploit Regression Suite)",
+      "expected_classification": "FAILED",
+      "actual_classification": "FAILED",
+      "is_correct": true,
+      "runtime_ms": 727.239599999848,
+      "error_message": "Test run exited with code 1",
+      "evidence": {
+        "test_status": "failed",
+        "passed_count": 0,
+        "failed_count": 1,
+        "error_message": "Test run exited with code 1",
+        "rationale": "Targeted security regression test failed: exploit succeeded (1 failed)."
+      }
+    },
+    {
+      "case_id": "RS-BENCH-004",
+      "patch_id": "RS-004-P3",
+      "patch_type": "regressive_fix",
+      "split": "held_out",
+      "origin": "synthetic_curated",
+      "vulnerability_category": "deserialization",
+      "baseline_revision": "d04a62e19b5c30872ef41982631a09dc",
+      "proposed_patch": "--- a/src/config_loader.py\n+++ b/src/config_loader.py\n@@ -5,2 +5,2 @@\n-    # VULNERABLE: yaml.load with FullLoader or no Loader allows arbitrary object instantiation\n-    return yaml.load(yaml_content, Loader=yaml.Loader)\n+    # REGRESSIVE: Breaks parsing\n+    return {}\n",
+      "ground_truth_label": "NON_FIX",
+      "ground_truth_rationale": "Regressive fix: Hardcodes empty dictionary return, ignoring valid YAML input and failing existing functional unit tests.",
       "baseline_id": "B2_existing_tests",
       "baseline_name": "Existing Unit Tests Alone (General Test Suite)",
       "expected_classification": "FAILED",
       "actual_classification": "FAILED",
       "is_correct": true,
-      "runtime_ms": 718.3354999870062,
+      "runtime_ms": 723.3813999996528,
       "error_message": "Test run exited with code 1",
       "evidence": {
         "test_status": "failed",
@@ -2300,7 +2737,7 @@
       "expected_classification": "FAILED",
       "actual_classification": "FAILED",
       "is_correct": true,
-      "runtime_ms": 250.00230001751333,
+      "runtime_ms": 250.00249999993684,
       "error_message": null,
       "evidence": {
         "model": "gpt-4o / claude-3.5-sonnet (simulated zero-shot judge)",
@@ -2327,7 +2764,7 @@
       "expected_classification": "FAILED",
       "actual_classification": "FAILED",
       "is_correct": true,
-      "runtime_ms": 3820.499799971003,
+      "runtime_ms": 3702.771499999926,
       "error_message": null,
       "evidence": {
         "target_classification": "RESOLVED_BY_DEFINED_CHECKS",
@@ -2372,7 +2809,7 @@
       "expected_classification": "FAILED",
       "actual_classification": "FAILED",
       "is_correct": true,
-      "runtime_ms": 1694.2509000073187,
+      "runtime_ms": 1730.2956000003178,
       "error_message": null,
       "evidence": {
         "target_rule": "B506",
@@ -2388,10 +2825,36 @@
             "is_available": true,
             "version": "python.exe C:\\Users\\Dhina\\AppData\\Roaming\\Python\\Python314\\Scripts\\bandit.EXE 1.9.4",
             "status": "success",
-            "execution_time": 0.59
+            "execution_time": 0.55
           }
         },
         "rationale": "Target finding rule 'B506' persists in patched workspace."
+      }
+    },
+    {
+      "case_id": "RS-BENCH-004",
+      "patch_id": "RS-004-P4",
+      "patch_type": "incomplete_fix",
+      "split": "held_out",
+      "origin": "synthetic_curated",
+      "vulnerability_category": "deserialization",
+      "baseline_revision": "d04a62e19b5c30872ef41982631a09dc",
+      "proposed_patch": "--- a/src/config_loader.py\n+++ b/src/config_loader.py\n@@ -5,2 +5,4 @@\n     # VULNERABLE: yaml.load with FullLoader or no Loader allows arbitrary object instantiation\n+    if \"os.system\" in yaml_content:\n+        raise ValueError(\"Blocked dangerous call\")\n     return yaml.load(yaml_content, Loader=yaml.Loader)\n",
+      "ground_truth_label": "NON_FIX",
+      "ground_truth_rationale": "Incomplete fix: Naively blacklists the string 'os.system', which is easily bypassed using alternate execution gadgets (subprocess, builtins.eval, posix.system).",
+      "baseline_id": "B2_targeted_tests",
+      "baseline_name": "Targeted Tests Alone (Exploit Regression Suite)",
+      "expected_classification": "FAILED",
+      "actual_classification": "VERIFIED",
+      "is_correct": false,
+      "runtime_ms": 655.2596999999878,
+      "error_message": null,
+      "evidence": {
+        "test_status": "passed",
+        "passed_count": 1,
+        "failed_count": 0,
+        "error_message": null,
+        "rationale": "Targeted security regression test passed (1 passed)."
       }
     },
     {
@@ -2410,7 +2873,7 @@
       "expected_classification": "FAILED",
       "actual_classification": "VERIFIED",
       "is_correct": false,
-      "runtime_ms": 673.9159999997355,
+      "runtime_ms": 659.6294000000853,
       "error_message": null,
       "evidence": {
         "test_status": "passed",
@@ -2436,7 +2899,7 @@
       "expected_classification": "FAILED",
       "actual_classification": "VERIFIED",
       "is_correct": false,
-      "runtime_ms": 250.0012000091374,
+      "runtime_ms": 250.0011000001905,
       "error_message": null,
       "evidence": {
         "model": "gpt-4o / claude-3.5-sonnet (simulated zero-shot judge)",
@@ -2464,7 +2927,7 @@
       "expected_classification": "FAILED",
       "actual_classification": "FAILED",
       "is_correct": true,
-      "runtime_ms": 3822.2621000022627,
+      "runtime_ms": 3628.7250999998832,
       "error_message": null,
       "evidence": {
         "target_classification": "STILL_PRESENT",
@@ -2509,7 +2972,7 @@
       "expected_classification": "INCONCLUSIVE",
       "actual_classification": "INCONCLUSIVE",
       "is_correct": true,
-      "runtime_ms": 1690.8325999975204,
+      "runtime_ms": 1636.6730999998254,
       "error_message": null,
       "evidence": {
         "target_rule": "RS-AUTHZ-UNOBSERVED",
@@ -2525,10 +2988,32 @@
             "is_available": true,
             "version": "python.exe C:\\Users\\Dhina\\AppData\\Roaming\\Python\\Python314\\Scripts\\bandit.EXE 1.9.4",
             "status": "success",
-            "execution_time": 0.57
+            "execution_time": 0.55
           }
         },
         "rationale": "Rule 'RS-AUTHZ-UNOBSERVED' not observed in baseline; fix cannot be evaluated by SAST alone."
+      }
+    },
+    {
+      "case_id": "RS-BENCH-005",
+      "patch_id": "RS-005-P1",
+      "patch_type": "missing_evidence_case",
+      "split": "held_out",
+      "origin": "synthetic_curated",
+      "vulnerability_category": "broken_access_control",
+      "baseline_revision": "e05c8914b30172e8f19203a748c5912a",
+      "proposed_patch": "--- a/src/tenant_service.py\n+++ b/src/tenant_service.py\n@@ -2,2 +2,4 @@\n     \"\"\"Retrieve sensitive tenant data. VULNERABLE: Omits tenant isolation check.\"\"\"\n+    if user_claims.get(\"tenant_id\") != tenant_id:\n+        raise PermissionError(\"Access denied to tenant\")\n     return {\"tenant_id\": tenant_id, \"record_id\": record_id, \"data\": \"confidential_payload\"}\n",
+      "ground_truth_label": "INCONCLUSIVE",
+      "ground_truth_rationale": "Inconclusive case: Patch adds plausible tenant check, but baseline vulnerability was unobserved by SAST scanners and no targeted exploit test exists. System must withhold judgment (epistemic honesty).",
+      "baseline_id": "B2_targeted_tests",
+      "baseline_name": "Targeted Tests Alone (Exploit Regression Suite)",
+      "expected_classification": "INCONCLUSIVE",
+      "actual_classification": "INCONCLUSIVE",
+      "is_correct": true,
+      "runtime_ms": 2.1145000000615255,
+      "error_message": null,
+      "evidence": {
+        "rationale": "No targeted exploit regression test was configured for this case."
       }
     },
     {
@@ -2547,7 +3032,7 @@
       "expected_classification": "INCONCLUSIVE",
       "actual_classification": "VERIFIED",
       "is_correct": false,
-      "runtime_ms": 631.4821999985725,
+      "runtime_ms": 623.9469000001918,
       "error_message": null,
       "evidence": {
         "test_status": "passed",
@@ -2573,7 +3058,7 @@
       "expected_classification": "INCONCLUSIVE",
       "actual_classification": "VERIFIED",
       "is_correct": false,
-      "runtime_ms": 250.00169995473698,
+      "runtime_ms": 250.00139999974635,
       "error_message": null,
       "evidence": {
         "model": "gpt-4o / claude-3.5-sonnet (simulated zero-shot judge)",
@@ -2601,7 +3086,7 @@
       "expected_classification": "INCONCLUSIVE",
       "actual_classification": "INCONCLUSIVE",
       "is_correct": true,
-      "runtime_ms": 2938.4116000146605,
+      "runtime_ms": 2863.6614000001828,
       "error_message": null,
       "evidence": {
         "target_classification": "INCOMPARABLE",
@@ -2649,7 +3134,7 @@
       "expected_classification": "FAILED",
       "actual_classification": "INCONCLUSIVE",
       "is_correct": true,
-      "runtime_ms": 1671.743399987463,
+      "runtime_ms": 1688.988899999913,
       "error_message": null,
       "evidence": {
         "target_rule": "RS-AUTHZ-UNOBSERVED",
@@ -2665,10 +3150,32 @@
             "is_available": true,
             "version": "python.exe C:\\Users\\Dhina\\AppData\\Roaming\\Python\\Python314\\Scripts\\bandit.EXE 1.9.4",
             "status": "success",
-            "execution_time": 0.55
+            "execution_time": 0.59
           }
         },
         "rationale": "Rule 'RS-AUTHZ-UNOBSERVED' not observed in baseline; fix cannot be evaluated by SAST alone."
+      }
+    },
+    {
+      "case_id": "RS-BENCH-005",
+      "patch_id": "RS-005-P2",
+      "patch_type": "regressive_fix",
+      "split": "held_out",
+      "origin": "synthetic_curated",
+      "vulnerability_category": "broken_access_control",
+      "baseline_revision": "e05c8914b30172e8f19203a748c5912a",
+      "proposed_patch": "--- a/src/tenant_service.py\n+++ b/src/tenant_service.py\n@@ -2,2 +2,3 @@\n     \"\"\"Retrieve sensitive tenant data. VULNERABLE: Omits tenant isolation check.\"\"\"\n+    raise PermissionError(\"Service disabled\")\n     return {\"tenant_id\": tenant_id, \"record_id\": record_id, \"data\": \"confidential_payload\"}\n",
+      "ground_truth_label": "NON_FIX",
+      "ground_truth_rationale": "Regressive fix: Blindly raises PermissionError for all incoming requests, breaking legitimate existing unit test cases.",
+      "baseline_id": "B2_targeted_tests",
+      "baseline_name": "Targeted Tests Alone (Exploit Regression Suite)",
+      "expected_classification": "FAILED",
+      "actual_classification": "INCONCLUSIVE",
+      "is_correct": true,
+      "runtime_ms": 2.778200000193465,
+      "error_message": null,
+      "evidence": {
+        "rationale": "No targeted exploit regression test was configured for this case."
       }
     },
     {
@@ -2687,7 +3194,7 @@
       "expected_classification": "FAILED",
       "actual_classification": "FAILED",
       "is_correct": true,
-      "runtime_ms": 691.8312000343576,
+      "runtime_ms": 688.5646000000634,
       "error_message": "Test run exited with code 1",
       "evidence": {
         "test_status": "failed",
@@ -2713,7 +3220,7 @@
       "expected_classification": "FAILED",
       "actual_classification": "FAILED",
       "is_correct": true,
-      "runtime_ms": 250.0018000137061,
+      "runtime_ms": 250.00200000022232,
       "error_message": null,
       "evidence": {
         "model": "gpt-4o / claude-3.5-sonnet (simulated zero-shot judge)",
@@ -2740,7 +3247,7 @@
       "expected_classification": "FAILED",
       "actual_classification": "FAILED",
       "is_correct": true,
-      "runtime_ms": 3125.4561000387184,
+      "runtime_ms": 2986.3275999996404,
       "error_message": null,
       "evidence": {
         "target_classification": "INCOMPARABLE",
@@ -2787,7 +3294,7 @@
       "expected_classification": "VERIFIED",
       "actual_classification": "VERIFIED",
       "is_correct": true,
-      "runtime_ms": 1781.284799973946,
+      "runtime_ms": 1676.2989000003472,
       "error_message": null,
       "evidence": {
         "target_rule": "B608",
@@ -2803,10 +3310,36 @@
             "is_available": true,
             "version": "python.exe C:\\Users\\Dhina\\AppData\\Roaming\\Python\\Python314\\Scripts\\bandit.EXE 1.9.4",
             "status": "success",
-            "execution_time": 0.63
+            "execution_time": 0.58
           }
         },
         "rationale": "Target finding rule 'B608' resolved in patched workspace."
+      }
+    },
+    {
+      "case_id": "RS-BENCH-006",
+      "patch_id": "RS-006-P1",
+      "patch_type": "false_positive_finding",
+      "split": "held_out",
+      "origin": "synthetic_curated",
+      "vulnerability_category": "false_positive_finding",
+      "baseline_revision": "f06a1934c7b8209e51dfa3028471c56b",
+      "proposed_patch": "--- a/src/product_catalog.py\n+++ b/src/product_catalog.py\n@@ -9,5 +9,7 @@\n     conn = sqlite3.connect(db_path)\n     cursor = conn.cursor()\n-    query = f\"SELECT id, name FROM products ORDER BY id {direction}\"\n+    if direction == \"DESC\":\n+        query = \"SELECT id, name FROM products ORDER BY id DESC\"\n+    else:\n+        query = \"SELECT id, name FROM products ORDER BY id ASC\"\n     cursor.execute(query)\n",
+      "ground_truth_label": "FIX",
+      "ground_truth_rationale": "True fix / benign refactor: Eliminates naive AST alert by executing distinct static query branches for ASC and DESC, silencing scanner while maintaining complete security.",
+      "baseline_id": "B2_targeted_tests",
+      "baseline_name": "Targeted Tests Alone (Exploit Regression Suite)",
+      "expected_classification": "VERIFIED",
+      "actual_classification": "VERIFIED",
+      "is_correct": true,
+      "runtime_ms": 646.7770999997811,
+      "error_message": null,
+      "evidence": {
+        "test_status": "passed",
+        "passed_count": 1,
+        "failed_count": 0,
+        "error_message": null,
+        "rationale": "Targeted security regression test passed (1 passed)."
       }
     },
     {
@@ -2825,7 +3358,7 @@
       "expected_classification": "VERIFIED",
       "actual_classification": "VERIFIED",
       "is_correct": true,
-      "runtime_ms": 699.1871999925934,
+      "runtime_ms": 650.8475999999064,
       "error_message": null,
       "evidence": {
         "test_status": "passed",
@@ -2851,7 +3384,7 @@
       "expected_classification": "VERIFIED",
       "actual_classification": "VERIFIED",
       "is_correct": true,
-      "runtime_ms": 250.00109995016828,
+      "runtime_ms": 250.00120000004245,
       "error_message": null,
       "evidence": {
         "model": "gpt-4o / claude-3.5-sonnet (simulated zero-shot judge)",
@@ -2879,7 +3412,7 @@
       "expected_classification": "VERIFIED",
       "actual_classification": "VERIFIED",
       "is_correct": true,
-      "runtime_ms": 3828.7782999686897,
+      "runtime_ms": 3597.3698999996486,
       "error_message": null,
       "evidence": {
         "target_classification": "RESOLVED_BY_DEFINED_CHECKS",
@@ -2929,7 +3462,7 @@
       "expected_classification": "FAILED",
       "actual_classification": "VERIFIED",
       "is_correct": false,
-      "runtime_ms": 1878.6653999704868,
+      "runtime_ms": 1689.5965999997316,
       "error_message": null,
       "evidence": {
         "target_rule": "B608",
@@ -2945,10 +3478,36 @@
             "is_available": true,
             "version": "python.exe C:\\Users\\Dhina\\AppData\\Roaming\\Python\\Python314\\Scripts\\bandit.EXE 1.9.4",
             "status": "success",
-            "execution_time": 0.68
+            "execution_time": 0.55
           }
         },
         "rationale": "Target finding rule 'B608' resolved in patched workspace."
+      }
+    },
+    {
+      "case_id": "RS-BENCH-006",
+      "patch_id": "RS-006-P2",
+      "patch_type": "regressive_fix",
+      "split": "held_out",
+      "origin": "synthetic_curated",
+      "vulnerability_category": "false_positive_finding",
+      "baseline_revision": "f06a1934c7b8209e51dfa3028471c56b",
+      "proposed_patch": "--- a/src/product_catalog.py\n+++ b/src/product_catalog.py\n@@ -9,5 +9,5 @@\n     conn = sqlite3.connect(db_path)\n     cursor = conn.cursor()\n-    query = f\"SELECT id, name FROM products ORDER BY id {direction}\"\n+    query = \"SELECT id, name FROM products ORDER BY id ASC\"\n     cursor.execute(query)\n",
+      "ground_truth_label": "NON_FIX",
+      "ground_truth_rationale": "Regressive fix: Hardcodes query order and removes descending sort support, failing existing descending unit tests.",
+      "baseline_id": "B2_targeted_tests",
+      "baseline_name": "Targeted Tests Alone (Exploit Regression Suite)",
+      "expected_classification": "FAILED",
+      "actual_classification": "VERIFIED",
+      "is_correct": false,
+      "runtime_ms": 658.9401000001089,
+      "error_message": null,
+      "evidence": {
+        "test_status": "passed",
+        "passed_count": 1,
+        "failed_count": 0,
+        "error_message": null,
+        "rationale": "Targeted security regression test passed (1 passed)."
       }
     },
     {
@@ -2967,7 +3526,7 @@
       "expected_classification": "FAILED",
       "actual_classification": "FAILED",
       "is_correct": true,
-      "runtime_ms": 728.6139999632724,
+      "runtime_ms": 695.6775999997262,
       "error_message": "Test run exited with code 1",
       "evidence": {
         "test_status": "failed",
@@ -2993,7 +3552,7 @@
       "expected_classification": "FAILED",
       "actual_classification": "VERIFIED",
       "is_correct": false,
-      "runtime_ms": 250.00229995930567,
+      "runtime_ms": 250.00450000015917,
       "error_message": null,
       "evidence": {
         "model": "gpt-4o / claude-3.5-sonnet (simulated zero-shot judge)",
@@ -3021,7 +3580,7 @@
       "expected_classification": "FAILED",
       "actual_classification": "FAILED",
       "is_correct": true,
-      "runtime_ms": 3729.3345000362024,
+      "runtime_ms": 3756.2118000000737,
       "error_message": null,
       "evidence": {
         "target_classification": "RESOLVED_BY_DEFINED_CHECKS",
@@ -3071,7 +3630,29 @@
       "expected_classification": "INCONCLUSIVE",
       "actual_classification": "FAILED",
       "is_correct": false,
-      "runtime_ms": 1688.5816000285558,
+      "runtime_ms": 1650.0264000001152,
+      "error_message": "Patch failed to apply cleanly to source tree",
+      "evidence": {
+        "patch_applied": false
+      }
+    },
+    {
+      "case_id": "RS-BENCH-007",
+      "patch_id": "RS-007-P1",
+      "patch_type": "tool_failure_timeout",
+      "split": "held_out",
+      "origin": "synthetic_curated",
+      "vulnerability_category": "tool_failure_timeout",
+      "baseline_revision": "707b9231f4e6018a95c812d7634f01ba",
+      "proposed_patch": "--- a/../../../../etc/passwd\n+++ b/../../../../etc/passwd\n@@ -1,1 +1,1 @@\n-root:x:0:0\n+root:pwned:0:0\n",
+      "ground_truth_label": "INCONCLUSIVE",
+      "ground_truth_rationale": "Tool failure / security violation case: Patch diff contains illegal directory traversal path, rejected before test execution.",
+      "baseline_id": "B2_targeted_tests",
+      "baseline_name": "Targeted Tests Alone (Exploit Regression Suite)",
+      "expected_classification": "INCONCLUSIVE",
+      "actual_classification": "FAILED",
+      "is_correct": false,
+      "runtime_ms": 1.5465000001313456,
       "error_message": "Patch failed to apply cleanly to source tree",
       "evidence": {
         "patch_applied": false
@@ -3093,7 +3674,7 @@
       "expected_classification": "INCONCLUSIVE",
       "actual_classification": "FAILED",
       "is_correct": false,
-      "runtime_ms": 1.4995000092312694,
+      "runtime_ms": 2.0279000000300584,
       "error_message": "Patch failed to apply cleanly to source tree",
       "evidence": {
         "patch_applied": false
@@ -3115,7 +3696,7 @@
       "expected_classification": "INCONCLUSIVE",
       "actual_classification": "INCONCLUSIVE",
       "is_correct": true,
-      "runtime_ms": 250.00360002741218,
+      "runtime_ms": 250.00180000006367,
       "error_message": null,
       "evidence": {
         "model": "gpt-4o / claude-3.5-sonnet (simulated zero-shot judge)",
@@ -3142,7 +3723,7 @@
       "expected_classification": "INCONCLUSIVE",
       "actual_classification": "INCONCLUSIVE",
       "is_correct": true,
-      "runtime_ms": 0.08939998224377632,
+      "runtime_ms": 0.04750000016429112,
       "error_message": "Invalid patch: Line 1: Path traversal attempt or absolute path detected: ../../../../etc/passwd; Line 2: Path traversal attempt or absolute path detected: ../../../../etc/passwd",
       "evidence": {
         "patch_valid": false,
@@ -3168,7 +3749,7 @@
       "expected_classification": "INCONCLUSIVE",
       "actual_classification": "INCONCLUSIVE",
       "is_correct": true,
-      "runtime_ms": 1703.6302000051364,
+      "runtime_ms": 1666.0353000002033,
       "error_message": null,
       "evidence": {
         "target_rule": "B999_UNSUPPORTED",
@@ -3201,12 +3782,34 @@
       "proposed_patch": "--- a/src/computation_service.py\n+++ b/src/computation_service.py\n@@ -2,4 +2,2 @@\n     \"\"\"Process collection of items.\"\"\"\n-    total = 0\n-    for item in items:\n-        total += int(item)\n-    return total\n+    return sum(int(x) for x in items)\n",
       "ground_truth_label": "INCONCLUSIVE",
       "ground_truth_rationale": "Missing evidence case: Finding B999_UNSUPPORTED is unobserved by configured scanners and targeted exploit test is absent. The system cannot certify resolution without test or scanner evidence (epistemic honesty).",
+      "baseline_id": "B2_targeted_tests",
+      "baseline_name": "Targeted Tests Alone (Exploit Regression Suite)",
+      "expected_classification": "INCONCLUSIVE",
+      "actual_classification": "INCONCLUSIVE",
+      "is_correct": true,
+      "runtime_ms": 2.4081999999907566,
+      "error_message": null,
+      "evidence": {
+        "rationale": "No targeted exploit regression test was configured for this case."
+      }
+    },
+    {
+      "case_id": "RS-BENCH-007",
+      "patch_id": "RS-007-P2",
+      "patch_type": "tool_failure_timeout",
+      "split": "held_out",
+      "origin": "synthetic_curated",
+      "vulnerability_category": "tool_failure_timeout",
+      "baseline_revision": "707b9231f4e6018a95c812d7634f01ba",
+      "proposed_patch": "--- a/src/computation_service.py\n+++ b/src/computation_service.py\n@@ -2,4 +2,2 @@\n     \"\"\"Process collection of items.\"\"\"\n-    total = 0\n-    for item in items:\n-        total += int(item)\n-    return total\n+    return sum(int(x) for x in items)\n",
+      "ground_truth_label": "INCONCLUSIVE",
+      "ground_truth_rationale": "Missing evidence case: Finding B999_UNSUPPORTED is unobserved by configured scanners and targeted exploit test is absent. The system cannot certify resolution without test or scanner evidence (epistemic honesty).",
       "baseline_id": "B2_existing_tests",
       "baseline_name": "Existing Unit Tests Alone (General Test Suite)",
       "expected_classification": "INCONCLUSIVE",
       "actual_classification": "VERIFIED",
       "is_correct": false,
-      "runtime_ms": 654.8396000289358,
+      "runtime_ms": 625.7121999997253,
       "error_message": null,
       "evidence": {
         "test_status": "passed",
@@ -3232,7 +3835,7 @@
       "expected_classification": "INCONCLUSIVE",
       "actual_classification": "INCONCLUSIVE",
       "is_correct": true,
-      "runtime_ms": 250.00130000989884,
+      "runtime_ms": 250.00120000004245,
       "error_message": null,
       "evidence": {
         "model": "gpt-4o / claude-3.5-sonnet (simulated zero-shot judge)",
@@ -3259,7 +3862,7 @@
       "expected_classification": "INCONCLUSIVE",
       "actual_classification": "INCONCLUSIVE",
       "is_correct": true,
-      "runtime_ms": 2942.622499947902,
+      "runtime_ms": 2896.834399999989,
       "error_message": null,
       "evidence": {
         "target_classification": "INCOMPARABLE",

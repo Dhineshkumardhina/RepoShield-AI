@@ -712,40 +712,7 @@ export interface PatchValidationResponse {
 }
 
 export type RepoShieldPriority = 'CRITICAL' | 'HIGH' | 'MEDIUM' | 'LOW' | 'INFORMATIONAL';
-export type EvidenceCompleteness = 'COMPLETE' | 'PARTIAL' | 'MINIMAL';
-
-export interface EnvironmentContext {
-  environment?: string;
-  is_internet_facing?: boolean;
-  asset_criticality?: string;
-  auth_context?: string;
-  data_sensitivity?: string;
-}
-
-export interface PrioritizationFactor {
-  name: string;
-  weight: number;
-  impact: number;
-  evidence: string;
-  rationale: string;
-}
-
-export interface ContextualRiskAssessment {
-  finding_id: string;
-  repo_id: string;
-  original_scanner_severity: string;
-  contextual_priority: RepoShieldPriority;
-  evidence_completeness: EvidenceCompleteness;
-  verification_status: string;
-  priority_score: number;
-  sensitive_data_involved: boolean;
-  reachability_evidence: string;
-  dependency_exposure: string;
-  auth_context: string;
-  factors: PrioritizationFactor[];
-  missing_context: string[];
-  methodology_disclaimer: string;
-}
+export type EvidenceCompleteness = 'COMPLETE' | 'PARTIAL' | 'MINIMAL' | 'INSUFFICIENT';
 
 export interface SecurityEvidenceRecord {
   id: string;

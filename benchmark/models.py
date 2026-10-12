@@ -43,6 +43,7 @@ class BenchmarkPatchType(str, Enum):
 class BaselineId(str, Enum):
     B1_SAST_ALONE = "B1_sast_alone"
     B2_EXISTING_TESTS = "B2_existing_tests"
+    B2_TARGETED_TESTS = "B2_targeted_tests"
     B3_AI_JUDGE = "B3_ai_judge"
     B4_REPOSHIELD_COMBINED = "B4_reposhield_pipeline"
 

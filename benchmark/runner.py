@@ -30,6 +30,7 @@ from benchmark.models import (
 from benchmark.deduplicator import validate_dataset_uniqueness_and_splits
 from benchmark.baselines import (
     SastAloneBaseline,
+    TargetedTestsAloneBaseline,
     ExistingTestsAloneBaseline,
     AiJudgeBaseline,
     RepoShieldCombinedBaseline,
@@ -160,6 +161,7 @@ def run_benchmark_suite(
 
     baselines = [
         SastAloneBaseline(),
+        TargetedTestsAloneBaseline(),
         ExistingTestsAloneBaseline(),
         AiJudgeBaseline(),
         RepoShieldCombinedBaseline(),

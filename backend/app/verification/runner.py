@@ -102,7 +102,8 @@ class VerificationChecksOutcome:
 def run_scanners_on_directory(
     target_dir: Path,
     scanner_names: Optional[List[str]] = None,
-    timeout_seconds: int = 30
+    timeout_seconds: int = 30,
+    options: Optional[Dict[str, Any]] = None,
 ) -> Tuple[List[NormalizedFinding], Dict[str, Any], List[str]]:
     """Execute configured scanners against a directory and return normalized findings."""
     findings: List[NormalizedFinding] = []
@@ -112,6 +113,9 @@ def run_scanners_on_directory(
     available_adapters = scanner_registry.list_all()
     if scanner_names:
         adapters = [a for a in available_adapters if a.name in scanner_names]
+        unregistered = [name for name in scanner_names if not any(a.name == name for a in available_adapters)]
+        for name in unregistered:
+            errors.append(f"Scanner '{name}' is not registered in this environment.")
     else:
         adapters = available_adapters
 
@@ -126,13 +130,16 @@ def run_scanners_on_directory(
         metadata[adapter.name] = meta_entry
 
         if not adapter.is_available():
+            if scanner_names and adapter.name in scanner_names:
+                errors.append(f"{adapter.display_name} is not installed or available in this environment.")
             continue
 
         try:
             job_result = adapter.scan(
                 target_dir=target_dir,
                 scan_id="verify_scan",
-                timeout_seconds=timeout_seconds
+                timeout_seconds=timeout_seconds,
+                options=options,
             )
             findings.extend(job_result.findings)
             meta_entry["status"] = job_result.status.value

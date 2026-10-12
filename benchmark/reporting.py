@@ -112,11 +112,12 @@ def generate_markdown_report(summary: BenchmarkSuiteSummary) -> str:
     buf.write("## 1. Research Objective & Baselines\n\n")
     buf.write("This benchmark investigates the central research question:\n")
     buf.write("> *Does combining static analysis, targeted security tests, and explicit evidence rules improve the reliability of security-fix evaluation compared with single-technique baselines?*\n\n")
-    buf.write("Four comparative evaluation pipelines were executed over identical candidate patches and source code trees:\n")
-    buf.write("1. **Baseline 1: Static Analysis Alone (SAST Delta):** Certifies a fix if the target scanner rule disappears from the AST.\n")
-    buf.write("2. **Baseline 2: Existing Unit Tests Alone:** Certifies a fix if repository unit tests pass in CI.\n")
-    buf.write("3. **Baseline 3: AI / LLM Judge Alone:** Zero-shot heuristic diff review without execution grounding.\n")
-    buf.write("4. **Baseline 4: RepoShield Combined Pipeline:** Multi-tier evidence gate coupling baseline reproduction, differential SAST, unit test regressions, targeted exploit test verification, and 6-status finding classification.\n\n")
+    buf.write("Five comparative evaluation pipelines were executed over identical candidate patches and source code trees:\n")
+    buf.write("1. **Baseline A: Static Analysis Alone (SAST Delta):** Certifies a fix if the target scanner rule disappears from the AST.\n")
+    buf.write("2. **Baseline B: Targeted Tests Alone (Exploit Regression Suite):** Certifies a fix if the vulnerability exploit fails against patched code.\n")
+    buf.write("3. **Baseline B2: General Unit Tests Alone:** Certifies a fix if repository functional unit tests pass in CI.\n")
+    buf.write("4. **Baseline C: AI / LLM Judge Alone:** Zero-shot heuristic diff review without execution grounding.\n")
+    buf.write("5. **Baseline D: RepoShield Combined Pipeline:** Multi-tier evidence gate coupling baseline reproduction, differential SAST, unit test regressions, targeted exploit test verification, and 6-status finding classification.\n\n")
 
     buf.write("---\n\n")
     buf.write("## 2. Empirical Benchmark Metrics Summary\n\n")
@@ -146,9 +147,10 @@ def generate_markdown_report(summary: BenchmarkSuiteSummary) -> str:
     buf.write("We evaluate paired 2x2 contingency tables using McNemar's test with Edwards continuity correction ($\alpha = 0.05$):\n\n")
     b4_id = "B4_reposhield_pipeline"
     for b_id, b_label in [
-        ("B1_sast_alone", "Baseline 1: Static Analysis Alone"),
-        ("B2_existing_tests", "Baseline 2: Existing Tests Alone"),
-        ("B3_ai_judge", "Baseline 3: AI / LLM Judge Alone"),
+        ("B1_sast_alone", "Baseline A: Static Analysis Alone"),
+        ("B2_targeted_tests", "Baseline B: Targeted Tests Alone"),
+        ("B2_existing_tests", "Baseline B2: General Unit Tests Alone"),
+        ("B3_ai_judge", "Baseline C: AI / LLM Judge Alone"),
     ]:
         chi2, p_val = compute_mcnemar_test(summary.sample_records, b4_id, b_id)
         sig_str = "**Statistically Significant (p < 0.05)**" if p_val < 0.05 else "Not statistically significant"

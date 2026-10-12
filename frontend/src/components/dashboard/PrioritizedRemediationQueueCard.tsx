@@ -338,6 +338,8 @@ export const PrioritizedRemediationQueueCard: React.FC<PrioritizedRemediationQue
                                 status: 'verified',
                                 message: item.title,
                                 prNumber: 418,
+                                executionTime: '1.2s',
+                                timestamp: new Date().toISOString(),
                               });
                             }
                           }}
