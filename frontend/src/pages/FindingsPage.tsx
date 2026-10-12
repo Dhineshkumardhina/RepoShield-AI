@@ -144,18 +144,18 @@ export const FindingsPage: React.FC = () => {
       <div className="px-4 lg:px-8 py-5 bg-white border-b border-slate-200 flex flex-col md:flex-row md:items-center justify-between gap-4">
         <div>
           <div className="flex items-center gap-2">
-            <span className="font-label-caps text-xs text-blue-600 uppercase font-bold tracking-wider">
-              EVIDENCE-BASED VULNERABILITY TRIAGE
+            <span className="font-mono text-[10px] text-slate-500 uppercase font-semibold">
+              Vulnerability Findings
             </span>
-            <span className="px-1.5 py-0.5 rounded bg-blue-50 text-blue-700 font-mono-sm text-xs font-bold border border-blue-200">
-              {combinedFindings.length} FINDINGS
+            <span className="px-1.5 py-0.5 rounded bg-slate-100 text-slate-700 font-mono text-[10px] font-semibold border border-slate-200">
+              {combinedFindings.length} Active
             </span>
           </div>
-          <h1 className="font-headline-lg text-2xl text-slate-900 tracking-tight mt-0.5 font-bold">
-            Vulnerability Findings &amp; Risk Prioritization
+          <h1 className="text-xl font-bold text-slate-900 tracking-tight mt-0.5">
+            Security Findings
           </h1>
           <p className="text-xs text-slate-500 mt-0.5">
-            Transparently distinguishes raw scanner severity from contextual urgency. Severe findings are protected against silent downgrading when evidence is missing.
+            Static analysis findings correlated with code reachability and fix verification status.
           </p>
         </div>
 
@@ -163,10 +163,10 @@ export const FindingsPage: React.FC = () => {
           <button
             type="button"
             onClick={() => navigate('/repositories')}
-            className="px-3.5 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg text-xs font-semibold shadow-xs transition-colors flex items-center gap-1.5"
+            className="px-3.5 py-1.5 bg-slate-900 hover:bg-slate-800 text-white rounded-md text-xs font-medium shadow-2xs transition-colors flex items-center gap-1.5"
           >
-            <span className="material-symbols-outlined text-base">bolt</span>
-            <span>Trigger Scanner Hub</span>
+            <span className="material-symbols-outlined text-sm">radar</span>
+            <span>Trigger Scan</span>
           </button>
         </div>
       </div>

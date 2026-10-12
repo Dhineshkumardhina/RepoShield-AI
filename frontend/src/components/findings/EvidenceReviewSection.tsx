@@ -203,9 +203,9 @@ export const EvidenceReviewSection: React.FC<EvidenceReviewSectionProps> = ({
                   </span>
                 </div>
                 {validation.ai_assisted && (
-                  <div className="px-2 py-1 rounded bg-purple-100 text-purple-800 border border-purple-200 text-[11px] font-semibold flex items-center gap-1">
-                    <span className="material-symbols-outlined text-xs">smart_toy</span>
-                    AI Assisted ({validation.ai_model || 'Analysis Assistant'})
+                  <div className="px-2 py-1 rounded bg-slate-100 text-slate-700 border border-slate-200 text-[11px] font-mono flex items-center gap-1">
+                    <span className="material-symbols-outlined text-xs">analytics</span>
+                    Automated ({validation.ai_model || 'Security Engine'})
                   </div>
                 )}
               </div>

@@ -1,12 +1,13 @@
 @import "tailwindcss";
 
 @theme {
-  --color-primary: #2563eb;
-  --color-primary-hover: #1d4ed8;
-  --color-primary-light: #dbeafe;
-  --color-primary-dark: #1e40af;
+  /* Clean, crisp enterprise palette (slate / charcoal + clean blue accents) */
+  --color-primary: #0f172a;
+  --color-primary-hover: #1e293b;
+  --color-primary-light: #f1f5f9;
+  --color-primary-dark: #020617;
   
-  --color-accent: #60a5fa;
+  --color-accent: #2563eb;
   --color-accent-light: #eff6ff;
   
   --color-surface: #ffffff;
@@ -15,10 +16,40 @@
   --color-border-subtle: #f1f5f9;
   
   --color-text-main: #0f172a;
-  --color-text-muted: #64748b;
+  --color-text-muted: #475569;
   --color-text-subtle: #94a3b8;
+
+  /* Enterprise Surface Tokens (resolves broken transparent containers) */
+  --color-surface-container-lowest: #ffffff;
+  --color-surface-container-low: #f8fafc;
+  --color-surface-container: #f1f5f9;
+  --color-surface-container-high: #e2e8f0;
+  --color-surface-container-highest: #cbd5e1;
+
+  --color-outline: #cbd5e1;
+  --color-outline-variant: #e2e8f0;
+
+  --color-on-surface: #0f172a;
+  --color-on-surface-variant: #475569;
+  --color-on-surface-muted: #64748b;
+
+  --color-primary-container: #f1f5f9;
+  --color-on-primary: #ffffff;
+  --color-on-primary-container: #0f172a;
+  --color-on-primary-fixed-variant: #1e293b;
   
-  /* Severity & Status Colors */
+  --color-secondary-container: #f1f5f9;
+  --color-on-secondary-fixed-variant: #334155;
+  --color-tertiary-container: #ecfdf5;
+  --color-tertiary: #047857;
+  --color-tertiary-fixed: #e0f2fe;
+  --color-on-tertiary-fixed-variant: #0369a1;
+
+  --color-error: #dc2626;
+  --color-error-container: #fef2f2;
+  --color-on-error: #ffffff;
+  
+  /* Semantic Severity Colors */
   --color-critical: #dc2626;
   --color-critical-bg: #fef2f2;
   --color-critical-border: #fecaca;
@@ -39,14 +70,33 @@
   --color-success-bg: #ecfdf5;
   --color-success-border: #a7f3d0;
   
+  /* Spacing Tokens */
+  --spacing-space-xs: 0.25rem;
+  --spacing-space-sm: 0.5rem;
+  --spacing-space-md: 1rem;
+  --spacing-space-lg: 1.5rem;
   --spacing-gutter: 1.5rem;
+  --spacing-gutter-desktop: 2rem;
+
+  /* Typography Sizing */
+  --text-mono-sm: 0.75rem;
+  --text-mono-md: 0.8125rem;
+  --text-body-sm: 0.8125rem;
+  --text-headline-sm: 0.9375rem;
+  --text-label-caps: 0.6875rem;
 }
 
 @layer base {
+  * {
+    border-color: #e2e8f0;
+  }
+
   body {
-    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
     background-color: #f8fafc;
     color: #0f172a;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
   }
 }
 
@@ -67,90 +117,99 @@
   -webkit-font-smoothing: antialiased;
 }
 
-/* Typography Utility Classes matching Xerova specifications */
+/* Typography Utility Classes */
 .font-headline-xl {
-  font-family: 'Inter', sans-serif;
-  font-size: 32px;
-  line-height: 40px;
-  letter-spacing: -0.02em;
+  font-size: 2rem;
+  line-height: 2.5rem;
+  letter-spacing: -0.025em;
   font-weight: 700;
 }
 
 .font-headline-lg {
-  font-family: 'Inter', sans-serif;
-  font-size: 24px;
-  line-height: 32px;
-  letter-spacing: -0.015em;
+  font-size: 1.5rem;
+  line-height: 2rem;
+  letter-spacing: -0.02em;
   font-weight: 600;
 }
 
 .font-headline-md {
-  font-family: 'Inter', sans-serif;
-  font-size: 18px;
-  line-height: 26px;
-  letter-spacing: -0.01em;
+  font-size: 1.125rem;
+  line-height: 1.625rem;
+  letter-spacing: -0.015em;
   font-weight: 600;
 }
 
 .font-headline-sm {
-  font-family: 'Inter', sans-serif;
-  font-size: 15px;
-  line-height: 22px;
+  font-size: 0.9375rem;
+  line-height: 1.375rem;
   font-weight: 600;
 }
 
 .font-body-lg {
-  font-family: 'Inter', sans-serif;
-  font-size: 16px;
-  line-height: 24px;
+  font-size: 1rem;
+  line-height: 1.5rem;
   font-weight: 400;
 }
 
 .font-body-md {
-  font-family: 'Inter', sans-serif;
-  font-size: 14px;
-  line-height: 20px;
+  font-size: 0.875rem;
+  line-height: 1.25rem;
   font-weight: 400;
 }
 
 .font-body-sm {
-  font-family: 'Inter', sans-serif;
-  font-size: 13px;
-  line-height: 18px;
+  font-size: 0.8125rem;
+  line-height: 1.125rem;
   font-weight: 400;
 }
 
 .font-mono-lg {
-  font-family: 'JetBrains Mono', monospace;
-  font-size: 14px;
-  line-height: 20px;
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+  font-size: 0.875rem;
+  line-height: 1.25rem;
   font-weight: 500;
   font-variant-numeric: tabular-nums;
 }
 
 .font-mono-md {
-  font-family: 'JetBrains Mono', monospace;
-  font-size: 12px;
-  line-height: 16px;
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+  font-size: 0.75rem;
+  line-height: 1rem;
   font-weight: 400;
   font-variant-numeric: tabular-nums;
 }
 
 .font-mono-sm {
-  font-family: 'JetBrains Mono', monospace;
-  font-size: 11px;
-  line-height: 14px;
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+  font-size: 0.6875rem;
+  line-height: 0.875rem;
   letter-spacing: 0.02em;
   font-weight: 500;
   font-variant-numeric: tabular-nums;
 }
 
 .font-label-caps {
-  font-family: 'JetBrains Mono', monospace;
-  font-size: 10px;
-  line-height: 14px;
-  letter-spacing: 0.06em;
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+  font-size: 0.625rem;
+  line-height: 0.875rem;
+  letter-spacing: 0.05em;
   font-weight: 600;
   text-transform: uppercase;
   font-variant-numeric: tabular-nums;
+}
+
+/* Clean Custom Scrollbar */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+::-webkit-scrollbar-thumb {
+  background: #cbd5e1;
+  border-radius: 3px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #94a3b8;
 }

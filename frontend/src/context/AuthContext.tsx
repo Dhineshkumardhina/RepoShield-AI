@@ -1,4 +1,5 @@
-import React, { createContext, useContext, useState, ReactNode } from 'react';
+import React, { createContext, useContext, useState, useEffect, ReactNode } from 'react';
+import { loginWithCredentials, setAuthToken, getAuthToken } from '../services/api';
 
 export interface UserSession {
   id: string;
@@ -11,9 +12,9 @@ export interface UserSession {
 }
 
 const DEFAULT_DEMO_USER: UserSession = {
-  id: 'usr-sarah-jenkins',
-  email: 'sarah.jenkins@xerova.com',
-  fullName: 'Dr. Sarah Jenkins',
+  id: 'usr-dev-seed-001',
+  email: 'dev@xerova.com',
+  fullName: 'Xerova Security Lead',
   role: 'SecOps Lead',
   organization: 'Xerova Digital Solutions',
   isAuthenticated: true,
@@ -22,7 +23,7 @@ const DEFAULT_DEMO_USER: UserSession = {
 
 interface AuthContextType {
   user: UserSession | null;
-  login: (email: string, role?: UserSession['role']) => Promise<{ success: boolean; error?: string }>;
+  login: (email: string, password?: string, role?: UserSession['role']) => Promise<{ success: boolean; error?: string }>;
   register: (fullName: string, email: string, organization: string) => Promise<{ success: boolean; error?: string }>;
   logout: () => void;
 }
@@ -30,29 +31,58 @@ interface AuthContextType {
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
 export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
-  // In-memory session strictly without writing credentials or tokens to localStorage
   const [user, setUser] = useState<UserSession | null>(DEFAULT_DEMO_USER);
 
-  const login = async (email: string, role: UserSession['role'] = 'SecOps Lead') => {
-    // Artificial latency simulating SSO negotiation
-    await new Promise(resolve => setTimeout(resolve, 350));
-    
-    if (!email || !email.includes('@')) {
-      return { success: false, error: 'Please provide a valid corporate email address.' };
-    }
-
-    const newUser: UserSession = {
-      id: `usr-${Date.now()}`,
-      email,
-      fullName: email.split('@')[0].replace('.', ' ').replace(/\b\w/g, c => c.toUpperCase()),
-      role,
-      organization: 'Xerova Digital Solutions',
-      isAuthenticated: true,
-      sessionType: 'demo_operator',
+  // Automatically authenticate with local dev seed account on initial mount if not yet authenticated
+  useEffect(() => {
+    const initAuth = async () => {
+      const existingToken = getAuthToken();
+      if (!existingToken) {
+        try {
+          const res = await loginWithCredentials('dev@xerova.com', 'XerovaDevPass2026!');
+          if (res?.access_token) {
+            setUser({
+              id: res.user.id,
+              email: res.user.email,
+              fullName: 'Xerova Security Lead',
+              role: 'SecOps Lead',
+              organization: 'Xerova Digital Solutions',
+              isAuthenticated: true,
+              sessionType: 'demo_operator',
+            });
+          }
+        } catch {
+          // Non-blocking in test or disconnected offline modes
+        }
+      }
     };
+    initAuth();
+  }, []);
 
-    setUser(newUser);
-    return { success: true };
+  const login = async (
+    email: string,
+    password: string = 'XerovaDevPass2026!',
+    role: UserSession['role'] = 'SecOps Lead'
+  ) => {
+    try {
+      const res = await loginWithCredentials(email, password);
+      if (res?.access_token) {
+        const newUser: UserSession = {
+          id: res.user.id,
+          email: res.user.email,
+          fullName: email.split('@')[0].replace('.', ' ').replace(/\b\w/g, c => c.toUpperCase()),
+          role,
+          organization: 'Xerova Digital Solutions',
+          isAuthenticated: true,
+          sessionType: 'demo_operator',
+        };
+        setUser(newUser);
+        return { success: true };
+      }
+      return { success: false, error: 'Authentication failed.' };
+    } catch (err: any) {
+      return { success: false, error: err.message || 'Authentication failed.' };
+    }
   };
 
   const register = async (fullName: string, email: string, organization: string) => {
@@ -77,6 +107,7 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
   };
 
   const logout = () => {
+    setAuthToken(null);
     setUser(null);
   };
 

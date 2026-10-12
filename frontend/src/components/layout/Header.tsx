@@ -66,61 +66,61 @@ export const Header: React.FC<HeaderProps> = ({
     {
       id: 1,
       title: 'Regression Detected in PR #402',
-      repo: 'xerova/billing-service',
+      repo: 'billing-service',
       time: '42m ago',
       type: 'error'
     },
     {
       id: 2,
-      title: 'AST Taint Verified: Ready to Auto-Merge PR #418',
-      repo: 'xerova/auth-gateway',
+      title: 'Fix Verified: Safe to Merge PR #418',
+      repo: 'auth-gateway',
       time: '14m ago',
       type: 'success'
     },
     {
       id: 3,
-      title: 'Trufflehog pre-commit secret block',
-      repo: 'xerova/notification-hub',
+      title: 'Secret Detected in Staging Branch',
+      repo: 'notification-hub',
       time: '2h ago',
       type: 'warning'
     }
   ];
 
   return (
-    <header className="fixed top-0 left-0 lg:left-64 right-0 h-14 bg-surface-container-lowest border-b border-outline-variant z-40 flex items-center justify-between px-4 lg:px-gutter-desktop">
+    <header className="fixed top-0 left-0 lg:left-64 right-0 h-14 bg-white border-b border-slate-200 z-40 flex items-center justify-between px-4 lg:px-8">
       {/* Left side: Hamburger for mobile + Search Input */}
-      <div className="flex items-center gap-space-md flex-1 max-w-xl">
+      <div className="flex items-center gap-3 flex-1 max-w-xl">
         <button
           onClick={onOpenMobileMenu}
-          className="lg:hidden p-1.5 rounded hover:bg-surface-container text-on-surface-variant"
+          className="lg:hidden p-1.5 rounded hover:bg-slate-100 text-slate-500"
           aria-label="Open Navigation"
         >
           <span className="material-symbols-outlined text-2xl">menu</span>
         </button>
 
         <div className="relative w-full">
-          <span className="material-symbols-outlined absolute left-2.5 top-1/2 -translate-y-1/2 text-on-surface-variant text-base">
+          <span className="material-symbols-outlined absolute left-2.5 top-1/2 -translate-y-1/2 text-slate-400 text-base">
             search
           </span>
           <input
             ref={searchInputRef}
             value={searchQuery}
             onChange={e => onSearchChange(e.target.value)}
-            className="w-full pl-9 pr-10 py-1.5 bg-surface-container-low border border-outline-variant rounded font-mono-md text-mono-md text-on-surface placeholder:text-outline focus:outline-none focus:border-primary focus:bg-surface-container-lowest transition-all"
-            placeholder="Search CVE, repo, commit, or finding ID... / for shortcut"
+            className="w-full pl-9 pr-10 py-1.5 bg-slate-50 border border-slate-200 rounded-md font-mono text-xs text-slate-900 placeholder:text-slate-400 focus:outline-hidden focus:border-slate-400 focus:bg-white transition-all"
+            placeholder="Search CVE, repository, or finding... Press / to focus"
             type="text"
           />
-          <kbd className="hidden sm:inline-block absolute right-2.5 top-1/2 -translate-y-1/2 font-label-caps text-label-caps px-1 py-0.5 rounded bg-surface-container-high text-on-surface-variant border border-outline-variant">
+          <kbd className="hidden sm:inline-block absolute right-2.5 top-1/2 -translate-y-1/2 font-mono text-[10px] px-1 py-0.5 rounded bg-slate-100 text-slate-500 border border-slate-200">
             /
           </kbd>
         </div>
       </div>
 
       {/* Right side: Backend Health, Region Selector, Trigger Scan, Notifications, Profile */}
-      <div className="flex items-center gap-2 sm:gap-space-md">
+      <div className="flex items-center gap-2 sm:gap-3">
         {/* API Health Pill */}
         <div
-          className={`hidden md:flex items-center gap-1.5 px-2.5 py-1 rounded-full border text-xs font-mono-sm transition-colors ${
+          className={`hidden md:flex items-center gap-1.5 px-2.5 py-1 rounded-full border text-xs font-mono transition-colors ${
             backendStatus === 'connected'
               ? 'bg-emerald-50 text-emerald-700 border-emerald-200'
               : backendStatus === 'checking'
@@ -130,16 +130,16 @@ export const Header: React.FC<HeaderProps> = ({
           title={backendMeta || 'FastAPI backend connection'}
         >
           <span
-            className={`w-2 h-2 rounded-full ${
+            className={`w-1.5 h-1.5 rounded-full ${
               backendStatus === 'connected'
-                ? 'bg-emerald-500 animate-pulse'
+                ? 'bg-emerald-600'
                 : backendStatus === 'checking'
                 ? 'bg-amber-500'
                 : 'bg-rose-500'
             }`}
           />
-          <span className="font-medium">
-            {backendStatus === 'connected' ? 'API: Connected' : backendStatus === 'checking' ? 'API: Checking...' : 'API: Offline'}
+          <span className="font-medium text-[11px]">
+            {backendStatus === 'connected' ? 'API Connected' : backendStatus === 'checking' ? 'Connecting...' : 'API Offline'}
           </span>
         </div>
 
@@ -147,15 +147,15 @@ export const Header: React.FC<HeaderProps> = ({
         <div className="relative hidden sm:block">
           <button
             onClick={() => setShowRegionDropdown(!showRegionDropdown)}
-            className="flex items-center gap-space-xs px-2 py-1 rounded border border-outline-variant bg-surface-container-low hover:bg-surface-container text-on-surface transition-colors"
+            className="flex items-center gap-1.5 px-2.5 py-1 rounded-md border border-slate-200 bg-white hover:bg-slate-50 text-slate-700 text-xs transition-colors"
           >
-            <span className="material-symbols-outlined text-on-surface-variant text-sm">dns</span>
-            <span className="font-mono-md text-mono-md font-medium">{region}</span>
-            <span className="material-symbols-outlined text-on-surface-variant text-xs">arrow_drop_down</span>
+            <span className="material-symbols-outlined text-slate-500 text-sm">dns</span>
+            <span className="font-mono text-xs">{region}</span>
+            <span className="material-symbols-outlined text-slate-400 text-xs">arrow_drop_down</span>
           </button>
 
           {showRegionDropdown && (
-            <div className="absolute right-0 mt-1 w-44 bg-surface-container-lowest border border-outline-variant rounded shadow-lg z-50 py-1 font-mono-sm">
+            <div className="absolute right-0 mt-1 w-44 bg-white border border-slate-200 rounded-md shadow-lg z-50 py-1 font-mono text-xs">
               {['us-east-prod-01', 'eu-west-prod-01', 'ap-southeast-01'].map(r => (
                 <button
                   key={r}
@@ -163,8 +163,8 @@ export const Header: React.FC<HeaderProps> = ({
                     setRegion(r);
                     setShowRegionDropdown(false);
                   }}
-                  className={`w-full text-left px-3 py-1.5 hover:bg-surface-container transition-colors ${
-                    region === r ? 'font-bold text-primary bg-surface-container-low' : 'text-on-surface'
+                  className={`w-full text-left px-3 py-1.5 hover:bg-slate-50 transition-colors ${
+                    region === r ? 'font-semibold text-slate-900 bg-slate-50' : 'text-slate-600'
                   }`}
                 >
                   {r}
@@ -177,13 +177,13 @@ export const Header: React.FC<HeaderProps> = ({
         {/* Trigger Scan CTA */}
         <button
           onClick={onTriggerScan}
-          className="flex items-center gap-1.5 px-3 py-1.5 rounded bg-primary text-on-primary font-body-sm text-body-sm font-medium hover:bg-on-primary-fixed-variant transition-colors shadow-xs"
+          className="flex items-center gap-1.5 px-3 py-1.5 rounded-md bg-slate-900 text-white text-xs font-medium hover:bg-slate-800 transition-colors shadow-2xs"
         >
-          <span className="material-symbols-outlined text-base">bolt</span>
-          <span className="hidden sm:inline">Trigger Scan</span>
+          <span className="material-symbols-outlined text-sm">radar</span>
+          <span className="hidden sm:inline">Run Scan</span>
         </button>
 
-        <div className="h-4 w-px bg-outline-variant hidden sm:block"></div>
+        <div className="h-4 w-px bg-slate-200 hidden sm:block" />
 
         {/* Notifications Popover */}
         <div className="relative">
@@ -192,61 +192,59 @@ export const Header: React.FC<HeaderProps> = ({
               setShowNotifications(!showNotifications);
               if (unreadCount > 0) setUnreadCount(0);
             }}
-            className="relative p-1.5 rounded hover:bg-surface-container text-on-surface-variant hover:text-on-surface transition-colors"
-            title="Active Security Notifications"
+            className="relative p-1.5 rounded-md hover:bg-slate-100 text-slate-500 hover:text-slate-800 transition-colors"
+            title="Notifications"
           >
             <span className="material-symbols-outlined text-xl">notifications</span>
             {unreadCount > 0 && (
-              <span className="absolute top-1 right-1 flex items-center justify-center min-w-[14px] h-[14px] px-0.5 text-[9px] font-mono-sm font-bold bg-error text-on-error rounded-full">
+              <span className="absolute top-1 right-1 flex items-center justify-center min-w-[14px] h-[14px] px-0.5 text-[9px] font-mono font-bold bg-rose-600 text-white rounded-full">
                 {unreadCount}
               </span>
             )}
           </button>
 
           {showNotifications && (
-            <div className="absolute right-0 mt-1 w-80 bg-surface-container-lowest border border-outline-variant rounded shadow-lg z-50 overflow-hidden animate-in fade-in duration-100">
-              <div className="p-3 border-b border-outline-variant bg-surface-container-low flex items-center justify-between">
-                <span className="font-label-caps text-on-surface uppercase font-semibold">
-                  Live Security Alerts
+            <div className="absolute right-0 mt-1 w-80 bg-white border border-slate-200 rounded-md shadow-lg z-50 overflow-hidden">
+              <div className="p-3 border-b border-slate-200 bg-slate-50 flex items-center justify-between">
+                <span className="text-xs font-semibold text-slate-900 uppercase tracking-wide">
+                  Security Alerts
                 </span>
-                <span className="font-mono-sm text-primary text-xs font-semibold">3 New</span>
+                <span className="font-mono text-slate-500 text-xs font-medium">3 New</span>
               </div>
-              <div className="divide-y divide-outline-variant max-h-72 overflow-y-auto">
+              <div className="divide-y divide-slate-100 max-h-72 overflow-y-auto">
                 {alerts.map(a => (
-                  <div key={a.id} className="p-3 hover:bg-surface-container-low transition-colors text-left">
-                    <div className="flex items-center justify-between font-mono-sm text-[11px] mb-0.5">
-                      <span className="font-bold text-on-surface truncate">{a.repo}</span>
-                      <span className="text-outline shrink-0">{a.time}</span>
+                  <div key={a.id} className="p-3 hover:bg-slate-50 transition-colors text-left">
+                    <div className="flex items-center justify-between font-mono text-[11px] mb-0.5">
+                      <span className="font-semibold text-slate-800 truncate">{a.repo}</span>
+                      <span className="text-slate-400 shrink-0">{a.time}</span>
                     </div>
-                    <p className="font-body-sm text-xs text-on-surface-variant">{a.title}</p>
+                    <p className="text-xs text-slate-600">{a.title}</p>
                   </div>
                 ))}
               </div>
-              <div className="p-2 border-t border-outline-variant text-center bg-surface-container-lowest">
+              <div className="p-2 border-t border-slate-100 text-center bg-slate-50">
                 <button
                   onClick={() => setShowNotifications(false)}
-                  className="font-mono-sm text-xs text-primary font-medium hover:underline"
+                  className="font-mono text-xs text-slate-700 font-medium hover:underline"
                 >
-                  View All Telemetry Events
+                  Dismiss Alerts
                 </button>
               </div>
             </div>
           )}
         </div>
 
-        {/* Profile */}
-        <div className="flex items-center gap-space-sm pl-space-xs">
-          <img
-            alt="Dr. Sarah Jenkins Profile"
-            className="w-8 h-8 rounded-full object-cover border border-outline-variant"
-            src="https://lh3.googleusercontent.com/aida-public/AB6AXuApgniuqkV6xUCmpqwEdn7CZ6mDxtnTkTx80rH4U4FE7achytd2w1jq8fZ8dsurIkegyI8Q5YuHt_Ojy4i3gRpw_FRfOzqOrURpBztYzzv4fEJ3nnvvGZ0gUDQg7Kj_6NDysBzjI_tJNLYY4qOkTtbeZYaA8PLPWLmipUe6h-TUP7j-WoeHO3pqjZHzAmaJTkr7jvS5Dr6uwPJ1C4Iwroisv9t7cAdDUWDbOKCB4tm8kc6nSYcHT0MYWg"
-          />
+        {/* User Badge */}
+        <div className="flex items-center gap-2 pl-1">
+          <div className="w-7 h-7 rounded bg-slate-200 text-slate-700 font-semibold flex items-center justify-center text-xs">
+            S
+          </div>
           <div className="hidden xl:flex flex-col text-left leading-tight">
-            <span className="font-body-sm text-body-sm font-semibold text-on-surface">
-              Dr. Sarah Jenkins
+            <span className="text-xs font-medium text-slate-900">
+              SecOps Engineer
             </span>
-            <span className="font-label-caps text-label-caps text-on-surface-variant">
-              Lead AppSec Eng
+            <span className="text-[10px] text-slate-500 font-mono">
+              Production
             </span>
           </div>
         </div>

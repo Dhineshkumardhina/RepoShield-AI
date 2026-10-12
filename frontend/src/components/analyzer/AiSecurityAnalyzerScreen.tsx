@@ -165,29 +165,29 @@ export const AiSecurityAnalyzerScreen: React.FC = () => {
   return (
     <div className="flex flex-col w-full">
       {/* Header */}
-      <div className="px-4 lg:px-gutter-desktop py-space-md bg-surface-container-lowest border-b border-outline-variant/60 flex flex-col md:flex-row md:items-center justify-between gap-space-md">
+      <div className="px-4 lg:px-8 py-4 bg-white border-b border-slate-200 flex flex-col md:flex-row md:items-center justify-between gap-4">
         <div>
           <div className="flex items-center gap-2">
-            <span className="font-label-caps text-label-caps text-primary uppercase font-bold tracking-wider">
-              AI SECURITY-ANALYSIS PROTOTYPE
+            <span className="font-mono text-[10px] text-slate-500 uppercase font-semibold">
+              Remediation Studio
             </span>
-            <span className="px-1.5 py-0.5 rounded bg-tertiary-fixed text-on-tertiary-fixed-variant font-mono-sm text-mono-sm font-bold">
-              8 SECURITY INVARIANTS ACTIVE
+            <span className="px-1.5 py-0.5 rounded bg-slate-100 text-slate-700 font-mono text-[10px] font-semibold border border-slate-200">
+              Deterministic Rules
             </span>
           </div>
-          <h1 className="font-headline-lg text-headline-lg text-on-surface tracking-tight mt-0.5">
-            Structured Finding Triager &amp; Evidence Grounder
+          <h1 className="text-xl font-bold text-slate-900 tracking-tight mt-0.5">
+            Security Finding Triager &amp; Fix Grounder
           </h1>
         </div>
 
         {/* Tab Switcher */}
-        <div className="inline-flex p-0.5 rounded bg-surface-container-high font-mono-sm text-xs">
+        <div className="inline-flex p-0.5 rounded bg-slate-100 font-mono text-xs border border-slate-200">
           <button
             onClick={() => setActiveTab('workbench')}
-            className={`px-3 py-1 rounded transition-colors ${
+            className={`px-3 py-1.5 rounded transition-colors ${
               activeTab === 'workbench'
-                ? 'bg-surface-container-lowest text-primary font-bold shadow-xs'
-                : 'text-on-surface-variant hover:text-on-surface'
+                ? 'bg-white text-slate-900 font-medium shadow-2xs'
+                : 'text-slate-600 hover:text-slate-900'
             }`}
           >
             Interactive Workbench
@@ -197,26 +197,26 @@ export const AiSecurityAnalyzerScreen: React.FC = () => {
               setActiveTab('test-suite');
               if (!hasRunTests) handleRunAllTests();
             }}
-            className={`px-3 py-1 rounded transition-colors flex items-center gap-1.5 ${
+            className={`px-3 py-1.5 rounded transition-colors flex items-center gap-1.5 ${
               activeTab === 'test-suite'
-                ? 'bg-surface-container-lowest text-primary font-bold shadow-xs'
-                : 'text-on-surface-variant hover:text-on-surface'
+                ? 'bg-white text-slate-900 font-medium shadow-2xs'
+                : 'text-slate-600 hover:text-slate-900'
             }`}
           >
-            <span>Automated Tests</span>
-            <span className="px-1.5 py-0.2 rounded bg-tertiary-fixed text-on-tertiary-fixed-variant font-bold text-[10px]">
+            <span>Automated Suite</span>
+            <span className="px-1.5 py-0.2 rounded bg-slate-200 text-slate-700 font-semibold text-[10px]">
               9 Tests
             </span>
           </button>
           <button
             onClick={() => setActiveTab('limitations')}
-            className={`px-3 py-1 rounded transition-colors ${
+            className={`px-3 py-1.5 rounded transition-colors ${
               activeTab === 'limitations'
-                ? 'bg-surface-container-lowest text-primary font-bold shadow-xs'
-                : 'text-on-surface-variant hover:text-on-surface'
+                ? 'bg-white text-slate-900 font-medium shadow-2xs'
+                : 'text-slate-600 hover:text-slate-900'
             }`}
           >
-            Rules &amp; Limitations
+            Verification Rules
           </button>
         </div>
       </div>

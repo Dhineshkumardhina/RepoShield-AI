@@ -96,7 +96,7 @@ export const SettingsPage: React.FC = () => {
             <div className="p-3 rounded-lg bg-slate-50 border border-slate-200">
               <span className="text-[10px] text-slate-400 uppercase font-semibold block mb-1">Service Status</span>
               <span className="font-bold text-emerald-600 flex items-center gap-1">
-                <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
+                <span className="w-2 h-2 rounded-full bg-emerald-600" />
                 {healthData?.status ? healthData.status.toUpperCase() : 'CONNECTED'}
               </span>
             </div>

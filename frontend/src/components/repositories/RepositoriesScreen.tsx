@@ -31,15 +31,15 @@ export const RepositoriesScreen: React.FC<RepositoriesScreenProps> = ({
       <div className="px-4 lg:px-gutter-desktop py-space-md bg-surface-container-lowest border-b border-outline-variant/60 flex flex-col md:flex-row md:items-center justify-between gap-space-md">
         <div>
           <div className="flex items-center gap-2">
-            <span className="font-label-caps text-label-caps text-primary uppercase font-bold tracking-wider">
-              WORKSPACE REPOSITORY INVENTORY
+            <span className="font-mono text-[10px] text-slate-500 uppercase font-semibold">
+              Repository Inventory
             </span>
-            <span className="px-1.5 py-0.5 rounded bg-surface-container-high text-on-surface font-mono-sm text-mono-sm font-bold">
-              42 TOTAL
+            <span className="px-1.5 py-0.5 rounded bg-slate-100 text-slate-700 font-mono text-[10px] font-semibold border border-slate-200">
+              42 Total
             </span>
           </div>
-          <h1 className="font-headline-lg text-headline-lg text-on-surface tracking-tight mt-0.5">
-            Production Repositories &amp; Guardrails
+          <h1 className="text-xl font-bold text-slate-900 tracking-tight mt-0.5">
+            Monitored Repositories
           </h1>
         </div>
 

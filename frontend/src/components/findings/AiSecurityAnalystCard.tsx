@@ -21,38 +21,38 @@ export const AiSecurityAnalystCard: React.FC<AiSecurityAnalystCardProps> = ({
   return (
     <div className="rounded-lg bg-surface-container-lowest border border-outline-variant/80 shadow-xs overflow-hidden">
       {/* Header Warning Banner */}
-      <div className="bg-amber-500/10 border-b border-amber-500/20 px-4 py-3 flex items-center justify-between flex-wrap gap-2">
+      <div className="bg-slate-50 border-b border-slate-200 px-4 py-3 flex items-center justify-between flex-wrap gap-2">
         <div className="flex items-center gap-2">
-          <span className="material-symbols-outlined text-amber-600 text-lg">smart_toy</span>
+          <span className="material-symbols-outlined text-slate-700 text-lg">analytics</span>
           <div>
-            <h4 className="font-bold text-xs uppercase tracking-wider text-amber-900">
+            <h4 className="font-semibold text-xs text-slate-900">
               AI-Generated Security Analysis — Requires Human Review
             </h4>
-            <p className="text-[11px] text-amber-700">
+            <p className="text-[11px] text-slate-500">
               Remediation insights and root cause claims must be validated by security engineers prior to implementation.
             </p>
           </div>
         </div>
         <div className="flex items-center gap-2">
-          <label className="flex items-center gap-1.5 text-xs text-on-surface cursor-pointer select-none">
+          <label className="flex items-center gap-1.5 text-xs text-slate-700 cursor-pointer select-none">
             <input
               type="checkbox"
               checked={userAuthorized}
               onChange={(e) => onToggleAuthorization(e.target.checked)}
-              className="rounded border-slate-300 text-primary focus:ring-primary"
+              className="rounded border-slate-300 text-slate-900 focus:ring-slate-900"
             />
-            <span className="font-medium text-xs">Authorize AI Analysis</span>
+            <span className="font-medium text-xs">Authorize Code Analysis</span>
           </label>
           <button
             onClick={onRunAnalysis}
             disabled={!userAuthorized || isLoading}
-            className={`px-3 py-1 rounded text-xs font-semibold flex items-center gap-1 transition-colors ${
+            className={`px-3 py-1 rounded text-xs font-medium flex items-center gap-1 transition-colors ${
               !userAuthorized || isLoading
                 ? 'bg-slate-100 text-slate-400 cursor-not-allowed'
-                : 'bg-primary text-white hover:bg-blue-700'
+                : 'bg-slate-900 text-white hover:bg-slate-800'
             }`}
           >
-            {isLoading ? 'Analyzing...' : 'Run AI Analyst'}
+            {isLoading ? 'Analyzing...' : 'Generate Analysis'}
           </button>
         </div>
       </div>
@@ -196,10 +196,10 @@ export const AiSecurityAnalystCard: React.FC<AiSecurityAnalystCardProps> = ({
         {/* Empty State when no analysis generated yet */}
         {!analysis && !isLoading && !error && userAuthorized && (
           <div className="py-8 flex flex-col items-center justify-center text-center space-y-2">
-            <span className="material-symbols-outlined text-3xl text-slate-400">psychology</span>
-            <p className="font-semibold text-xs text-slate-800">No AI Security Assessment on File</p>
+            <span className="material-symbols-outlined text-3xl text-slate-400">fact_check</span>
+            <p className="font-semibold text-xs text-slate-800">No Remediation Analysis Generated</p>
             <p className="text-[11px] text-slate-500 max-w-sm">
-              Click &quot;Run AI Analyst&quot; above to synthesize root-cause hypotheses, exploitability boundaries, and targeted regression tests.
+              Click &quot;Generate Analysis&quot; above to evaluate root-cause patterns, exploitability boundaries, and candidate patches.
             </p>
           </div>
         )}

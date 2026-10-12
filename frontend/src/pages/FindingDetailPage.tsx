@@ -154,21 +154,21 @@ export const FindingDetailPage: React.FC = () => {
   };
 
   return (
-    <div className="flex flex-col w-full">
+    <div className="flex flex-col w-full pb-16 font-sans">
       {/* Breadcrumb / Top Bar */}
-      <div className="px-4 lg:px-gutter-desktop py-space-sm bg-surface-container-lowest border-b border-outline-variant/60 flex items-center justify-between">
-        <div className="flex items-center gap-2 text-xs font-mono-sm">
-          <Link to="/findings" className="text-primary hover:underline flex items-center gap-1">
+      <div className="px-4 lg:px-8 py-3 bg-white border-b border-slate-200 flex items-center justify-between">
+        <div className="flex items-center gap-2 text-xs font-mono">
+          <Link to="/findings" className="text-slate-600 hover:text-slate-900 flex items-center gap-1 font-medium transition-colors">
             <span className="material-symbols-outlined text-sm">arrow_back</span>
             Findings Hub
           </Link>
-          <span className="text-outline">/</span>
-          <span className="font-bold text-on-surface">{finding?.id || id}</span>
+          <span className="text-slate-300">/</span>
+          <span className="font-bold text-slate-900">{finding?.id || id}</span>
         </div>
         <div className="flex items-center gap-2">
           <Link
             to="/verification"
-            className="px-3 py-1 bg-primary text-white text-xs font-semibold rounded hover:bg-blue-700 transition-colors flex items-center gap-1"
+            className="px-3 py-1.5 bg-slate-900 text-white text-xs font-medium rounded-md hover:bg-slate-800 transition-colors flex items-center gap-1.5 shadow-2xs"
           >
             <span className="material-symbols-outlined text-sm">verified_user</span>
             Fix Verification Center
@@ -176,16 +176,16 @@ export const FindingDetailPage: React.FC = () => {
         </div>
       </div>
 
-      <div className="px-4 lg:px-gutter-desktop py-space-lg space-y-6">
+      <div className="px-4 lg:px-8 py-6 space-y-6">
         {isLoadingFinding && (
-          <div className="p-8 bg-surface-container-lowest border border-outline-variant/60 rounded-lg flex items-center justify-center space-x-3">
-            <div className="w-5 h-5 border-2 border-primary border-t-transparent rounded-full animate-spin" />
-            <span className="text-xs text-on-surface-variant font-mono-sm">Retrieving security finding from database...</span>
+          <div className="p-8 bg-white border border-slate-200 rounded-xl flex items-center justify-center space-x-3 shadow-2xs">
+            <div className="w-5 h-5 border-2 border-slate-900 border-t-transparent rounded-full animate-spin" />
+            <span className="text-xs text-slate-600 font-mono">Retrieving security finding from database...</span>
           </div>
         )}
 
         {findingError && (
-          <div className="p-4 bg-red-50 border border-red-200 rounded-lg text-xs text-red-700 flex items-center gap-2">
+          <div className="p-4 bg-rose-50 border border-rose-200 rounded-xl text-xs text-rose-700 flex items-center gap-2 shadow-2xs">
             <span className="material-symbols-outlined text-base">error</span>
             <span>{findingError}</span>
           </div>
@@ -193,77 +193,77 @@ export const FindingDetailPage: React.FC = () => {
 
         {/* Finding Summary */}
         {finding && (
-        <div className="p-6 bg-surface-container-lowest border border-outline-variant/60 rounded-lg shadow-xs">
-          <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
-            <div>
-              <div className="flex items-center gap-2.5 mb-2">
-                {finding?.severity && (
-                  <SeverityBadge severity={finding.severity.toLowerCase() as any} />
-                )}
-                <span className="font-mono-sm text-xs text-on-surface-variant font-semibold">
-                  {finding?.cwe}
-                </span>
-                <span className="px-2 py-0.5 rounded bg-slate-100 text-slate-700 font-mono-sm text-[11px]">
-                  {finding?.scanner_name}
-                </span>
+          <div className="p-6 bg-white border border-slate-200 rounded-xl shadow-2xs">
+            <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
+              <div>
+                <div className="flex items-center gap-2.5 mb-2">
+                  {finding?.severity && (
+                    <SeverityBadge severity={finding.severity.toLowerCase() as any} />
+                  )}
+                  <span className="font-mono text-xs text-slate-600 font-semibold">
+                    {finding?.cwe}
+                  </span>
+                  <span className="px-2 py-0.5 rounded bg-slate-100 text-slate-700 font-mono text-[11px] border border-slate-200">
+                    {finding?.scanner_name}
+                  </span>
+                </div>
+                <h1 className="text-xl font-bold text-slate-900 tracking-tight">
+                  {finding?.title}
+                </h1>
+                <p className="text-xs text-slate-500 font-mono mt-1">
+                  {finding?.file_path}:{finding?.line_number}
+                </p>
               </div>
-              <h1 className="text-xl font-bold text-on-surface">
-                {finding?.title}
-              </h1>
-              <p className="text-xs text-outline font-mono-sm mt-1">
-                {finding?.file_path}:{finding?.line_number}
-              </p>
-            </div>
-            <div className="flex items-center gap-2">
-              <button
-                onClick={handleRunAnalysis}
-                className="px-4 py-2 bg-primary text-white text-xs font-bold rounded shadow-xs hover:bg-blue-700 transition-colors flex items-center gap-1.5"
-              >
-                <span className="material-symbols-outlined text-sm">smart_toy</span>
-                Run AI Analyst
-              </button>
+              <div className="flex items-center gap-2">
+                <button
+                  onClick={handleRunAnalysis}
+                  className="px-3.5 py-1.5 bg-slate-900 text-white text-xs font-medium rounded-md shadow-2xs hover:bg-slate-800 transition-colors flex items-center gap-1.5"
+                >
+                  <span className="material-symbols-outlined text-sm">analytics</span>
+                  Run AI Analyst
+                </button>
+              </div>
             </div>
           </div>
-        </div>
         )}
 
         {/* Contextual Risk Prioritization Panel */}
-        <div className="p-6 bg-surface-container-lowest border border-outline-variant/60 rounded-lg shadow-xs space-y-4">
-          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b border-outline-variant/40 pb-3">
+        <div className="p-6 bg-white border border-slate-200 rounded-xl shadow-2xs space-y-4">
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b border-slate-200 pb-3">
             <div>
               <div className="flex items-center gap-2">
-                <span className="font-label-caps text-xs text-primary font-bold uppercase">
+                <span className="font-mono text-xs text-slate-900 font-bold uppercase tracking-wider">
                   CONTEXTUAL RISK PRIORITIZATION &amp; EVIDENCE BOUNDARY
                 </span>
-                <span className="px-2 py-0.5 rounded bg-blue-50 text-blue-700 font-mono-sm text-[11px] font-bold">
-                  TRANSPARENT SCORING
+                <span className="px-2 py-0.5 rounded bg-slate-100 text-slate-700 font-mono text-[11px] font-medium border border-slate-200">
+                  Evidence Scored
                 </span>
               </div>
-              <p className="text-xs text-on-surface-variant font-mono-sm mt-0.5">
+              <p className="text-xs text-slate-500 font-mono mt-0.5">
                 Evaluates scanner severity, component category, reachability, sensitive data, and fix readiness.
               </p>
             </div>
-            <span className="text-[11px] font-mono-sm text-outline">
+            <span className="text-[11px] font-mono text-slate-400">
               Triage Metric • Not Probability of Exploitation
             </span>
           </div>
 
           {/* 4 Separated Evaluation Dimensions */}
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-3 text-xs font-mono-sm">
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-3 text-xs font-mono">
             <div className="p-3 rounded-lg bg-slate-50 border border-slate-200">
               <span className="text-slate-500 text-[10px] uppercase font-bold block">1. Scanner Severity</span>
               <span className="font-bold text-rose-700 text-sm mt-0.5 block">
                 {prioritization?.original_scanner_severity || finding?.severity || 'CRITICAL'}
               </span>
-              <span className="text-[10px] text-slate-500">Raw engine report</span>
+              <span className="text-[10px] text-slate-400">Raw engine report</span>
             </div>
 
             <div className="p-3 rounded-lg bg-slate-50 border border-slate-200">
               <span className="text-slate-500 text-[10px] uppercase font-bold block">2. Contextual Priority</span>
-              <span className="font-bold text-primary text-sm mt-0.5 block">
+              <span className="font-bold text-blue-600 text-sm mt-0.5 block">
                 {prioritization?.contextual_priority || 'CRITICAL'} ({prioritization?.priority_score?.toFixed(1) || '80.0'}/100)
               </span>
-              <span className="text-[10px] text-slate-500">Evidence-weighted rank</span>
+              <span className="text-[10px] text-slate-400">Evidence-weighted rank</span>
             </div>
 
             <div className="p-3 rounded-lg bg-slate-50 border border-slate-200">
@@ -271,7 +271,7 @@ export const FindingDetailPage: React.FC = () => {
               <span className="font-bold text-slate-800 text-sm mt-0.5 block">
                 {prioritization?.evidence_completeness || 'PARTIAL'}
               </span>
-              <span className="text-[10px] text-slate-500">AST &amp; context depth</span>
+              <span className="text-[10px] text-slate-400">AST &amp; context depth</span>
             </div>
 
             <div className="p-3 rounded-lg bg-slate-50 border border-slate-200">
@@ -285,7 +285,7 @@ export const FindingDetailPage: React.FC = () => {
               }`}>
                 {prioritization?.verification_status || 'NOT_TESTED'}
               </span>
-              <span className="text-[10px] text-slate-500">
+              <span className="text-[10px] text-slate-400">
                 {prioritization?.remediation_readiness === 'VERIFIED_FIX_READY' ? 'Verified fix ready' : 'No verified fix'}
               </span>
             </div>
@@ -293,11 +293,11 @@ export const FindingDetailPage: React.FC = () => {
 
           {/* Floor Protection & Limitation Alert */}
           {prioritization?.floor_protection_applied && (
-            <div className="p-3 rounded-lg bg-amber-50 border border-amber-300 text-xs font-mono-sm flex items-start gap-2.5 text-amber-900">
+            <div className="p-3.5 rounded-lg bg-amber-50 border border-amber-200 text-xs font-mono flex items-start gap-2.5 text-amber-900">
               <span className="material-symbols-outlined text-amber-600 text-base mt-0.5">shield</span>
               <div>
                 <span className="font-bold block">Severe Finding Floor Protection Active</span>
-                <span>
+                <span className="font-sans">
                   The scanner reported {prioritization.original_scanner_severity} severity. Because reachability or environmental evidence is missing, RepoShield AI protects this finding from silent downgrading, preserving elevated triage visibility.
                 </span>
               </div>
@@ -306,18 +306,18 @@ export const FindingDetailPage: React.FC = () => {
 
           {/* Investigation Recommendation Callout */}
           {prioritization?.investigation_recommendation && (
-            <div className="p-3 rounded-lg bg-blue-50 border border-blue-200 text-xs font-mono-sm flex items-start gap-2.5 text-blue-900">
+            <div className="p-3.5 rounded-lg bg-blue-50 border border-blue-200 text-xs font-mono flex items-start gap-2.5 text-blue-900">
               <span className="material-symbols-outlined text-blue-600 text-base mt-0.5">search</span>
               <div>
                 <span className="font-bold block">Recommended Investigation Action:</span>
-                <span>{prioritization.investigation_recommendation}</span>
+                <span className="font-sans">{prioritization.investigation_recommendation}</span>
               </div>
             </div>
           )}
 
           {/* Remediation Linkage & Patch Availability */}
           {prioritization?.remediation_linkage && (
-            <div className="p-3.5 bg-slate-50 rounded-lg border border-slate-200 text-xs font-mono-sm space-y-2">
+            <div className="p-3.5 bg-slate-50 rounded-lg border border-slate-200 text-xs font-mono space-y-2">
               <div className="flex items-center justify-between">
                 <span className="font-bold text-slate-700 uppercase text-[11px]">Supporting Remediation Links:</span>
                 <span className="text-[11px] text-slate-500">
@@ -325,13 +325,13 @@ export const FindingDetailPage: React.FC = () => {
                 </span>
               </div>
               {prioritization.remediation_linkage.patch_diff_preview && (
-                <div className="bg-slate-900 p-2.5 rounded text-[11px] text-slate-200 font-mono overflow-x-auto">
+                <div className="bg-slate-900 p-3 rounded-lg text-[11px] text-slate-200 font-mono overflow-x-auto shadow-inner">
                   <span className="text-slate-400 block mb-1">Proposed Patch Diff:</span>
                   <pre className="whitespace-pre">{prioritization.remediation_linkage.patch_diff_preview}</pre>
                 </div>
               )}
               {prioritization.remediation_linkage.recommendations.length > 0 && (
-                <div className="space-y-1 text-[11px] text-slate-700">
+                <div className="space-y-1 text-[11px] text-slate-700 font-sans">
                   <span className="font-semibold block text-slate-800">Actionable Recommendations:</span>
                   {prioritization.remediation_linkage.recommendations.map((rec, i) => (
                     <div key={i} className="flex items-start gap-1.5">
@@ -346,18 +346,18 @@ export const FindingDetailPage: React.FC = () => {
 
           {/* Dynamic Traceable Factors Breakdown */}
           {prioritization?.factors && prioritization.factors.length > 0 && (
-            <div className="p-3.5 bg-slate-50 rounded-lg border border-slate-200 text-xs font-mono-sm space-y-1.5">
+            <div className="p-3.5 bg-slate-50 rounded-lg border border-slate-200 text-xs font-mono space-y-2">
               <span className="font-bold text-slate-700 block uppercase text-[11px]">Traceable Scoring Factors:</span>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-2 text-slate-600 text-[11px]">
                 {prioritization.factors.map((f, i) => (
-                  <div key={i} className="p-2 rounded bg-white border border-slate-200/80">
+                  <div key={i} className="p-2.5 rounded-lg bg-white border border-slate-200 shadow-2xs">
                     <div className="flex items-center justify-between font-semibold text-slate-800">
                       <span>{f.name}</span>
                       <span className={f.impact >= 0 ? 'text-emerald-700 font-bold' : 'text-slate-500'}>
                         {f.impact >= 0 ? `+${f.impact}` : `${f.impact}`}
                       </span>
                     </div>
-                    <p className="text-[10px] text-slate-500 mt-0.5">{f.rationale}</p>
+                    <p className="text-[10px] text-slate-500 mt-0.5 font-sans">{f.rationale}</p>
                   </div>
                 ))}
               </div>
@@ -378,15 +378,15 @@ export const FindingDetailPage: React.FC = () => {
         )}
 
         {/* AST Taint Trace Evidence Section */}
-        <div className="p-6 bg-surface-container-lowest border border-outline-variant/60 rounded-lg shadow-xs space-y-3">
+        <div className="p-6 bg-white border border-slate-200 rounded-xl shadow-2xs space-y-3">
           <div className="flex items-center justify-between">
-            <h3 className="font-bold text-sm text-on-surface flex items-center gap-2">
-              <span className="material-symbols-outlined text-base text-primary">account_tree</span>
+            <h3 className="font-bold text-sm text-slate-900 flex items-center gap-2">
+              <span className="material-symbols-outlined text-base text-slate-700">account_tree</span>
               AST Taint Trace Evidence
             </h3>
-            <span className="font-mono-sm text-xs text-slate-500">Static Dataflow Propagation Path</span>
+            <span className="font-mono text-xs text-slate-500">Static Dataflow Propagation Path</span>
           </div>
-          <div className="p-4 bg-slate-900 rounded-md font-mono-sm text-xs text-slate-100 space-y-2">
+          <div className="p-4 bg-slate-900 rounded-lg font-mono text-xs text-slate-100 space-y-2 shadow-inner">
             <div className="flex items-center gap-2 text-amber-400">
               <span className="font-bold">[SOURCE]</span>
               <span>tenant_id &larr; Request Query Parameter (Untrusted Input)</span>
@@ -402,15 +402,15 @@ export const FindingDetailPage: React.FC = () => {
           </div>
         </div>
 
-        {/* AI Security Analyst Section */}
+        {/* Remediation Analysis Section */}
         <div className="space-y-3">
           <div className="flex items-center justify-between">
-            <h3 className="font-bold text-base text-on-surface flex items-center gap-2">
-              <span className="material-symbols-outlined text-lg text-primary">psychology</span>
+            <h3 className="font-semibold text-base text-slate-900 flex items-center gap-2">
+              <span className="material-symbols-outlined text-lg text-slate-700">analytics</span>
               AI Security Analyst
             </h3>
-            <span className="font-mono-sm text-xs text-outline">
-              Bounded Semantic Reasoning
+            <span className="font-mono text-xs text-slate-400">
+              Deterministic Security Engine
             </span>
           </div>
 

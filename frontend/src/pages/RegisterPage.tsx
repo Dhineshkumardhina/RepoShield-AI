@@ -41,18 +41,18 @@ export const RegisterPage: React.FC = () => {
     <div className="min-h-screen bg-slate-50 flex flex-col justify-center py-12 sm:px-6 lg:px-8 font-sans">
       <div className="sm:mx-auto sm:w-full sm:max-w-md text-center">
         <Link to="/" className="inline-flex items-center gap-2 mb-4">
-          <div className="w-10 h-10 rounded-xl bg-blue-600 flex items-center justify-center text-white shadow-xs">
-            <span className="material-symbols-outlined text-2xl">shield</span>
+          <div className="w-9 h-9 rounded-md bg-slate-900 flex items-center justify-center text-white">
+            <span className="material-symbols-outlined text-xl">shield</span>
           </div>
-          <span className="font-headline-md text-xl font-bold text-slate-900 tracking-tight">
+          <span className="font-semibold text-xl text-slate-900 tracking-tight">
             RepoShield AI
           </span>
         </Link>
-        <h2 className="font-headline-lg text-2xl font-bold text-slate-900 tracking-tight">
+        <h2 className="text-xl font-bold text-slate-900 tracking-tight">
           Register AppSec Workspace
         </h2>
-        <p className="mt-1.5 text-xs text-slate-500 max-w-sm mx-auto">
-          Deploy automated AST fix verification for your engineering organization.
+        <p className="mt-1 text-xs text-slate-500 max-w-sm mx-auto">
+          Configure automated fix verification for your repositories.
         </p>
       </div>
 
@@ -128,7 +128,7 @@ export const RegisterPage: React.FC = () => {
             <button
               type="submit"
               disabled={isLoading}
-              className="w-full mt-4 py-2.5 px-4 bg-blue-600 hover:bg-blue-700 text-white font-semibold text-sm rounded-lg shadow-xs transition-colors flex items-center justify-center gap-2 disabled:opacity-50"
+              className="w-full mt-4 py-2.5 px-4 bg-slate-900 hover:bg-slate-800 text-white font-medium text-sm rounded-md shadow-2xs transition-colors flex items-center justify-center gap-2 disabled:opacity-50"
             >
               {isLoading && <span className="material-symbols-outlined text-base animate-spin">progress_activity</span>}
               <span>{isLoading ? 'Creating Workspace...' : 'Initialize Workspace'}</span>

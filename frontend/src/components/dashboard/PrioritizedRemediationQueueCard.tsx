@@ -160,8 +160,8 @@ export const PrioritizedRemediationQueueCard: React.FC<PrioritizedRemediationQue
         );
       case 'ANALYSIS_AVAILABLE':
         return (
-          <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded text-[11px] font-mono font-medium bg-purple-50 text-purple-700 border border-purple-200">
-            <span className="material-symbols-outlined text-[13px]">psychology</span>
+          <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded text-[11px] font-mono font-medium bg-slate-100 text-slate-700 border border-slate-200">
+            <span className="material-symbols-outlined text-[13px]">analytics</span>
             Analysis Ready
           </span>
         );
@@ -178,19 +178,19 @@ export const PrioritizedRemediationQueueCard: React.FC<PrioritizedRemediationQue
   return (
     <div className="rounded-xl bg-white border border-slate-200 shadow-xs overflow-hidden mb-6">
       {/* Header with Title and Priority Chips */}
-      <div className="p-4 bg-slate-50/80 border-b border-slate-200 flex flex-col md:flex-row md:items-center justify-between gap-3">
+      <div className="p-4 bg-slate-50 border-b border-slate-200 flex flex-col md:flex-row md:items-center justify-between gap-3">
         <div>
           <div className="flex items-center gap-2">
-            <span className="material-symbols-outlined text-blue-600 text-lg">format_list_numbered</span>
-            <h3 className="font-headline-sm text-sm font-bold text-slate-900 tracking-tight">
-              Prioritized Remediation Queue (Evidence-Ranked)
+            <span className="material-symbols-outlined text-slate-700 text-lg">format_list_numbered</span>
+            <h3 className="text-sm font-bold text-slate-900 tracking-tight">
+              Prioritized Remediation Queue
             </h3>
-            <span className="px-2 py-0.5 rounded bg-blue-100 text-blue-800 text-[10px] font-mono font-bold">
-              MULTI-TIER EVIDENCE
+            <span className="px-1.5 py-0.5 rounded bg-slate-100 text-slate-700 text-[10px] font-mono font-medium border border-slate-200">
+              Evidence Ranked
             </span>
           </div>
           <p className="text-xs text-slate-500 mt-0.5">
-            Ranked by observable code evidence and fix readiness. Separates scanner severity from contextual urgency and protects severe findings from silent downgrades.
+            Prioritized by reachable attack surface and verified fix availability.
           </p>
         </div>
 
