@@ -1,0 +1,12 @@
+backend/
+tests/
+samples/
+benchmark/
+ml_experiments/
+docs/
+*.db
+*.sqlite
+venv/
+.venv/
+__pycache__/
+.git/
