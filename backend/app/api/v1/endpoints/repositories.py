@@ -2,6 +2,7 @@
 import os
 from pathlib import Path
 import re
+import shutil
 import tempfile
 from typing import List, Optional
 from fastapi import APIRouter, Depends, File, Form, Query, UploadFile, status
@@ -371,3 +372,37 @@ def get_repository(
 ) -> Repository:
     repo = verify_repository_ownership(repo_id=repo_id, current_user=current_user, db=db)
     return repo
+
+
+@router.delete(
+    "/{repo_id}",
+    status_code=status.HTTP_204_NO_CONTENT,
+    summary="Delete repository, cascading findings/scans and purging workspace files",
+)
+def delete_repository(
+    repo_id: str,
+    current_user: User = Depends(get_current_user),
+    db: Session = Depends(get_db),
+) -> None:
+    repo = verify_repository_ownership(repo_id=repo_id, current_user=current_user, db=db)
+    workspace = repo.workspace_path
+    repo_name = repo.name
+
+    # 1. Purge workspace from filesystem
+    if workspace and os.path.exists(workspace):
+        shutil.rmtree(workspace, ignore_errors=True)
+
+    # 2. Delete database entity (cascades to findings and scans)
+    db.delete(repo)
+    db.commit()
+
+    # 3. Log audit event
+    record_audit_event(
+        db=db,
+        action="REPOSITORY_DELETED",
+        resource_type="repository",
+        resource_identifier=repo_id,
+        actor_id=current_user.id,
+        metadata={"repo_name": repo_name},
+    )
+

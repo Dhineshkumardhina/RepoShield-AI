@@ -72,7 +72,11 @@ class GeminiAnalystClient:
             detected_injection=has_injection,
         )
 
-        url = f"{GEMINI_API_BASE}/{self.model}:generateContent?key={self.api_key}"
+        url = f"{GEMINI_API_BASE}/{self.model}:generateContent"
+        headers = {
+            "Content-Type": "application/json",
+            "x-goog-api-key": self.api_key,
+        }
         payload = {
             "system_instruction": {
                 "parts": [{"text": system_instruction}]
@@ -90,7 +94,7 @@ class GeminiAnalystClient:
         for attempt in range(1, self.max_retries + 1):
             try:
                 with httpx.Client(timeout=self.timeout) as client:
-                    response = client.post(url, json=payload)
+                    response = client.post(url, headers=headers, json=payload)
 
                 if response.status_code != 200:
                     logger.warning(

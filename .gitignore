@@ -43,12 +43,16 @@ htmlcov/
 .ruff_cache/
 .mypy_cache/
 
-# Databases
+# Databases & Ingested Workspaces
 *.db
 *.sqlite
 *.sqlite3
 reposhield.db
 test_reposhield.db
+data/
+backend/data/workspaces/
+backend/data/
+
 
 # Node.js & Frontend Build Outputs
 node_modules/

@@ -3,6 +3,7 @@ import json
 from pathlib import Path
 import shutil
 import subprocess
+import sys
 import time
 from typing import Any, Dict, List, Optional
 
@@ -32,7 +33,7 @@ class PipAuditScannerAdapter(BaseScannerAdapter):
             return [audit_bin]
         try:
             res = subprocess.run(
-                ["python", "-m", "pip_audit", "--version"],
+                [sys.executable, "-m", "pip_audit", "--version"],
                 stdout=subprocess.PIPE,
                 stderr=subprocess.PIPE,
                 text=True,
@@ -40,7 +41,7 @@ class PipAuditScannerAdapter(BaseScannerAdapter):
                 timeout=5,
             )
             if res.returncode == 0:
-                return ["python", "-m", "pip_audit"]
+                return [sys.executable, "-m", "pip_audit"]
         except Exception:
             pass
         return None
@@ -113,7 +114,7 @@ class PipAuditScannerAdapter(BaseScannerAdapter):
         # Run pip-audit for each discovered requirement manifest
         for manifest in manifests:
             rel_manifest = str(manifest.resolve().relative_to(target_dir.resolve())).replace("\\", "/")
-            args = cmd_base + ["-f", "json", "-r", str(manifest.resolve())]
+            args = cmd_base + ["-f", "json", "--no-deps", "--disable-pip", "-r", str(manifest.resolve())]
 
             try:
                 res = subprocess.run(
@@ -126,6 +127,20 @@ class PipAuditScannerAdapter(BaseScannerAdapter):
                     env=get_scanner_env(),
                     timeout=timeout_seconds,
                 )
+
+                # If --no-deps failed due to unpinned dependencies, retry without --no-deps
+                if res.returncode not in (0, 1) and "not pinned" in res.stderr.lower():
+                    logger.info(f"Unpinned requirements in {rel_manifest}, retrying pip-audit with resolver")
+                    res = subprocess.run(
+                        cmd_base + ["-f", "json", "-r", str(manifest.resolve())],
+                        stdout=subprocess.PIPE,
+                        stderr=subprocess.PIPE,
+                        text=True,
+                        encoding="utf-8",
+                        errors="replace",
+                        env=get_scanner_env(),
+                        timeout=timeout_seconds,
+                    )
 
                 # pip-audit returns 0 if clean, 1 if vulnerabilities found
                 if res.returncode not in (0, 1):

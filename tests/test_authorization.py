@@ -126,3 +126,36 @@ def test_cross_tenant_scan_isolation(client_a: TestClient, client_b: TestClient)
     bob_get_scan = client_b.get(f"/api/v1/scans/{scan_id}")
     assert bob_get_scan.status_code == 403
     assert bob_get_scan.json()["error"]["code"] == "FORBIDDEN"
+
+
+def test_cross_tenant_repository_deletion_and_isolation(client_a: TestClient, client_b: TestClient, db_session: Session):
+    # 1. Alice creates repository
+    repo_res = client_a.post(
+        "/api/v1/repositories",
+        json={"name": "alice/vault-service", "git_url": "https://github.com/alice/vault"},
+    )
+    repo_id = repo_res.json()["id"]
+
+    # 2. Bob attempts to delete Alice's repository -> MUST return 403 Forbidden
+    bob_del_res = client_b.delete(f"/api/v1/repositories/{repo_id}")
+    assert bob_del_res.status_code == 403
+    assert bob_del_res.json()["error"]["code"] == "FORBIDDEN"
+
+    # Verify repository still exists
+    assert client_a.get(f"/api/v1/repositories/{repo_id}").status_code == 200
+
+    # 3. Alice deletes her repository -> MUST return 204 No Content
+    alice_del_res = client_a.delete(f"/api/v1/repositories/{repo_id}")
+    assert alice_del_res.status_code == 204
+
+    # 4. Verify repository is deleted
+    assert client_a.get(f"/api/v1/repositories/{repo_id}").status_code == 404
+
+    # 5. Verify audit event was recorded
+    audit_evt = db_session.query(AuditEvent).filter(
+        AuditEvent.action == "REPOSITORY_DELETED",
+        AuditEvent.resource_identifier == repo_id,
+        AuditEvent.actor_id == client_a.user.id,
+    ).first()
+    assert audit_evt is not None
+

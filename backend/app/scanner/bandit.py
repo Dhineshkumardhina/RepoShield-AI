@@ -3,6 +3,7 @@ import json
 from pathlib import Path
 import shutil
 import subprocess
+import sys
 import time
 from typing import Any, Dict, List, Optional
 
@@ -61,7 +62,7 @@ class BanditScannerAdapter(BaseScannerAdapter):
             return [bandit_bin]
         try:
             res = subprocess.run(
-                ["python", "-m", "bandit", "--version"],
+                [sys.executable, "-m", "bandit", "--version"],
                 stdout=subprocess.PIPE,
                 stderr=subprocess.PIPE,
                 text=True,
@@ -69,7 +70,7 @@ class BanditScannerAdapter(BaseScannerAdapter):
                 timeout=5,
             )
             if res.returncode == 0:
-                return ["python", "-m", "bandit"]
+                return [sys.executable, "-m", "bandit"]
         except Exception:
             pass
         return None

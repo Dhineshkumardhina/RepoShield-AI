@@ -30,6 +30,9 @@ logger = get_logger("reposhield.main")
 
 def seed_initial_dev_data() -> None:
     """Populates development database with initial sample AppSec entities if empty."""
+    if settings.is_production or settings.APP_ENV not in ("development", "local_mock_dev"):
+        logger.warning("Default seed data creation blocked in non-development environment.")
+        return
     db = SessionLocal()
     try:
         # 1. Ensure dev seed user exists
@@ -218,6 +221,16 @@ def create_application() -> FastAPI:
     def top_level_health():
         from .api.v1.endpoints.health import get_service_health
         return get_service_health()
+
+    @app.get("/live", tags=["Health & Diagnostics"])
+    def top_level_live():
+        from .api.v1.endpoints.health import liveness_probe
+        return liveness_probe()
+
+    @app.get("/ready", tags=["Health & Diagnostics"])
+    def top_level_ready():
+        from .api.v1.endpoints.health import readiness_probe
+        return readiness_probe()
 
     return app
 

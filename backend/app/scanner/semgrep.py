@@ -3,6 +3,7 @@ import json
 from pathlib import Path
 import shutil
 import subprocess
+import sys
 import time
 from typing import Any, Dict, List, Optional
 
@@ -50,7 +51,7 @@ class SemgrepScannerAdapter(BaseScannerAdapter):
                 pass
         try:
             res = subprocess.run(
-                ["python", "-m", "semgrep", "--version"],
+                [sys.executable, "-m", "semgrep", "--version"],
                 stdout=subprocess.PIPE,
                 stderr=subprocess.PIPE,
                 text=True,
@@ -58,7 +59,7 @@ class SemgrepScannerAdapter(BaseScannerAdapter):
                 timeout=5,
             )
             if res.returncode == 0:
-                return ["python", "-m", "semgrep"]
+                return [sys.executable, "-m", "semgrep"]
         except Exception:
             pass
         return None

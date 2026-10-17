@@ -15,11 +15,12 @@ if (-not (Test-Path ".env")) {
 
 # 2. Install backend dependencies
 Write-Host "[2/4] Installing backend dependencies..." -ForegroundColor Yellow
-python -m pip install -r backend/requirements.txt
+py -3.12 -m pip install -r backend/requirements.txt
 
 # 3. Run database migrations
 Write-Host "[3/4] Running Alembic database migrations..." -ForegroundColor Yellow
-python -m alembic -c backend/alembic.ini upgrade head
+$env:PYTHONPATH = "backend"
+py -3.12 -m alembic -c backend/alembic.ini upgrade head
 
 # 4. Install frontend dependencies
 Write-Host "[4/4] Installing frontend npm packages..." -ForegroundColor Yellow
